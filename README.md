@@ -16,7 +16,7 @@ These skills work in Cursor, Claude Code, and any agent that supports the Agent 
 
 **Quick copy**
 ```bash
-git clone https://github.com/<you>/thisura-skills.git
+git clone https://github.com/RaZanjana/thisura-skills.git
 cp -r thisura-skills/thisura ~/.claude/skills/        # personal (all projects)
 # or into a single project:
 cp -r thisura-skills/thisura /path/to/project/.claude/skills/
@@ -24,7 +24,7 @@ cp -r thisura-skills/thisura /path/to/project/.claude/skills/
 
 **Symlink (auto-updates with `git pull`)**
 ```bash
-git clone https://github.com/<you>/thisura-skills.git
+git clone https://github.com/RaZanjana/thisura-skills.git
 ln -s "$(pwd)/thisura-skills/thisura" ~/.claude/skills/thisura
 ```
 
