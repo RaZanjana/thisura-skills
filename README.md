@@ -1,6 +1,6 @@
 # Thisura Skills
 
-A small collection of reusable [Claude skills](https://www.anthropic.com/news/skills) for our UI/UX workflow. Clone it, drop a skill into your agent's skills folder, and go.
+A small collection of reusable [Agent Skills](https://www.anthropic.com/news/skills) for our UI/UX workflow. One command installs them — no project, no repo to keep open, no setup.
 
 ## What's inside
 
@@ -10,25 +10,33 @@ A small collection of reusable [Claude skills](https://www.anthropic.com/news/sk
 
 More skills may be added as sibling folders over time.
 
-## Install a skill
+## Install (designers — no repo needed)
 
-These skills work in Cursor, Claude Code, and any agent that supports the Agent Skills standard. Pick one of the two methods:
+Paste this into Terminal:
 
-**Quick copy**
 ```bash
-git clone https://github.com/RaZanjana/thisura-skills.git
-cp -r thisura-skills/thisura ~/.claude/skills/        # personal (all projects)
-# or into a single project:
-cp -r thisura-skills/thisura /path/to/project/.claude/skills/
+curl -fsSL https://raw.githubusercontent.com/RaZanjana/thisura-skills/main/install.sh | bash
 ```
 
-**Symlink (auto-updates with `git pull`)**
+That's the whole install. It drops Thisura into `~/.claude/skills/` (creating the folder if it doesn't exist) and works with any model you use in Cursor — Claude, GPT, or Gemini. Then **restart Cursor** and type `/thisura` in the Agent chat to confirm it loaded.
+
+You don't need a Cursor project open, a git repo, or the Claude app installed — the skill lives at the OS level and loads on every launch.
+
+> **Re-running the same command updates the skill** to the latest version. That's also how you pull updates later — just run it again and restart Cursor.
+
+<details>
+<summary>Manual install (optional)</summary>
+
+If you'd rather not run the script:
+
 ```bash
 git clone https://github.com/RaZanjana/thisura-skills.git
+cp -r thisura-skills/thisura ~/.claude/skills/        # copy
+# or symlink so git pull keeps it fresh:
 ln -s "$(pwd)/thisura-skills/thisura" ~/.claude/skills/thisura
 ```
-
-Cursor also reads `.agents/skills/` — either location works. Restart Cursor after installing, then type `/` in the Agent chat and search for the skill name to confirm it loaded.
+Cursor also reads `.agents/skills/` and per-project `.claude/skills/` — any of those work.
+</details>
 
 ## Using a skill
 
@@ -40,14 +48,17 @@ Use /thisura and generate a style guide for the project in this Figma file: [pas
 
 It'll ask a few setup questions, then build everything. Full details in [`thisura/README.md`](./thisura/README.md).
 
-## Updating
+## Contributing / updating the skill
 
-- Pull the latest: `git pull`. If you installed via **symlink**, your skill updates automatically. If you **copied**, re-copy the folder.
-- Versions are tagged (e.g. `v1.0.0`). Pin to one with `git checkout v1.0.0` if you need stability.
+Maintainers edit the markdown, commit, and push:
 
-## Contributing
+```bash
+git add .
+git commit -m "what changed"
+git push
+```
 
-Edit the markdown, commit, and push. Keep changes scoped to one skill per commit where possible, tag releases, and note what changed.
+Keep changes scoped to one skill per commit where possible, and tag releases (`git tag v1.1.0 && git push --tags`) so people can pin a version.
 
 ## License
 

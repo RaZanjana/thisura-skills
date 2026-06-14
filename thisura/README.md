@@ -54,32 +54,34 @@ If you ask it for something off this list, it'll stop, tell you nicely, and offe
 
 A few things need to be in place first:
 
-1. **Cursor**, running a **Claude model** (you've already got this on the team account).
+1. **Cursor** (any model works — Claude, GPT, or Gemini; the skill is written and tuned for Claude, so that's the smoothest).
 2. **Figma MCP connected to Cursor — and it must be the write/authoring kind.** This is the one that trips people up: a read-only Figma MCP can *look* at a file but can't *create* variables and styles. If Thisura says it can't write, this is why.
 3. **Edit access** to the target Figma file (you need to be able to write to it).
 4. Values map to **Tailwind v4** — if a code repo is open, even better, because Thisura can match the exact values your devs ship.
 
 ---
 
-## Setup (Cursor)
+## Setup (one command)
 
-One-time setup:
+Paste this into Terminal — that's the entire install:
 
-1. Drop the whole `thisura/` folder into your project's skills directory — either `.claude/skills/` or `.agents/skills/`. So you'll end up with:
-   ```
-   your-project/
-   └── .claude/
-       └── skills/
-           └── thisura/
-               ├── SKILL.md
-               ├── primitives.md
-               ├── web-shadcn.md
-               └── mobile-gluestack.md
-   ```
-2. Cursor discovers skills automatically when it starts — no config needed. (If it was already open, restart or reload it.)
-3. To check it loaded: type `/` in the Agent chat and search for **thisura**. If it shows up, you're good.
+```bash
+curl -fsSL https://raw.githubusercontent.com/RaZanjana/thisura-skills/main/install.sh | bash
+```
 
-> Tip: commit the `thisura/` folder to the repo so the whole team gets it automatically — no one has to set it up twice.
+It drops Thisura into `~/.claude/skills/` (creating the folder if it's not there), so it's available in Cursor no matter what you're working on — no project, no repo, no Claude app required. Then **restart Cursor** and type `/` in the Agent chat to confirm **thisura** shows up.
+
+> **To update later:** run the same command again and restart Cursor. It always pulls the latest version.
+
+<details>
+<summary>Manual install (optional)</summary>
+
+```bash
+git clone https://github.com/RaZanjana/thisura-skills.git
+cp -r thisura-skills/thisura ~/.claude/skills/
+```
+Cursor also reads `.agents/skills/` and per-project `.claude/skills/` if you prefer one of those.
+</details>
 
 ---
 
@@ -136,7 +138,7 @@ By default, if a code repo is open, Thisura pulls exact token values from the pr
 ## Troubleshooting
 
 **Thisura doesn't show up when I type `/`.**
-The folder probably isn't in the right place, or Cursor needs a reload. Check it's under `.claude/skills/thisura/` (or `.agents/skills/thisura/`) with `SKILL.md` inside, then restart Cursor.
+First, restart Cursor — skills only load on startup. If it's still missing, the install didn't land: re-run the install command, then check the folder exists with `ls ~/.claude/skills/thisura` (you should see `SKILL.md` inside).
 
 **It says it can't write to Figma / it's read-only.**
 Your Figma MCP is the read-only kind. Thisura needs a **write/authoring** Figma MCP to create variables and styles. Swap to that one in your MCP setup.
