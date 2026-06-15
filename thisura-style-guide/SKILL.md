@@ -26,7 +26,7 @@ Personality: helpful, direct, a little warm. Out-of-lane requests get the **Out 
 
 On invocation, check the target file:
 - **No `Primitives`/`Colors`/`Breakpoints` collections (or no `🎨 Style Guide` page)** → **Create mode**: run Phases 1–6.
-- **Those collections + a Style Guide page already exist** → **Update mode**: skip creation; **read the current variables and styles live**, then **rebuild the Style Guide page from the same template** (Phase 5) so it reflects current values with identical structure/layout. Report what changed (e.g. new/renamed/removed tokens). Don't hand-edit; regenerate from the variables, which are the source of truth.
+- **Those collections + a Style Guide page already exist** → **Update mode**: skip creation; **read the current variables and styles live**, then **rebuild the Style Guide page from the template in `style-guide-layout.md`** (auto-layout, hug/fill) so it reflects current values with identical structure. Regenerate the page cleanly rather than patching the old absolute-positioned one. Report what changed (new/renamed/removed tokens).
 
 Triggers like "refresh/update the style guide in this file" force Update mode.
 
@@ -51,7 +51,7 @@ Then one open slot: "Anything special for this run?" — in-scope extras fold in
 ---
 
 ## Workflow (Create mode)
-Always read `primitives.md`; then **either** `web-shadcn.md` **or** `mobile-gluestack.md`.
+Always read `primitives.md`; then **either** `web-shadcn.md` **or** `mobile-gluestack.md`; and read `style-guide-layout.md` before Phase 5.
 ```
 Step 0 → P1 Primitives → P2 Colors → P3 Breakpoints → P4 Local styles → P5 Style Guide → P6 Validation
 ```
@@ -80,24 +80,27 @@ Per the platform file: `spacing/*`, `radius/*`, `typography/*` varying per mode.
   Never 100% opacity. Bind the shadow colour to `Other/overlay/shadow`. Source exact
   offset/blur/spread from Tailwind v4 (`shadow-xs … shadow-2xl`).
 
-### Phase 5 — Style Guide page (the template — keep identical in Update mode)
-Page `🎨 Style Guide`, rendered from tokens + styles. **Colours use a swatch-grid of cards**, not a vertical list:
-- **Theme colours** — a grid of cards (a few per row), grouped by category (Base/Surface, Text,
-  Primary, States, Chart, Sidebar). Each card: the resolved colour chip + token name + resolved
-  value + the primitive it aliases. If Dark mode exists, split each chip light/dark.
-- **Brand ramps** — horizontal **50→950 strips** (Tailwind-palette style), with step labels.
-  *Brand ramps live in Primitives but ARE documented here* (raw Tailwind ramps are not).
-- **Alpha + opacity** — semi-transparent swatches and the `opacity/*` scale shown on a
-  **checkerboard** background so transparency reads.
-- **Typography** — the type ramp from the text styles, plus a **per-breakpoint values table**.
-- **Spacing & radius** — per-breakpoint tables. **Shadows** — specimens of each effect style.
-- Every specimen is bound to its variable/style; the page uses the system's own type/spacing (dogfood).
+### Phase 5 — Style Guide page (read `style-guide-layout.md` first)
+**Build the entire page with Figma auto-layout + hug/fill sizing — never absolute x/y with guessed
+widths/heights** (that crops frames and leaves dead space). Follow `style-guide-layout.md` exactly;
+it is the template (and Update mode reuses it). Page `🎨 Style Guide`, rendered from tokens + styles:
+- **Theme colours** — a wrapping auto-layout **card grid** grouped by category (Base/Surface, Text,
+  Primary, States, Chart, Sidebar). Each card: colour chip (with border) + token name + value +
+  aliased primitive. Dark mode → split chip light/dark.
+- **Brand ramps** — horizontal hug auto-layout 50→950 strips with hex labels. *Documented here even
+  though they're Primitives* (raw Tailwind ramps are not).
+- **Alpha + opacity** — swatches on a checkerboard.
+- **Typography** — specimen rows that **hug height** (so display type isn't clipped) + a per-breakpoint table.
+- **Spacing & radius** — compact per-breakpoint tables **with visual bars/boxes**, not just numbers.
+- **Shadows** — actual **shadowed boxes** (effect style applied), not just labels.
+Every specimen bound to its variable/style; run the sizing checklist in `style-guide-layout.md` before finishing.
 
 ### Phase 6 — Validation
 Primitives unscoped (except `opacity/*`); Colors/Breakpoints reference them; per-mode values
 differ where specified; text styles variable-bound with % line-height; shadows low-alpha and
-bound; brand ramps documented; Style Guide renders from bindings with the card grid + tables.
-Report a short summary.
+bound; brand ramps documented. **Layout: run the sizing checklist in `style-guide-layout.md` —
+auto-layout everywhere, no frame left at default 100×100, typography rows hug height, tables
+compact with visual specimens, shadow boxes present, nothing clipped.** Report a short summary.
 
 ---
 
