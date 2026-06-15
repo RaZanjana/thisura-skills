@@ -1,89 +1,75 @@
-# Mobile semantics — Gluestack theming
+# Mobile — Gluestack theming (Colors + Breakpoints)
 
-Used when **platform = mobile**. Build the `Semantics` collection to **mirror Gluestack UI v2's
-token system exactly**, so each Figma variable name equals the NativeWind class root the devs
-type (`bg-background-0`, `text-typography-900`, `border-outline-200`). No normalization to
-role names — the 1:1 match is the whole point of the hand-off.
-
-Source exact values from the project's `gluestack-ui-provider/config.ts` (the `light` / `dark`
-`vars()` blocks) if a repo is open — that's what ships. Otherwise use Gluestack v2 defaults and
-convert to hex.
-
-## Contents
-1. Color scales (Light + Dark)
-2. Radius (NativeWind / Tailwind)
-3. Typography (local text styles)
-4. Extended group
-5. Mapping rule
+Used when **platform = mobile**. Build the `Colors` and `Breakpoints` collections, mirroring
+**Gluestack UI v2** so each Figma variable name equals the NativeWind class root devs type
+(`bg-background-0`, `text-typography-900`). Every token aliases a Primitive. Source exact values
+from the project's `gluestack-ui-provider/config.ts` (`light`/`dark` `vars()`) if a repo is open;
+otherwise use Gluestack v2 defaults and convert to hex.
 
 ---
 
-## 1. Color scales
+## Colors collection  (modes: Light [+ Dark if in scope])
 
-Gluestack colors are **numeric scales per role**, mode-swapped via the provider's light/dark
-`vars()`. Create each as a semantic variable group aliasing the Primitive color ramps. Light
-mode always; Dark mode as a second mode only if in scope.
+Two groups: `Theme` and `Other`.
 
-Scales (each with steps `0, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950`):
-
+### Theme/  — Gluestack numeric scales
+Mirror Gluestack's `{role}-{step}` scales exactly (no normalization). Each step aliases a
+`tailwind colors/*` primitive (or `brand/*` for primary). Steps: `0, 50, 100, 200, 300, 400,
+500, 600, 700, 800, 900, 950`.
 ```
-primary/0…950          secondary/0…950        tertiary/0…950
-background/0…950        typography/0…950        outline/0…950
-error/0…950            success/0…950          warning/0…950          info/0…950
-indicator/primary  indicator/info  indicator/error   (single-value indicators)
+Theme/primary/0…950     Theme/secondary/0…950     Theme/tertiary/0…950
+Theme/background/0…950   Theme/typography/0…950     Theme/outline/0…950
+Theme/error/0…950   Theme/success/0…950   Theme/warning/0…950   Theme/info/0…950
+Theme/indicator/primary  Theme/indicator/info  Theme/indicator/error
+```
+Typical aliasing: `background/0 → white`, `background/950 → neutral/950`,
+`typography/900 → neutral/900`, `typography/0 → white`, `outline/200 → neutral/200`,
+`error → red/*`, `success → green/*`, `warning → amber/*`, `info → blue/*`. Dark mode re-points
+per the provider's dark block (scale commonly inverts).
+
+### Other/  — placeholder
+Labelled, **empty** group for project-specific additions. Don't pre-fill.
+
+---
+
+## Breakpoints collection  (modes: Gluestack breakpoint tokens)
+
+Mobile doesn't use Desktop/Tablet/Mobile — use Gluestack's breakpoint tokens as the modes:
+**base, sm, md, lg, xl** (confirm exact px against the project's config). Create all modes with
+**identical base values** to start; tune per project. Everything dimensional aliases `px/*`.
+
+### breakpoint/  — token thresholds (constant across modes)
+```
+breakpoint/base = 0   breakpoint/sm   breakpoint/md   breakpoint/lg   breakpoint/xl
+```
+(Set exact px from the Gluestack/NativeWind config; alias the matching `px/*`.)
+
+### spacing/  — Tailwind-named, alias px
+Same Tailwind scale as web: `spacing/1 → px/4 … spacing/24 → px/96` (token `n` = `n × 4px`).
+
+### radius/  — NativeWind / Tailwind scale, alias px (may differ per mode)
+```
+radius/none = 0   radius/xs = 2   radius/sm = 4   radius/md = 6   radius/lg = 8
+radius/xl = 12    radius/2xl = 16  radius/3xl = 24  radius/full = 9999
+```
+(Confirm against the project's Tailwind/NativeWind version; add `px/*` as needed.)
+
+### typography/  — sizes alias px; weight/family/line-height as values
+Mirror Gluestack's `size` scale (`2xs … 6xl`):
+```
+typography/size/{2xs … 6xl} → alias px/*
+typography/weight/{…}        (raw numbers, per Gluestack fontWeight tokens)
+typography/font/{…}          (family strings)
+typography/line-height/{…}
 ```
 
-Naming: `primary/500`, `background/0`, `typography/900`, `outline/200`, etc. — matching the
-`--color-{role}-{step}` variables and their `{role}-{step}` utility roots.
+---
 
-**Binding to primitives:** alias each step to the nearest Tailwind primitive (or the brand ramp
-for `primary`). Typical neutral mapping: `background/0 → white`, `background/950 → near-black`,
-`typography/900 → neutral/900`, `typography/0 → white`, `outline/200 → neutral/200`. State roles
-map to their hues: `error → red`, `success → green`, `warning → amber`, `info → blue`. For Dark
-mode, re-point the same semantic steps to the inverted primitives per the provider's dark block
-(Gluestack commonly flips the scale so `background-0` darkens, `typography` lightens).
+## Local styles (Phase 4)
+- **Text styles** — named to Gluestack usage (`Heading/2xl`, `Text/md`, `Text/2xs`, …). **Bind**
+  family/size/weight/line-height to the `typography/*` variables. No hardcoded values.
+- **Effect styles** — shadow scale; bind shadow color to a `Colors` variable.
 
-Keep Gluestack's convention that the scale itself is semantic (step 0 = lightest surface / step
-950 = darkest), rather than adding separate role-name tokens.
-
-## 2. Radius — NativeWind / Tailwind scale
-
-Gluestack styles via NativeWind, so radius follows the **Tailwind radius scale** (not shadcn's
-`--radius` model). Create radius tokens aliasing `px/*` primitives:
-
-```
-radius/none = 0
-radius/xs   = 2px
-radius/sm   = 4px
-radius/md   = 6px
-radius/lg   = 8px
-radius/xl   = 12px
-radius/2xl  = 16px
-radius/3xl  = 24px
-radius/full = 9999px
-```
-(Confirm exact values against the project's Tailwind/NativeWind version; add `px/*` primitives
-for any value not already present, e.g. `px/2`, `px/6`.)
-
-## 3. Typography — local text styles
-
-Mirror Gluestack's `Text` / `Heading` **size scale** as local text styles, bound to the type
-primitives:
-
-- Sizes: `2xs, xs, sm, md, lg, xl, 2xl, 3xl, 4xl, 5xl, 6xl` (Gluestack's `size` prop values).
-- Name styles to match usage, e.g. `Heading/2xl`, `Heading/xl`, `Text/md`, `Text/sm`,
-  `Text/2xs`, plus weight variants the kit uses.
-- Bind `font-size`, `line-height`, `weight`, and the font family variable from Primitives.
-- Map Gluestack's `fontSize` / `lineHeight` / `fontWeight` tokens to the type primitives so the
-  scale has one source of truth.
-
-## 4. Extended group
-
-Create `semantic/extended/` as a labelled, **empty** placeholder for project-specific additions
-(custom roles, extra brand scales, semantic aliases). Don't pre-fill — just establish the group.
-
-## 5. Mapping rule (validation)
-
-Every Gluestack scale step → a Primitive alias. Light and (optional) Dark resolve with no unbound
-references. Names spelled exactly as Gluestack's `{role}-{step}`, so dev inspect shows the real
-NativeWind token root.
+## Validation
+Theme mirrors Gluestack `{role}-{step}` and aliases tailwind colors; Breakpoints tokens alias px;
+Light/Dark + breakpoint modes resolve; text styles are variable-bound; names match Gluestack + Tailwind exactly.

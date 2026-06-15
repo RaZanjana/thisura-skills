@@ -16,10 +16,11 @@ The point: instead of hand-building variables and a style guide every project, y
 
 After a run, your Figma file will have:
 
-- **A `Primitives` collection** — the raw material: Tailwind color ramps and raw pixel values. (This is plumbing; it's not shown in the style guide.)
-- **A `Semantics` collection** — the tokens you actually design with. Web gets shadcn roles (`background`, `primary`, `muted-foreground`, …); mobile gets Gluestack scales (`primary/500`, `background/0`, `typography/900`, …). Light mode always, Dark mode if the project needs it.
-- **Local styles** — text styles on the type scale + the Tailwind shadow scale, bound to your variables.
-- **A `🎨 Style Guide` page** — colour swatches, type ramp, spacing, radius, and shadows, all bound to the tokens so it updates itself. This is your dev contract.
+- **A `Primitives` collection** — the raw material: Tailwind color ramps and raw pixel values. Every token is *unscoped*, so designers never pick it directly — it's plumbing, referenced by the other collections and not shown in the style guide.
+- **A `Colors` collection** — the colours you design with, in two groups: `Theme` (the platform set — shadcn roles like `background`/`primary`/`muted-foreground` for web, or Gluestack scales like `primary/500`/`typography/900` for mobile) and `Other` (a placeholder for extra colours). Light mode always, Dark mode if the project needs it.
+- **A `Breakpoints` collection** — everything responsive, with device modes (web: Desktop/Tablet/Mobile; mobile: Gluestack tokens): breakpoints, spacing, radius, and typography. Switch the mode and these values change together.
+- **Local styles** — text styles with font/size/weight/line-height **bound to the typography variables** (so type goes responsive automatically), plus the Tailwind shadow scale.
+- **A `🎨 Style Guide` page** — theme swatches, type ramp, spacing, radius, breakpoints, and shadows, all bound to the tokens so it updates itself. This is your dev contract.
 
 ---
 
@@ -115,11 +116,11 @@ Answer those, approve anything it proposes, and it builds everything, then gives
 
 Once Thisura has run, there are three spots you're meant to own and adjust as the project moves. This is the "okay, it's done — what's mine now?" part.
 
-### 1. The `semantic/extended/` group
+### 1. The `Colors / Other` group
 
-Thisura only creates the standard theming set (shadcn roles for web, Gluestack scales for mobile). Anything beyond that lands in an empty `semantic/extended/` group that you fill in yourself as needs come up.
+Thisura only creates the standard theming set under `Colors/Theme` (shadcn roles for web, Gluestack scales for mobile). Anything beyond that lands in the empty `Colors/Other` group that you fill in yourself as needs come up.
 
-**Example:** You set up tokens for a fintech web app. Two sprints later the product needs `success` and `warning` states, plus a `chart-positive` / `chart-negative` pair — none of which are in shadcn's defaults. Instead of messing with the core tokens or dropping in raw hex, you add them under `extended/` and still alias them back to primitives (`green/600`, `amber/500`). One rule to keep: **extended tokens must still point at a primitive, never a raw value** — that's what keeps the system consistent.
+**Example:** You set up tokens for a fintech web app. Two sprints later the product needs `success` and `warning` states, plus a `chart-positive` / `chart-negative` pair — none of which are in shadcn's defaults. Instead of messing with the theme tokens or dropping in raw hex, you add them under `Colors/Other` and still alias them back to the Tailwind primitives (`green/600`, `amber/500`). One rule to keep: **`Other` tokens must still point at a primitive, never a raw value** — that's what keeps the system consistent.
 
 ### 2. The brand ramp
 
