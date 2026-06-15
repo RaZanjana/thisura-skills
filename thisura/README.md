@@ -1,4 +1,4 @@
-# Thisura — Figma Design-Token & Style-Guide Builder
+# Thisura Style Guide — Figma Design-Token & Style-Guide Builder
 
 A little helper that turns a Figma file into a clean, dev-ready design system — variables, styles, and a bound style guide — so hand-off stops being a copy-paste chore.
 
@@ -18,7 +18,7 @@ After a run, your Figma file will have:
 
 - **A `Primitives` collection** — the raw material: Tailwind color ramps and raw pixel values. Every token is *unscoped*, so designers never pick it directly — it's plumbing, referenced by the other collections and not shown in the style guide.
 - **A `Colors` collection** — the colours you design with, in two groups: `Theme` (the platform set — shadcn roles like `background`/`primary`/`muted-foreground` for web, or Gluestack scales like `primary/500`/`typography/900` for mobile) and `Other` (a placeholder for extra colours). Light mode always, Dark mode if the project needs it.
-- **A `Breakpoints` collection** — everything responsive, with device modes (web: Desktop/Tablet/Mobile; mobile: Gluestack tokens): breakpoints, spacing, radius, and typography. Switch the mode and these values change together.
+- **A `Breakpoints` collection** — everything responsive, with device modes (web: Large Desktop / Standard Desktop / Tablet / Mobile; mobile app: Tablet / Mobile): spacing, radius, and typography. The values **genuinely change per mode** — switch the mode and type, spacing, and radius all shift to that breakpoint's values.
 - **Local styles** — text styles with font/size/weight/line-height **bound to the typography variables** (so type goes responsive automatically), plus the Tailwind shadow scale.
 - **A `🎨 Style Guide` page** — theme swatches, type ramp, spacing, radius, breakpoints, and shadows, all bound to the tokens so it updates itself. This is your dev contract.
 
@@ -79,7 +79,7 @@ It drops Thisura into `~/.claude/skills/` (creating the folder if it's not there
 
 ```bash
 git clone https://github.com/RaZanjana/thisura-skills.git
-cp -r thisura-skills/thisura ~/.claude/skills/
+cp -r thisura-skills/thisura-style-guide ~/.claude/skills/
 ```
 Cursor also reads `.agents/skills/` and per-project `.claude/skills/` if you prefer one of those.
 </details>
@@ -91,7 +91,7 @@ Cursor also reads `.agents/skills/` and per-project `.claude/skills/` if you pre
 In the Agent chat, call it and point it at your file:
 
 ```
-Use /thisura and generate a style guide for the project in this Figma file: [paste Figma URL]
+Use /thisura-style-guide and generate a style guide for the project in this Figma file: [paste Figma URL]
 ```
 
 That's it. Thisura then **pauses and asks you a few quick questions first** (this is on purpose — it won't guess). Expect:
@@ -101,11 +101,11 @@ That's it. Thisura then **pauses and asks you a few quick questions first** (thi
 - **Dark mode this project?** — yes adds a Dark mode, no keeps it light-only.
 - **Anything special?** — an open slot for extra requests (an extra palette, a specific font, naming tweaks).
 
-Answer those, approve anything it proposes, and it builds everything, then gives you a short summary of what it created. You can also force it anytime by just typing `/thisura` and describing what you want.
+Answer those, approve anything it proposes, and it builds everything, then gives you a short summary of what it created. You can also force it anytime by just typing `/thisura-style-guide` and describing what you want.
 
 **Sample run:**
 
-> **You:** Use /thisura and generate a style guide for the project in this Figma file: figma.com/file/abc123
+> **You:** Use /thisura-style-guide and generate a style guide for the project in this Figma file: figma.com/file/abc123
 > **Thisura:** Quick setup first — is this web or mobile? Do you have a brand guide? Dark mode in scope? Anything special for this run?
 > **You:** Mobile, no brand guide, light only. Primary should be around #2563EB.
 > **Thisura:** Here's the proposed palette + brand ramp from that blue — look good? *(you approve)* …building Primitives, Gluestack semantics, styles, and the Style Guide page.
@@ -122,11 +122,11 @@ Thisura only creates the standard theming set under `Colors/Theme` (shadcn roles
 
 **Example:** You set up tokens for a fintech web app. Two sprints later the product needs `success` and `warning` states, plus a `chart-positive` / `chart-negative` pair — none of which are in shadcn's defaults. Instead of messing with the theme tokens or dropping in raw hex, you add them under `Colors/Other` and still alias them back to the Tailwind primitives (`green/600`, `amber/500`). One rule to keep: **`Other` tokens must still point at a primitive, never a raw value** — that's what keeps the system consistent.
 
-### 2. The brand ramp
+### 2. The brand ramp(s)
 
-When there's no brand guide, Thisura builds a full Tailwind-style `color/brand/50…950` ramp from a single brand colour. That's a starting point, not the final word.
+Thisura reads the **whole** brand guide, not just the logo. If the guide has several brand colours, it captures all of them — following the guide's documented usage if it states roles, otherwise inferring primary / secondary / tertiary — and builds a full `brand/50…950`, `brand-secondary/50…950`, etc. ramp for each. A single-colour guide (or no guide) just produces `brand/`.
 
-**Example:** A client hands you just their logo blue, `#2563EB`. Thisura generates the whole ramp around it and shows it for approval. You think the `900`/`950` end looks a bit muddy for their dark UI, so you nudge those two steps lighter before approving. Totally fine — the ramp is yours to tweak at the approval step (or re-run if you'd rather).
+**Example:** A client's guide lists three colours — a logo blue, an orange "accent for CTAs", and a dark slate. Thisura maps blue → `brand/` (primary), orange → `brand-secondary/` (the guide flagged it for CTAs), slate → `brand-tertiary/`, and generates a 50–950 ramp for each, shown for approval. If you think the `900`/`950` end of one looks muddy, nudge those steps before approving — the ramps are yours to tweak.
 
 ### 3. Sourced vs. fixed values
 
@@ -139,7 +139,7 @@ By default, if a code repo is open, Thisura pulls exact token values from the pr
 ## Troubleshooting
 
 **Thisura doesn't show up when I type `/`.**
-First, restart Cursor — skills only load on startup. If it's still missing, the install didn't land: re-run the install command, then check the folder exists with `ls ~/.claude/skills/thisura` (you should see `SKILL.md` inside).
+First, restart Cursor — skills only load on startup. If it's still missing, the install didn't land: re-run the install command, then check the folder exists with `ls ~/.claude/skills/thisura-style-guide` (you should see `SKILL.md` inside).
 
 **It says it can't write to Figma / it's read-only.**
 Your Figma MCP is the read-only kind. Thisura needs a **write/authoring** Figma MCP to create variables and styles. Swap to that one in your MCP setup.

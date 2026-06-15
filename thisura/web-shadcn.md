@@ -1,96 +1,82 @@
 # Web — shadcn theming (Colors + Breakpoints)
 
-Used when **platform = web**. Build the `Colors` and `Breakpoints` collections. Every token
-**aliases a Primitive** — no raw hex/px outside `Primitives`. shadcn defaults are oklch; convert
-to hex precisely, or source from the project's `globals.css` if a repo is open.
+Platform = web. Build `Colors` and `Breakpoints`. Every token aliases a Primitive — no raw
+hex/px outside `Primitives`. shadcn defaults are oklch; convert to hex precisely, or source from
+the project's `globals.css`.
 
 ---
 
-## Colors collection  (modes: Light [+ Dark if in scope])
+## Colors collection  (modes: Light [+ Dark])
 
-Two groups: `Theme` and `Other`.
-
-### Theme/  — shadcn role tokens
-Names match shadcn exactly so the Figma variable equals the dev's utility root
-(`bg-background`, `text-muted-foreground`, …). Each aliases a `tailwind colors/*` primitive
-(or `brand/*` for primary).
-
+### Theme/  — shadcn role tokens (alias `tailwind colors/*` or `brand*/*`)
 ```
-Theme/background            Theme/foreground
-Theme/card                  Theme/card-foreground
-Theme/popover               Theme/popover-foreground
-Theme/primary               Theme/primary-foreground
-Theme/secondary             Theme/secondary-foreground
-Theme/muted                 Theme/muted-foreground
-Theme/accent                Theme/accent-foreground
-Theme/destructive
-Theme/border   Theme/input   Theme/ring
-Theme/chart-1 … Theme/chart-5
+Theme/background  Theme/foreground   Theme/card  Theme/card-foreground
+Theme/popover  Theme/popover-foreground   Theme/primary  Theme/primary-foreground
+Theme/secondary  Theme/secondary-foreground   Theme/muted  Theme/muted-foreground
+Theme/accent  Theme/accent-foreground   Theme/destructive
+Theme/border  Theme/input  Theme/ring   Theme/chart-1 … Theme/chart-5
 Theme/sidebar  Theme/sidebar-foreground  Theme/sidebar-primary  Theme/sidebar-primary-foreground
 Theme/sidebar-accent  Theme/sidebar-accent-foreground  Theme/sidebar-border  Theme/sidebar-ring
 ```
-Reference defaults (neutral base; verify + convert): `--radius 0.625rem`, `background oklch(1 0 0)`,
-`foreground oklch(0.145 0 0)`, `primary oklch(0.205 0 0)`, `muted oklch(0.97 0 0)`,
-`muted-foreground oklch(0.556 0 0)`, `border/input oklch(0.922 0 0)`, `ring oklch(0.708 0 0)`,
-`destructive oklch(0.577 0.245 27.325)` … (full set in shadcn theming docs). Dark mode re-points
-per shadcn's `.dark` block. Typical aliasing: `background → white`, `foreground → neutral/950`,
+Defaults (neutral base; verify + convert oklch→hex): `background oklch(1 0 0)`, `foreground oklch(0.145 0 0)`,
+`primary oklch(0.205 0 0)`, `muted oklch(0.97 0 0)`, `muted-foreground oklch(0.556 0 0)`,
+`border/input oklch(0.922 0 0)`, `ring oklch(0.708 0 0)`, `destructive oklch(0.577 0.245 27.325)` …
+Dark re-points per `.dark`. Typical aliasing: `background → white`, `foreground → neutral/950`,
 `muted → neutral/100`, `muted-foreground → neutral/500`, `border/input → neutral/200`,
-`primary → brand/500` (or neutral base), `destructive → red/*`.
+`primary → brand/500`, `destructive → red/*`.
 
-### Other/  — placeholder
-A labelled, **empty** group for project-specific colors the designer adds later (e.g.
-`success`, `warning`, marketing accents). Don't pre-fill — just establish the group.
+### Other/  — labelled empty placeholder for project-specific colors. Don't pre-fill.
 
 ---
 
-## Breakpoints collection  (modes: Desktop, Tablet, Mobile)
+## Breakpoints collection  (modes — values VARY per mode)
+Modes: **Large Desktop** (>1440) · **Standard Desktop** (1280–1440) · **Tablet** (768–1279) · **Mobile** (<768).
+No `breakpoint` group — the modes are the breakpoints. Everything dimensional aliases `px/*`.
 
-Create all three modes with **identical Desktop values** to start; the designer tunes
-Tablet/Mobile per project. Everything dimensional aliases `px/*`.
+### typography/size  (alias px; display shrinks, body constant)
+| token | L.Desktop | S.Desktop | Tablet | Mobile |
+|---|---|---|---|---|
+| 6xl | 72 | 60 | 48 | 36 |
+| 5xl | 60 | 48 | 40 | 32 |
+| 4xl | 48 | 40 | 34 | 28 |
+| 3xl | 40 | 36 | 30 | 24 |
+| 2xl | 32 | 28 | 24 | 22 |
+| xl | 24 | 22 | 20 | 20 |
+| lg | 20 | 18 | 18 | 18 |
+| base | 16 | 16 | 16 | 16 |
+| sm | 14 | 14 | 14 | 14 |
+| xs | 12 | 12 | 12 | 12 |
 
-### breakpoint/  — Tailwind threshold widths (constant across modes)
-```
-breakpoint/sm = 640    breakpoint/md = 768    breakpoint/lg = 1024
-breakpoint/xl = 1280   breakpoint/2xl = 1536
-```
-(Alias `px/640 … px/1536`. Designers may add per-mode `breakpoint/container`, `/columns`, `/gutter`.)
+### typography/weight, typography/font  (constant across modes)
+`weight/{thin=100 … black=900}` (raw numbers); `font/sans`, `font/mono` (family strings from brand/approval).
+**Line-height is NOT a variable** — set it as a % in each text style (Phase 4).
 
-### spacing/  — Tailwind-named, alias px
-```
-spacing/0 → px/0, spacing/1 → px/4, spacing/2 → px/8, spacing/3 → px/12, spacing/4 → px/16,
-spacing/5 → px/20, spacing/6 → px/24, spacing/8 → px/32, spacing/10 → px/40, spacing/12 → px/48,
-spacing/16 → px/64, spacing/20 → px/80, spacing/24 → px/96 …
-```
-(Token `n` = `n × 4px`. Add steps the project uses.)
+### spacing/  (Tailwind-named, alias px) — ≤16px constant; ≥24px step down
+Rule: Tablet ×0.85, Mobile ×0.70 for tokens ≥24px, rounded to the 4px grid.
+| token (S.Desktop) | L.Desktop | S.Desktop | Tablet | Mobile |
+|---|---|---|---|---|
+| 1–4 (4–16) | = | = | = | = (unchanged) |
+| 6 (24) | 24 | 24 | 20 | 16 |
+| 8 (32) | 32 | 32 | 28 | 24 |
+| 10 (40) | 40 | 40 | 32 | 28 |
+| 12 (48) | 48 | 48 | 40 | 32 |
+| 16 (64) | 64 | 64 | 56 | 44 |
+| 20 (80) | 80 | 80 | 68 | 56 |
+| 24 (96) | 96 | 96 | 80 | 68 |
 
-### radius/  — shadcn `--radius` model, alias px (may differ per mode)
-Figma has no calc, so precompute from `radius/base = 10px` (0.625rem):
-```
-radius/sm = 6px   radius/md = 8px   radius/lg = 10px   radius/xl = 14px
-radius/2xl = 18px  radius/3xl = 22px  radius/4xl = 26px
-```
-Alias each to the matching `px/*` (add `px/6`, `px/14`, `px/18`, `px/22`, `px/26` as needed).
-A smaller `radius/base` on Mobile is a valid per-mode tweak.
-
-### typography/  — sizes alias px; weight/family/line-height as values
-```
-typography/size/xs → px/12,  sm → px/14,  base → px/16,  lg → px/18,  xl → px/20,
-              2xl → px/24, 3xl → px/30, 4xl → px/36, 5xl → px/48, 6xl → px/60 …
-typography/weight/{thin=100 … black=900}        (raw numbers)
-typography/font/sans, typography/font/mono       (family strings; set from brand/approval)
-typography/line-height/{none=1, tight=1.25, snug=1.375, normal=1.5, relaxed=1.625, loose=2}
-```
-(Sizes vary per mode for responsive type; weight/family/line-height usually constant across modes.)
+### radius/  — shadcn `--radius` model, alias px; gentle step-down (×0.9 Tablet, ×0.8 Mobile; radii ≥12px only)
+Base scale (Desktop): `sm 6 · md 8 · lg 10 · xl 14 · 2xl 18 · 3xl 22 · 4xl 26` (from `radius/base = 10`, 0.625rem).
+Small radii (≤10) stay constant; larger ones step down (e.g. `2xl 18 → 16 → 14`).
 
 ---
 
-## Local styles (Phase 4)
-- **Text styles** — role/size named (`Display/2xl`, `Heading/xl`, `Body/base`, `Label/sm`,
-  `Caption/xs`, `Code/sm`). **Bind** font family → `typography/font/*`, size → `typography/size/*`,
-  weight → `typography/weight/*`, line-height → `typography/line-height/*`. No hardcoded values,
-  so type follows the active Breakpoints mode.
-- **Effect styles** — Tailwind shadow scale (`shadow-sm … shadow-2xl`); bind shadow color to a `Colors` variable.
+## Local styles
+- **Text styles** (`Display/2xl`, `Heading/xl`, `Body/base`, `Label/sm`, `Caption/xs`, `Code/sm`):
+  bind family → `typography/font/*`, size → `typography/size/*`, weight → `typography/weight/*`.
+  **Set line-height as a %** in the style (e.g. headings 120–130%, body 150%) — % renders correctly
+  and auto-scales with the per-mode size.
+- **Effect styles** — `shadow-sm … shadow-2xl`; bind shadow color to a `Colors` variable.
 
 ## Validation
-Theme aliases tailwind colors; Breakpoints tokens alias px; Light/Dark + Desktop/Tablet/Mobile
-resolve; text styles are variable-bound; names match shadcn + Tailwind exactly.
+Theme aliases colors; spacing/radius/type **differ per mode** per the tables; text styles bound with
+% line-height; Style Guide shows the per-breakpoint table; names match shadcn + Tailwind.

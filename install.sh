@@ -8,7 +8,7 @@ set -euo pipefail
 
 REPO="RaZanjana/thisura-skills"
 BRANCH="main"
-SKILL="thisura"
+SKILL="thisura-style-guide"
 DEST="$HOME/.claude/skills"
 
 echo "→ Installing '$SKILL' into $DEST"

@@ -1,75 +1,65 @@
 # Mobile — Gluestack theming (Colors + Breakpoints)
 
-Used when **platform = mobile**. Build the `Colors` and `Breakpoints` collections, mirroring
-**Gluestack UI v2** so each Figma variable name equals the NativeWind class root devs type
-(`bg-background-0`, `text-typography-900`). Every token aliases a Primitive. Source exact values
-from the project's `gluestack-ui-provider/config.ts` (`light`/`dark` `vars()`) if a repo is open;
-otherwise use Gluestack v2 defaults and convert to hex.
+Platform = mobile. Build `Colors` and `Breakpoints`, mirroring **Gluestack UI v2** so each Figma
+variable name equals the NativeWind class root (`bg-background-0`, `text-typography-900`). Every
+token aliases a Primitive. Source exact values from `gluestack-ui-provider/config.ts` if a repo is open.
 
 ---
 
-## Colors collection  (modes: Light [+ Dark if in scope])
+## Colors collection  (modes: Light [+ Dark])
 
-Two groups: `Theme` and `Other`.
-
-### Theme/  — Gluestack numeric scales
-Mirror Gluestack's `{role}-{step}` scales exactly (no normalization). Each step aliases a
-`tailwind colors/*` primitive (or `brand/*` for primary). Steps: `0, 50, 100, 200, 300, 400,
-500, 600, 700, 800, 900, 950`.
+### Theme/  — Gluestack numeric scales (mirror exactly; alias `tailwind colors/*` or `brand*/*`)
+Steps `0, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950`.
 ```
-Theme/primary/0…950     Theme/secondary/0…950     Theme/tertiary/0…950
-Theme/background/0…950   Theme/typography/0…950     Theme/outline/0…950
-Theme/error/0…950   Theme/success/0…950   Theme/warning/0…950   Theme/info/0…950
+Theme/primary/0…950   Theme/secondary/0…950   Theme/tertiary/0…950
+Theme/background/0…950  Theme/typography/0…950   Theme/outline/0…950
+Theme/error/0…950  Theme/success/0…950  Theme/warning/0…950  Theme/info/0…950
 Theme/indicator/primary  Theme/indicator/info  Theme/indicator/error
 ```
-Typical aliasing: `background/0 → white`, `background/950 → neutral/950`,
-`typography/900 → neutral/900`, `typography/0 → white`, `outline/200 → neutral/200`,
-`error → red/*`, `success → green/*`, `warning → amber/*`, `info → blue/*`. Dark mode re-points
-per the provider's dark block (scale commonly inverts).
+Typical aliasing: `background/0 → white`, `background/950 → neutral/950`, `typography/900 → neutral/900`,
+`typography/0 → white`, `outline/200 → neutral/200`, `error → red/*`, `success → green/*`,
+`warning → amber/*`, `info → blue/*`. Dark re-points per the provider's dark block.
 
-### Other/  — placeholder
-Labelled, **empty** group for project-specific additions. Don't pre-fill.
+### Other/  — labelled empty placeholder. Don't pre-fill.
 
 ---
 
-## Breakpoints collection  (modes: Gluestack breakpoint tokens)
+## Breakpoints collection  (modes — values VARY per mode)
+Mobile apps use two modes: **Tablet** (≥768) · **Mobile** (<768). No `breakpoint` group.
+Everything dimensional aliases `px/*`.
 
-Mobile doesn't use Desktop/Tablet/Mobile — use Gluestack's breakpoint tokens as the modes:
-**base, sm, md, lg, xl** (confirm exact px against the project's config). Create all modes with
-**identical base values** to start; tune per project. Everything dimensional aliases `px/*`.
+### typography/size  (alias px; display shrinks, body constant)
+Mirror Gluestack's `size` scale; per-mode values:
+| size | Tablet | Mobile |
+|---|---|---|
+| 6xl | 48 | 36 |
+| 5xl | 40 | 32 |
+| 4xl | 34 | 28 |
+| 3xl | 30 | 24 |
+| 2xl | 24 | 22 |
+| xl | 20 | 20 |
+| lg | 18 | 18 |
+| md (base) | 16 | 16 |
+| sm | 14 | 14 |
+| xs / 2xs | 12 / 10 | 12 / 10 |
 
-### breakpoint/  — token thresholds (constant across modes)
-```
-breakpoint/base = 0   breakpoint/sm   breakpoint/md   breakpoint/lg   breakpoint/xl
-```
-(Set exact px from the Gluestack/NativeWind config; alias the matching `px/*`.)
+### typography/weight, typography/font  (constant)
+`weight/{…}` (raw numbers per Gluestack fontWeight); `font/{…}` (family strings).
+**Line-height is NOT a variable** — set as a % in each text style (Phase 4).
 
-### spacing/  — Tailwind-named, alias px
-Same Tailwind scale as web: `spacing/1 → px/4 … spacing/24 → px/96` (token `n` = `n × 4px`).
+### spacing/  (Tailwind-named, alias px) — ≤16px constant; ≥24px step down (Mobile ×0.85 vs Tablet)
+`6 (24)→20 · 8 (32)→28 · 10 (40)→32 · 12 (48)→40 · 16 (64)→56 · 20 (80)→68 · 24 (96)→80` (Mobile column; Tablet = base).
 
-### radius/  — NativeWind / Tailwind scale, alias px (may differ per mode)
-```
-radius/none = 0   radius/xs = 2   radius/sm = 4   radius/md = 6   radius/lg = 8
-radius/xl = 12    radius/2xl = 16  radius/3xl = 24  radius/full = 9999
-```
-(Confirm against the project's Tailwind/NativeWind version; add `px/*` as needed.)
-
-### typography/  — sizes alias px; weight/family/line-height as values
-Mirror Gluestack's `size` scale (`2xs … 6xl`):
-```
-typography/size/{2xs … 6xl} → alias px/*
-typography/weight/{…}        (raw numbers, per Gluestack fontWeight tokens)
-typography/font/{…}          (family strings)
-typography/line-height/{…}
-```
+### radius/  — NativeWind / Tailwind scale, alias px; gentle step-down on Mobile (radii ≥12px)
+`none 0 · xs 2 · sm 4 · md 6 · lg 8 · xl 12 · 2xl 16 · 3xl 24 · full 9999` (Tablet base; Mobile eases large radii, e.g. `3xl 24 → 20`).
 
 ---
 
-## Local styles (Phase 4)
-- **Text styles** — named to Gluestack usage (`Heading/2xl`, `Text/md`, `Text/2xs`, …). **Bind**
-  family/size/weight/line-height to the `typography/*` variables. No hardcoded values.
+## Local styles
+- **Text styles** (`Heading/2xl`, `Text/md`, `Text/2xs`, …): bind family/size/weight to the
+  `typography/*` variables. **Set line-height as a %** in the style (headings ~120–130%, body ~150%).
 - **Effect styles** — shadow scale; bind shadow color to a `Colors` variable.
 
 ## Validation
-Theme mirrors Gluestack `{role}-{step}` and aliases tailwind colors; Breakpoints tokens alias px;
-Light/Dark + breakpoint modes resolve; text styles are variable-bound; names match Gluestack + Tailwind exactly.
+Theme mirrors Gluestack `{role}-{step}` and aliases colors; spacing/radius/type **differ per mode**;
+text styles bound with % line-height; Style Guide shows the per-breakpoint table; names match Gluestack + Tailwind.

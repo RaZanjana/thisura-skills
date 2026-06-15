@@ -6,7 +6,7 @@ A small collection of reusable [Agent Skills](https://www.anthropic.com/news/ski
 
 | Skill | What it does |
 |-------|--------------|
-| [`thisura/`](./thisura) | Builds a Figma design-token system (Primitives → Semantics), local styles, and a bound Style Guide page for dev hand-off. Tailwind v4 naming; shadcn for web, Gluestack for mobile. See its [README](./thisura/README.md). |
+| [`thisura-style-guide/`](./thisura-style-guide) | Builds a Figma design-token system (Primitives, Colors, Breakpoints), local styles, and a bound Style Guide page for dev hand-off. Tailwind v4 naming; shadcn for web, Gluestack for mobile. See its [README](./thisura-style-guide/README.md). |
 
 More skills may be added as sibling folders over time.
 
@@ -18,7 +18,7 @@ Paste this into Terminal:
 curl -fsSL https://raw.githubusercontent.com/RaZanjana/thisura-skills/main/install.sh | bash
 ```
 
-That's the whole install. It drops Thisura into `~/.claude/skills/` (creating the folder if it doesn't exist) and works with any model you use in Cursor — Claude, GPT, or Gemini. Then **restart Cursor** and type `/thisura` in the Agent chat to confirm it loaded.
+That's the whole install. It drops Thisura into `~/.claude/skills/` (creating the folder if it doesn't exist) and works with any model you use in Cursor — Claude, GPT, or Gemini. Then **restart Cursor** and type `/thisura-style-guide` in the Agent chat to confirm it loaded.
 
 You don't need a Cursor project open, a git repo, or the Claude app installed — the skill lives at the OS level and loads on every launch.
 
@@ -31,9 +31,9 @@ If you'd rather not run the script:
 
 ```bash
 git clone https://github.com/RaZanjana/thisura-skills.git
-cp -r thisura-skills/thisura ~/.claude/skills/        # copy
+cp -r thisura-skills/thisura-style-guide ~/.claude/skills/        # copy
 # or symlink so git pull keeps it fresh:
-ln -s "$(pwd)/thisura-skills/thisura" ~/.claude/skills/thisura
+ln -s "$(pwd)/thisura-skills/thisura-style-guide" ~/.claude/skills/thisura-style-guide
 ```
 Cursor also reads `.agents/skills/` and per-project `.claude/skills/` — any of those work.
 </details>
@@ -43,10 +43,10 @@ Cursor also reads `.agents/skills/` and per-project `.claude/skills/` — any of
 Each skill has its own README with prerequisites and a sample prompt. For Thisura:
 
 ```
-Use /thisura and generate a style guide for the project in this Figma file: [paste Figma URL]
+Use /thisura-style-guide and generate a style guide for the project in this Figma file: [paste Figma URL]
 ```
 
-It'll ask a few setup questions, then build everything. Full details in [`thisura/README.md`](./thisura/README.md).
+It'll ask a few setup questions, then build everything. Full details in [`thisura-style-guide/README.md`](./thisura-style-guide/README.md).
 
 ## Contributing / updating the skill
 
