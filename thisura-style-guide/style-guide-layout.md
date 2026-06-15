@@ -29,23 +29,39 @@ offsets leave dead space. Auto-layout + hug eliminates all three by definition.
 - Ramp: **horizontal auto-layout, hug**, gap 0; each step = vertical auto-layout (hug): a **96×56** chip + step number + resolved hex below. Because the ramp hugs, it never clips.
 
 ## Alpha & opacity
-- Behind the swatches, a **checkerboard** fill (tile pattern or image) so transparency reads.
-- Alpha colours: horizontal auto-layout (wrap), each swatch **140×64** + label below.
-- Opacity scale: horizontal auto-layout, the base colour at each `opacity/*` step + label below.
+- **Each swatch cell = vertical auto-layout, HUG HEIGHT**: the swatch box (fixed, e.g. **140×64**)
+  on top, the label below, gap **8**. Do **not** give the cell or its row a fixed short height —
+  if you do, the label overflows and overlaps the next block (this is a real bug to avoid). The
+  cell must hug so its full height (≈90px) is reserved.
+- Alpha row: horizontal auto-layout with WRAP, **hug height**, gap 16. Each swatch box sits on a
+  **checkerboard** fill so transparency reads.
+- Opacity scale: same pattern — horizontal auto-layout, each cell vertical-hug (box + label), the
+  base colour at each `opacity/*` step. Put a clear gap (≥24) between the alpha row and the
+  opacity row so they never collide.
 
 ## Typography specimens
 - Each row: **horizontal auto-layout, width Fill, HUG HEIGHT** (never a fixed height — display
   type is 60–72px tall and will clip otherwise), vertical-align center, distribution
-  space-between: left = the sample text set in that **text style** (hug), right = the style name
-  (`muted-foreground`, hug). Row gap **8–12**.
+  **space-between**: the sample text set in that **text style** on the **LEFT**, the style-name
+  label (`muted-foreground`) on the **far right**. Row gap **8–12**.
+- **Left-align the sample text** — text-align LEFT, hug width, starting at the row's left edge
+  (x=0). Do **NOT** centre it. (The earlier build centred the sample at x≈197 — wrong.)
 
-## Tables (type / spacing / radius per breakpoint)
-- Build as a vertical auto-layout of **row frames**; each row = **horizontal auto-layout, hug
-  height (~28px)**, with fixed-width cells (token ≈180, each value ≈80) and a **bold header row**.
-  Row gap 0–4 — **never 100**.
-- **Spacing table:** add a visual cell — a rectangle whose **width = the spacing value** (in the
-  reference mode), so the scale reads at a glance.
-- **Radius table:** add a visual cell — a small square with that **corner radius** applied.
+## Tables (type / spacing / radius per breakpoint) — FIXED COLUMN GRID
+Tabular data must line up. The failure to avoid: letting value cells **hug** (so each row's
+columns start at a different x) or **centring** content (so nothing aligns). Rules:
+- Define the columns **once** and reuse the **identical widths** for the header row and every data
+  row: **Token col fixed ≈200**, then one **fixed-width column per breakpoint (≈110 each)**. Cells
+  are **fixed width — not hug**, so columns align vertically down the whole table.
+- **Left-align** every cell's text at the same inset. The **header labels sit in the same fixed
+  columns** as the data (so "Tablet" is directly above the Tablet values). Bold header row.
+- Table = vertical auto-layout of rows; each row = horizontal auto-layout, **hug height (~28–32px)**,
+  gap 0–4. **Never** 100px row spacing.
+- **Spacing table:** inside each fixed-width value cell, put the number **then** a bar (rectangle,
+  height ~10) whose width = the value, **capped to the cell width**. The bar lives inside the fixed
+  cell, so it never shifts the columns. (Don't size the cell to the bar.)
+- **Radius table:** inside each fixed-width value cell, a **fixed small box (e.g. 28×28)** with that
+  **corner radius** applied + the number. Same box size every row so columns stay aligned.
 
 ## Shadow specimens
 - Each: a **surface box ≈160×96** (`Theme/card` fill, radius `lg`) with the **effect style
@@ -55,8 +71,10 @@ offsets leave dead space. Auto-layout + hug eliminates all three by definition.
 ## Sizing checklist — must all pass before finishing
 - [ ] Page, every section, every grid/row/table uses **auto-layout**.
 - [ ] **No frame left at the default 100×100**; every container hugs or fills.
-- [ ] Typography rows **hug height** (no clipped display type).
-- [ ] Table rows are compact (hug height), **not** 100px-spaced; spacing/radius have **visual specimens**.
+- [ ] Typography rows **hug height** (no clipped display type) and the sample text is **left-aligned**, not centred.
+- [ ] **Alpha & opacity cells hug height** (swatch + label below) — labels never overlap the next block.
+- [ ] Tables use a **fixed shared column grid**: header columns sit directly above their data columns; value cells are fixed-width (not hug); text left-aligned. Spacing bars/radius boxes live **inside** the fixed cells.
+- [ ] Table rows are compact (~28–32px), **not** 100px-spaced; spacing/radius show **visual specimens**.
 - [ ] Shadow specimens include the **actual shadowed box**, not just a label.
 - [ ] Card/label text is never fix-width-clipped (hug or wrap; card wide enough).
 - [ ] **Clip content OFF** on sections; light chips carry a border.
