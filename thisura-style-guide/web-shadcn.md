@@ -25,7 +25,11 @@ Dark re-points per `.dark`. Typical aliasing: `background → white`, `foregroun
 `muted → neutral/100`, `muted-foreground → neutral/500`, `border/input → neutral/200`,
 `primary → brand/500`, `destructive → red/*`.
 
-### Other/  — labelled empty placeholder for project-specific colors. Don't pre-fill.
+### Other/  — placeholder + alpha colours
+A labelled placeholder for project-specific colours, **plus the standalone alpha colours**
+(semi-transparent; Figma can't alias-with-opacity): `Other/overlay/scrim` (black 60%),
+`Other/overlay/hover` (black 8%), `Other/overlay/pressed` (black 12%), `Other/overlay/shadow`
+(black 10%), `Other/overlay/on-dark` (white 10%). Set hex + alpha directly.
 
 ---
 
@@ -75,7 +79,9 @@ Small radii (≤10) stay constant; larger ones step down (e.g. `2xl 18 → 16 �
   bind family → `typography/font/*`, size → `typography/size/*`, weight → `typography/weight/*`.
   **Set line-height as a %** in the style (e.g. headings 120–130%, body 150%) — % renders correctly
   and auto-scales with the per-mode size.
-- **Effect styles** — `shadow-sm … shadow-2xl`; bind shadow color to a `Colors` variable.
+- **Effect styles** — Tailwind v4 shadow scale (`shadow-xs … shadow-2xl`): **black at low alpha
+  (~0.05–0.25), most as two stacked layers** (tight contact + soft ambient), never 100%. Bind the
+  shadow colour to `Other/overlay/shadow`. Source exact offset/blur/spread from Tailwind v4.
 
 ## Validation
 Theme aliases colors; spacing/radius/type **differ per mode** per the tables; text styles bound with

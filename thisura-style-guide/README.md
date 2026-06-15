@@ -16,11 +16,11 @@ The point: instead of hand-building variables and a style guide every project, y
 
 After a run, your Figma file will have:
 
-- **A `Primitives` collection** — the raw material: Tailwind color ramps and raw pixel values. Every token is *unscoped*, so designers never pick it directly — it's plumbing, referenced by the other collections and not shown in the style guide.
-- **A `Colors` collection** — the colours you design with, in two groups: `Theme` (the platform set — shadcn roles like `background`/`primary`/`muted-foreground` for web, or Gluestack scales like `primary/500`/`typography/900` for mobile) and `Other` (a placeholder for extra colours). Light mode always, Dark mode if the project needs it.
-- **A `Breakpoints` collection** — everything responsive, with device modes (web: Large Desktop / Standard Desktop / Tablet / Mobile; mobile app: Tablet / Mobile): spacing, radius, and typography. The values **genuinely change per mode** — switch the mode and type, spacing, and radius all shift to that breakpoint's values.
-- **Local styles** — text styles with font/size/weight/line-height **bound to the typography variables** (so type goes responsive automatically), plus the Tailwind shadow scale.
-- **A `🎨 Style Guide` page** — theme swatches, type ramp, spacing, radius, breakpoints, and shadows, all bound to the tokens so it updates itself. This is your dev contract.
+- **A `Primitives` collection** — the raw material: Tailwind colour ramps, raw pixel values, and an `opacity/*` scale. Tokens are *unscoped* (plumbing, referenced not picked) — except opacity, which you apply directly. Raw Tailwind ramps aren't shown in the style guide, but your **brand ramps are documented** there.
+- **A `Colors` collection** — two groups: `Theme` (the platform set — shadcn roles like `background`/`primary`/`muted-foreground` for web, or Gluestack scales like `primary/500`/`typography/900` for mobile) and `Other` (extra colours **plus alpha colours** for overlays, scrims, and shadow tint). Light mode always, Dark if needed.
+- **A `Breakpoints` collection** — everything responsive, with device modes (web: Large Desktop / Standard Desktop / Tablet / Mobile; mobile app: Tablet / Mobile): spacing, radius, and typography. The values **genuinely change per mode**.
+- **Local styles** — text styles with font/size/weight **bound to variables** (line-height set as a % so it scales), plus **soft, low-opacity shadow** effect styles tinted from an alpha colour.
+- **A `🎨 Style Guide` page** — a **swatch-grid of colour cards** (grouped by role), brand ramps, alpha/opacity on a checkerboard, type ramp, per-breakpoint tables for type/spacing/radius, and shadow specimens — all bound to the tokens. This is your dev contract, and you can **refresh it anytime** (see below) without hand-editing.
 
 ---
 
@@ -109,6 +109,19 @@ Answer those, approve anything it proposes, and it builds everything, then gives
 > **Thisura:** Quick setup first — is this web or mobile? Do you have a brand guide? Dark mode in scope? Anything special for this run?
 > **You:** Mobile, no brand guide, light only. Primary should be around #2563EB.
 > **Thisura:** Here's the proposed palette + brand ramp from that blue — look good? *(you approve)* …building Primitives, Gluestack semantics, styles, and the Style Guide page.
+
+### Updating the style guide later
+
+When you tweak variables or styles, you don't rebuild the page by hand. Re-invoke on the same file:
+
+```
+/thisura-style-guide — refresh the style guide in this file: [Figma URL]
+```
+
+It notices the file already has the collections and a `🎨 Style Guide` page, reads your current
+variables and styles live, and **rebuilds the page from the same template** — identical layout,
+updated values. It'll also tell you what changed (new/renamed/removed tokens). The variables stay
+the single source of truth, so the doc never drifts.
 
 ---
 

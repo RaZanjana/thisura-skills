@@ -20,7 +20,10 @@ Typical aliasing: `background/0 → white`, `background/950 → neutral/950`, `t
 `typography/0 → white`, `outline/200 → neutral/200`, `error → red/*`, `success → green/*`,
 `warning → amber/*`, `info → blue/*`. Dark re-points per the provider's dark block.
 
-### Other/  — labelled empty placeholder. Don't pre-fill.
+### Other/  — placeholder + alpha colours
+Labelled placeholder for project-specific colours, **plus standalone alpha colours**:
+`Other/overlay/scrim` (black 60%), `Other/overlay/hover` (black 8%), `Other/overlay/pressed`
+(black 12%), `Other/overlay/shadow` (black 10%), `Other/overlay/on-dark` (white 10%). Set hex + alpha directly.
 
 ---
 
@@ -58,7 +61,8 @@ Mirror Gluestack's `size` scale; per-mode values:
 ## Local styles
 - **Text styles** (`Heading/2xl`, `Text/md`, `Text/2xs`, …): bind family/size/weight to the
   `typography/*` variables. **Set line-height as a %** in the style (headings ~120–130%, body ~150%).
-- **Effect styles** — shadow scale; bind shadow color to a `Colors` variable.
+- **Effect styles** — shadow scale: **black at low alpha (~0.05–0.25), two stacked layers**, never
+  100%. Bind the shadow colour to `Other/overlay/shadow`.
 
 ## Validation
 Theme mirrors Gluestack `{role}-{step}` and aliases colors; spacing/radius/type **differ per mode**;

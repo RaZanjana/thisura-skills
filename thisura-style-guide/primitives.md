@@ -49,9 +49,27 @@ px/26, px/28, px/30, px/32, px/34, px/36, px/40, px/48, px/56, px/60, px/64, px/
 ```
 Add whatever the responsive spacing/radius/type tables require.
 
-## 5. Scoping — primitives are plumbing
+## 5. Opacity scale — `opacity/*`
+A Tailwind-standard opacity scale as **number variables**, applied at the layer level (modal
+backdrops, disabled states, etc.):
+```
+opacity/0, opacity/5, opacity/10, opacity/20, opacity/25, opacity/30, opacity/40, opacity/50,
+opacity/60, opacity/70, opacity/75, opacity/80, opacity/90, opacity/95, opacity/100
+```
+Store the percentage value (e.g. `50` = 50%) and **verify the unit on first apply** — Figma's
+number-variable units have surprised us before (see line-height). These are **scoped to opacity**
+(the one exception to §6's unscoping), since they're applied directly with no token layer above.
+
+> For semi-transparent *colours* (overlays, scrims, shadow tint), use the **alpha colours** in the
+> `Colors` collection (`Other/overlay/*`) — Figma can't derive a transparent colour from an
+> aliased opaque one, so those are standalone colour variables with baked alpha.
+
+## 6. Scoping — primitives are plumbing
 After creating each Primitive, **untick all scopes** so it never appears in a designer's
 fill/number/radius picker. Aliasing from Colors/Breakpoints still works regardless of scope.
+**Exception:** `opacity/*` is scoped to opacity so designers can apply it directly.
 
 ---
-**Output:** one `Primitives` collection (no modes): `tailwind colors/*`, `brand*/*`, `px/*` — all unscoped. Nothing here is swatched in the Style Guide.
+**Output:** one `Primitives` collection (no modes): `tailwind colors/*`, `brand*/*`, `px/*`,
+`opacity/*`. All unscoped except `opacity/*`. Raw Tailwind ramps are NOT swatched in the Style
+Guide — but `brand*/*` ramps **are** documented there.

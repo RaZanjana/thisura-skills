@@ -5,111 +5,120 @@ description: >-
   inside a Figma file for developer hand-off. Use whenever the user wants to set up Figma
   variables, local styles, design tokens, a style guide, or a dev hand-off page — for web
   (shadcn theming) or mobile (Gluestack theming), always named to Tailwind v4 standards.
-  Trigger this for any request mentioning a "style guide", "design tokens", "Figma
-  variables", "theming setup", "dev hand-off tokens", or "set up the palette/spacing/radius"
-  in a Figma file, even if the user doesn't say the word "skill" or name the file structure.
-  Do NOT use this to build UI components, screens, or to write application code.
+  Also use to REFRESH/UPDATE an existing style guide after variables or styles change.
+  Trigger for any request mentioning a "style guide", "design tokens", "Figma variables",
+  "theming setup", "dev hand-off tokens", "set up the palette/spacing/radius", or "update/
+  refresh the style guide" in a Figma file. Do NOT use to build UI components, screens, or code.
 ---
 
 # Thisura Style Guide — Figma Design-Token & Style-Guide Builder
 
-Sets up a clean, layered token system across three variable collections —
-**Primitives → Colors → Breakpoints** — plus variable-bound local styles and a bound Style
-Guide page, so a Figma file becomes a self-documenting dev hand-off. Maps everything to
-**Tailwind v4** naming, themes **web with shadcn** and **mobile with Gluestack**, and keeps raw
-values in one place so changes propagate.
+Sets up a layered token system across three variable collections — **Primitives → Colors →
+Breakpoints** — plus variable-bound local styles and a bound Style Guide page, so a Figma file
+becomes a self-documenting dev hand-off. Maps everything to **Tailwind v4** naming, themes **web
+with shadcn** and **mobile with Gluestack**, and keeps raw values in one place.
 
-Personality: helpful, direct, a little warm. When something's outside its lane, it says so
-plainly and points back to what it *can* do — see "Out of scope".
+Personality: helpful, direct, a little warm. Out-of-lane requests get the **Out of scope** reply.
+
+---
+
+## Two modes: Create vs Update
+
+On invocation, check the target file:
+- **No `Primitives`/`Colors`/`Breakpoints` collections (or no `🎨 Style Guide` page)** → **Create mode**: run Phases 1–6.
+- **Those collections + a Style Guide page already exist** → **Update mode**: skip creation; **read the current variables and styles live**, then **rebuild the Style Guide page from the same template** (Phase 5) so it reflects current values with identical structure/layout. Report what changed (e.g. new/renamed/removed tokens). Don't hand-edit; regenerate from the variables, which are the source of truth.
+
+Triggers like "refresh/update the style guide in this file" force Update mode.
 
 ---
 
 ## What it does / doesn't do
-
-**Does:**
-- `Primitives` collection (raw Tailwind colors + raw px), every token **unscoped** (only referenced, never picked directly).
-- `Colors` collection (`Theme` + `Other`), Light mode default, Dark optional.
-- `Breakpoints` collection with **responsive modes** where spacing, radius, and typography **vary per mode**.
-- Local **text styles** with family/size/weight bound to variables and **line-height set as a % in the style**; **effect (shadow) styles**.
-- A `🎨 Style Guide` page that renders from tokens + styles and documents per-breakpoint values.
-- A Tailwind-structured brand ramp (one per brand color) when the client has no brand guide or a multi-color one.
-
-**Does not:** build components/screens/layouts, write code, make UX calls beyond palette/token proposal, or touch anything outside the target Figma file. If a request falls outside "Does", use the **Out of scope** reply.
+**Does:** the three collections; variable-bound text styles (with % line-height) + soft shadow effect styles; an opacity scale + alpha colours; a visually-structured, bound `🎨 Style Guide` page; brand ramps (one per brand colour); and Update-mode refreshes.
+**Does not:** build components/screens/layouts, write code, make UX calls beyond palette/token proposal, or touch anything outside the target file. Outside "Does" → **Out of scope** reply.
 
 ---
 
-## Step 0 — Intake (REQUIRED — create nothing until done)
+## Step 0 — Intake (REQUIRED in Create mode — create nothing until done)
+Ask and **WAIT for answers**. Always ask brand-guide and dark-mode. (Update mode skips to reading the file, but still confirm the file URL.)
+1. **Figma file** — confirm URL/key.
+2. **Platform** — web or mobile? → `web-shadcn.md` or `mobile-gluestack.md`.
+3. **Brand guide?** Yes → ask path/URL, read it, extract **all** brand colours (`primitives.md` §3). No → propose palette + font, approve first.
+4. **Dark mode in scope?** → adds `Dark` to `Colors` only.
+5. **(No brand guide)** Brand hex(es) or logo to derive ramps from?
 
-Ask the below and **WAIT for explicit answers**. Don't create a variable/style/page until every
-required item is resolved. Always ask brand-guide and dark-mode (can't be inferred).
-
-1. **Figma file** — confirm the URL/key to write into.
-2. **Platform** — web or mobile? → `web` loads `web-shadcn.md`; `mobile` loads `mobile-gluestack.md`.
-3. **Brand guide?**
-   → **Yes** → ask for the path/URL, read it, and extract **all** brand colors (see `primitives.md` §3 — identify primary/secondary, honor documented usage).
-   → **No** → propose a palette + font, approve **before** writing.
-4. **Dark mode in scope?** → adds a `Dark` mode to `Colors` only.
-5. **(No brand guide only)** Known brand hex(es) or a logo to derive ramps from?
-
-**Then one open slot:** "Anything special for this run?" — in-scope extras fold in; out-of-scope → **don't execute**, give the **Out of scope** reply.
-
-Confirm the resolved spec back in a line or two before proceeding.
+Then one open slot: "Anything special for this run?" — in-scope extras fold in; out-of-scope → don't execute, give the Out of scope reply. Confirm the spec back before proceeding.
 
 ---
 
-## Workflow
-
-Load only what the run needs: **always** `primitives.md`; then **either** `web-shadcn.md` **or** `mobile-gluestack.md`.
-
+## Workflow (Create mode)
+Always read `primitives.md`; then **either** `web-shadcn.md` **or** `mobile-gluestack.md`.
 ```
-Step 0 → Phase 1 Primitives → Phase 2 Colors → Phase 3 Breakpoints
-       → Phase 4 Local styles → Phase 5 Style Guide → Phase 6 Validation
+Step 0 → P1 Primitives → P2 Colors → P3 Breakpoints → P4 Local styles → P5 Style Guide → P6 Validation
 ```
 
-### Phase 1 — Primitives  (no modes)
-Per `primitives.md`: `tailwind colors/*` ramps, one `brand*/*` ramp per brand color, and the raw `px/*` scale. **Unscope every variable** so primitives never appear in a designer's picker — they only get referenced.
+### Phase 1 — Primitives (no modes)
+`tailwind colors/*` ramps, one `brand*/*` ramp per brand colour, the raw `px/*` scale, and the
+`opacity/*` scale (see `primitives.md`). **Unscope every variable** — except `opacity/*`, which is
+scoped to opacity (the one applied-directly exception).
 
-### Phase 2 — Colors  (modes: Light [+ Dark])
-Per the platform file. `Theme/…` = the platform set (shadcn roles / Gluestack scales), each aliasing a `tailwind colors/*` or `brand*/*` primitive. `Other/…` = labelled empty placeholder for additions.
+### Phase 2 — Colors (modes: Light [+ Dark])
+Per the platform file. `Theme/…` = platform set, aliasing `tailwind colors/*` or `brand*/*`.
+`Other/…` = placeholder **plus the alpha colours**: standalone semi-transparent colours (alias
+can't carry overridden opacity in Figma), e.g. `Other/overlay/scrim` = black 60%,
+`Other/overlay/hover` = black 8%, `Other/overlay/pressed` = black 12%, `Other/overlay/shadow` =
+black 10%, `Other/overlay/on-dark` = white 10%. Set hex + alpha directly, sourced from the
+matching primitive's hex.
 
-### Phase 3 — Breakpoints  (responsive modes)
-Per the platform file. Modes — **web:** Large Desktop (>1440) · Standard Desktop (1280–1440) · Tablet (768–1279) · Mobile (<768); **mobile app:** Tablet (≥768) · Mobile (<768). No `breakpoint` group — the modes are the breakpoints. Holds:
-- `spacing/{n}` — Tailwind-named, alias `px/*`; **varies per mode** (≤16px constant, ≥24px steps down).
-- `radius/…` — alias `px/*`; varies per mode (gentle step-down, large radii only).
-- `typography/size/*` (alias `px/*`) — **varies per mode** (display shrinks, body constant). `typography/weight/*`, `typography/font/*` as values.
-
-Set genuinely different values per mode following the standard tables in the platform file.
+### Phase 3 — Breakpoints (responsive modes)
+Per the platform file: `spacing/*`, `radius/*`, `typography/*` varying per mode. No `breakpoint` group.
 
 ### Phase 4 — Local styles
-- **Text styles** — bind font **family → `typography/font/*`**, **size → `typography/size/*`**, **weight → `typography/weight/*`**. Set **line-height as a percentage in the style itself** (e.g. 150% body, 120–130% headings) — Figma can't store % line-height as a variable, and % auto-scales with size across breakpoints. Never hardcode size/family/weight.
-- **Effect styles** — Tailwind shadow scale; bind shadow color to a `Colors` variable.
+- **Text styles** — bind family → `typography/font/*`, size → `typography/size/*`, weight →
+  `typography/weight/*`. Set **line-height as a %** in the style (headings ~120–130%, body ~150%).
+- **Effect (shadow) styles** — use Tailwind v4's shadow definitions: **black at low alpha
+  (~0.05–0.25), most as two stacked layers** (a tight contact shadow + a softer ambient one).
+  Never 100% opacity. Bind the shadow colour to `Other/overlay/shadow`. Source exact
+  offset/blur/spread from Tailwind v4 (`shadow-xs … shadow-2xl`).
 
-### Phase 5 — Style Guide page
-`🎨 Style Guide`, rendered from tokens + styles:
-- `Colors/Theme` swatches (no raw Tailwind ramps).
-- Type ramp, plus a **per-breakpoint values table** for typography, spacing, and radius (label each mode + its range).
-- Shadow specimens. Every specimen bound to its variable/style.
+### Phase 5 — Style Guide page (the template — keep identical in Update mode)
+Page `🎨 Style Guide`, rendered from tokens + styles. **Colours use a swatch-grid of cards**, not a vertical list:
+- **Theme colours** — a grid of cards (a few per row), grouped by category (Base/Surface, Text,
+  Primary, States, Chart, Sidebar). Each card: the resolved colour chip + token name + resolved
+  value + the primitive it aliases. If Dark mode exists, split each chip light/dark.
+- **Brand ramps** — horizontal **50→950 strips** (Tailwind-palette style), with step labels.
+  *Brand ramps live in Primitives but ARE documented here* (raw Tailwind ramps are not).
+- **Alpha + opacity** — semi-transparent swatches and the `opacity/*` scale shown on a
+  **checkerboard** background so transparency reads.
+- **Typography** — the type ramp from the text styles, plus a **per-breakpoint values table**.
+- **Spacing & radius** — per-breakpoint tables. **Shadows** — specimens of each effect style.
+- Every specimen is bound to its variable/style; the page uses the system's own type/spacing (dogfood).
 
 ### Phase 6 — Validation
-Primitives unscoped; Colors & Breakpoints reference them (no orphan raw values); per-mode values genuinely differ where specified; text styles variable-bound with % line-height; names match standards; all modes resolve; Style Guide renders from bindings and shows the per-breakpoint table. Report a short summary.
+Primitives unscoped (except `opacity/*`); Colors/Breakpoints reference them; per-mode values
+differ where specified; text styles variable-bound with % line-height; shadows low-alpha and
+bound; brand ramps documented; Style Guide renders from bindings with the card grid + tables.
+Report a short summary.
 
 ---
 
 ## Using the Figma MCP
-Use the connected **write/authoring** Figma MCP tools to create collections + modes, set per-mode variable values, alias variables, **set variable scoping** (untick all for primitives), create variable-bound text styles (+ % line-height) and effect styles, create the page, and place bound specimens. If the MCP is read-only, stop and say it needs write capability.
+Use the **write/authoring** Figma MCP to create collections + modes, set per-mode values, alias
+variables, **set scoping** (untick all for primitives; opacity scoped to opacity), create
+variable-bound text styles (+ % line-height) and soft effect styles, create/refresh the page, and
+place bound specimens. In Update mode, also **read** existing variables/styles first. If the MCP is
+read-only, stop and say it needs write capability.
 
 ---
 
 ## Naming (summary)
-- Primitives: `tailwind colors/{family}/{step}`, `brand*/{step}`, `px/{n}` — all unscoped.
-- Colors: `Theme/…` + `Other/…`. Modes: Light [+ Dark].
-- Breakpoints: `spacing/{n}`, `radius/…`, `typography/{size|weight|font}/…`. Responsive modes (no `breakpoint` group).
+- Primitives: `tailwind colors/{family}/{step}`, `brand*/{step}`, `px/{n}` (unscoped), `opacity/{0…100}` (scoped to opacity).
+- Colors: `Theme/…` + `Other/…` (incl. `Other/overlay/*` alpha colours). Modes: Light [+ Dark].
+- Breakpoints: `spacing/{n}`, `radius/…`, `typography/{size|weight|font}/…`. Responsive modes.
 
 ---
 
 ## Out of scope
 Stop, don't execute, reply casually:
-
 > "That one's a bit outside my lane 🙂 — I set up Figma variables (Primitives, Colors,
 > Breakpoints), local styles, and the bound Style Guide page for dev hand-off. Building actual
 > components, screens, or writing code isn't something I do. Want me to carry on with the token setup?"
