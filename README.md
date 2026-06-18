@@ -7,6 +7,7 @@ A small collection of reusable [Agent Skills](https://www.anthropic.com/news/ski
 | Skill | What it does |
 |-------|--------------|
 | [`thisura-style-guide/`](./thisura-style-guide) | Builds a Figma design-token system (Primitives, Colors, Breakpoints), local styles, and a bound Style Guide page for dev hand-off. Tailwind v4 naming; shadcn for web, Gluestack for mobile. See its [README](./thisura-style-guide/README.md). |
+| [`thisura-wireframe/`](./thisura-wireframe) | Generates low-fidelity wireframes in a Figma file, **one user journey at a time**, from your PRD, Themes & Epics, and User Journey docs. Greyscale screens, flowchart-style arrows, Dev Mode annotations, a Section per journey. Keeps **recurring screens consistent** across journeys via a screen registry + master/snapshot derivation (placeholders reveal as each journey introduces them), with a self-audit and a review stop between journeys. See its [README](./thisura-wireframe/README.md). |
 
 More skills may be added as sibling folders over time.
 
@@ -18,7 +19,7 @@ Paste this into Terminal:
 curl -fsSL https://raw.githubusercontent.com/RaZanjana/thisura-skills/main/install.sh | bash
 ```
 
-That's the whole install. It drops Thisura into `~/.claude/skills/` (creating the folder if it doesn't exist) and works with any model you use in Cursor — Claude, GPT, or Gemini. Then **restart Cursor** and type `/thisura-style-guide` in the Agent chat to confirm it loaded.
+That's the whole install. It drops the Thisura skills into `~/.claude/skills/` (creating the folder if it doesn't exist) and works with any model you use in Cursor — Claude, GPT, or Gemini. Then **restart Cursor** and type `/` in the Agent chat to confirm `thisura-style-guide` and `thisura-wireframe` loaded.
 
 You don't need a Cursor project open, a git repo, or the Claude app installed — the skill lives at the OS level and loads on every launch.
 
@@ -32,21 +33,33 @@ If you'd rather not run the script:
 ```bash
 git clone https://github.com/RaZanjana/thisura-skills.git
 cp -r thisura-skills/thisura-style-guide ~/.claude/skills/        # copy
-# or symlink so git pull keeps it fresh:
+cp -r thisura-skills/thisura-wireframe   ~/.claude/skills/
+# or symlink so git pull keeps them fresh:
 ln -s "$(pwd)/thisura-skills/thisura-style-guide" ~/.claude/skills/thisura-style-guide
+ln -s "$(pwd)/thisura-skills/thisura-wireframe"   ~/.claude/skills/thisura-wireframe
 ```
 Cursor also reads `.agents/skills/` and per-project `.claude/skills/` — any of those work.
 </details>
 
 ## Using a skill
 
-Each skill has its own README with prerequisites and a sample prompt. For Thisura:
+Each skill has its own README with prerequisites and a sample prompt.
+
+Style guide:
 
 ```
 Use /thisura-style-guide and generate a style guide for the project in this Figma file: [paste Figma URL]
 ```
 
-It'll ask a few setup questions, then build everything. Full details in [`thisura-style-guide/README.md`](./thisura-style-guide/README.md).
+Wireframes (it asks for your PRD, Themes & Epics, and User Journey docs as setup questions):
+
+```
+Use /thisura-wireframe to wireframe the journeys for this project in this Figma file: [paste Figma URL]
+```
+
+Each one asks a few setup questions, then gets to work. Full details in
+[`thisura-style-guide/README.md`](./thisura-style-guide/README.md) and
+[`thisura-wireframe/README.md`](./thisura-wireframe/README.md).
 
 ## Contributing / updating the skill
 

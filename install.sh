@@ -8,10 +8,10 @@ set -euo pipefail
 
 REPO="RaZanjana/thisura-skills"
 BRANCH="main"
-SKILL="thisura-style-guide"
+SKILLS=("thisura-style-guide" "thisura-wireframe")
 DEST="$HOME/.claude/skills"
 
-echo "→ Installing '$SKILL' into $DEST"
+echo "→ Installing Thisura skills into $DEST"
 
 # Make sure the global skills folder exists
 mkdir -p "$DEST"
@@ -23,16 +23,18 @@ trap 'rm -rf "$TMP"' EXIT
 curl -fsSL "https://github.com/$REPO/archive/refs/heads/$BRANCH.tar.gz" \
   | tar -xz -C "$TMP"
 
-SRC="$TMP/$(basename "$REPO")-$BRANCH/$SKILL"
+ROOT="$TMP/$(basename "$REPO")-$BRANCH"
 
-if [ ! -d "$SRC" ]; then
-  echo "✗ Could not find the '$SKILL' folder in the repo. Aborting." >&2
-  exit 1
-fi
+for SKILL in "${SKILLS[@]}"; do
+  SRC="$ROOT/$SKILL"
+  if [ ! -d "$SRC" ]; then
+    echo "✗ Could not find the '$SKILL' folder in the repo. Skipping." >&2
+    continue
+  fi
+  # Replace any existing copy so re-running = update
+  rm -rf "$DEST/$SKILL"
+  cp -R "$SRC" "$DEST/$SKILL"
+  echo "✓ Installed: $DEST/$SKILL"
+done
 
-# Replace any existing copy so re-running = update
-rm -rf "$DEST/$SKILL"
-cp -R "$SRC" "$DEST/$SKILL"
-
-echo "✓ Installed: $DEST/$SKILL"
-echo "→ Restart Cursor, then type /$SKILL in the Agent chat."
+echo "→ Restart Cursor, then type / in the Agent chat to see the thisura skills."
