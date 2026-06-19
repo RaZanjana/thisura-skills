@@ -97,9 +97,14 @@ before involving the user**:
       reflowed; any modify/remove of an earlier-revealed element went through the ripple protocol.
 - [ ] **Layout integrity** — every text node is auto-height and every container auto-layout; **each
       screen frame equals its device size and contains its children (no child's bounding box exceeds
-      its parent — compare child max-extent vs parent w/h via get_metadata)**; no element overlaps a
-      sibling; no text overflows its box; **no connector crosses a screen/card/symbol frame**;
-      decision symbols are diamonds; every named slot has content (no empty labels).
+      its parent — compare child max-extent vs parent w/h via get_metadata)**; **no two screen
+      frames overlap anywhere in the Section** (happy path or branch rows); no element overlaps a
+      sibling; no text overflows its box.
+- [ ] **Map integrity** — connectors are **orthogonal** (no line with both width and height) and
+      **cross no screen/card/symbol frame**; Start/End terminators are wired to the real first/last
+      screens (none floating or unconnected); decision symbols are diamonds with centered labels;
+      every symbol/label/callout frame contains its text (none collapsed); annotations sit in a
+      reserved lane, each anchored to its element; every named slot has content (no empty labels).
 - [ ] **Surface correct** — each screen is at its assigned device size.
 - [ ] **Annotations resolve** — each Dev Mode annotation is attached to a real node and states a
       real navigation/state/content/interaction note.

@@ -29,36 +29,49 @@ clear of them:
 3. **Size the Section to its content** — after drawing, verify the Section's height/width covers all
    its screens + arrows with margin; if a screen or arrow falls outside, the Section is cropping —
    grow it. Never leave a Section at a default size while content overflows.
-4. Within a Section, lay the journey's **snapshots** (derived from the masters, **each at full
-   device size** — desktop 1440×1024, mobile 375×812) **left to right in flow order**, in a
-   consistent row (or rows), with a **fixed horizontal gap of ≥ 200px** between screens (so the
-   desktop pitch is ≥ 1640px per screen). State variants sit just **below** their happy screen. No
-   two screens overlap; nothing is clipped.
+4. **Lay every screen on one fixed grid — happy path AND all branch/alternate/state screens.** The
+   grid has a fixed **column pitch** (desktop ≥ 1640px = 1440 frame + ≥200 gap; mobile ≥ 575px) and
+   a fixed **row pitch** (desktop ≥ 1224px = 1024 frame + ≥200 gap). The happy path is the top row,
+   left→right in flow order. Branch and error/empty/alternate states go on **their own grid rows
+   below**, each snapped to a column of the same pitch — **never at ad-hoc offsets under a trigger.**
+   The failure to avoid: dropping branch screens 300–400px apart so 1440-wide frames pile on top of
+   each other. Two screens may **never** overlap anywhere in the Section (not just in the main row).
 5. **Size the Section to fit the full-size frames — never shrink frames to fit the Section.** The
    sizing dependency runs one way only: frames are full device size, and the Section grows to
    contain them (plus padding). A short/narrow Section with thumbnail-shrunk frames is the failure
    that makes content overflow each frame onto its neighbours.
+6. **Verify placement before drawing arrows.** After positioning, re-read the Section via
+   `Figma:get_metadata` and confirm no two screen frames' boxes overlap (compare every pair's
+   x/y/w/h). Fix overlaps first; arrows come last.
 
 ## Flowchart symbols (consistent greyscale, fixed style)
 Use proper flowchart symbols so the map reads as a flow, not just frames with lines. All symbols:
 fill white, 1.5px `#333333` stroke, Inter labels in `#333333`.
 - **Terminator (Start / End)** — rounded pill (radius `full`), ~120×48, label "Start" / "End".
-  Each journey begins with a Start terminator into its first screen and ends with End terminator(s).
+  Each journey begins with a **Start** terminator placed just **before** its first screen and wired
+  into it; it ends with **End** terminator(s) placed just **after** the terminal screen(s) and wired
+  from them — adjacent to the real screen, **never floating** above an unrelated frame or left
+  unconnected.
 - **Screen node** — the **lo-fi screen frame itself** acts as the process node; don't redraw a
   rectangle around it.
 - **Decision** — a **diamond**: a square **rotated 45°** (or a 4-point polygon), ~140×100 bounding
-  box, with the condition inside (e.g. "Logged in?"). **Do not use a default `regular-polygon`** —
+  box, with the condition **centered inside** it. **Do not use a default `regular-polygon`** —
   that renders as a triangle/pentagon, not a diamond. Outgoing arrows are labeled with the outcomes
   (e.g. "Yes" / "No", "Has items" / "Empty").
+- **Containment for all symbols/labels:** every symbol, label pill, callout and badge is a frame
+  whose width/height **fully contains its text** (auto-height; parent ≥ children). A symbol frame
+  collapsed to ~10px while its text spills out is the failure to avoid — it applies here exactly as
+  it does to screens.
 - **Connector / off-page** — small circle ~40×40 with a letter (A, B…) to join screens that are far
   apart or continue on another row, instead of a long crossing arrow.
 - **Annotation marker** — see Dev Mode annotations below (not a drawn box by default).
 
 ## Arrows (one style everywhere)
 - Stroke **2px `#333333`**, solid, with a filled triangular arrowhead at the destination.
-- Route as straight or right-angle (elbow) lines from the **edge** of the source (screen edge,
-  diamond corner) to the destination edge. Keep direction consistent (generally left→right,
-  top→bottom).
+- **Orthogonal routing only.** Every connector is made of **horizontal and vertical segments with
+  right-angle (elbow) joints** — never a single diagonal line. A line node with **both** a non-zero
+  width and a non-zero height is a diagonal and is wrong; build the path from straight H/V segments
+  in the gutters instead. Keep direction consistent (generally left→right, top→bottom).
 - **Label every arrow** with the trigger, in Inter 400 11–12px on a small white pad so it stays
   readable over other elements: e.g. `Tap "Continue"`, `Submit`, `Back`, `Yes` / `No`.
 - Wire the real paths from the journey: forward actions, **back/cancel/skip** paths, and branch
@@ -74,16 +87,28 @@ fill white, 1.5px `#333333` stroke, Inter labels in `#333333`.
   connector** circle to jump instead of drawing a long crossing line. Routing a horizontal line at a
   card's vertical mid (through the card body) is the failure to avoid.
 
-## Dev Mode annotations
-Attach **native Dev Mode annotations** (`node.annotations`) to the relevant screen or element —
-structured, not freeform. Use these categories as a prefix so hand-off notes stay scannable:
+## Annotations
+**Primary: native Dev Mode annotations** (`node.annotations`) attached to the relevant screen or
+element — structured, not freeform. Use these categories as a prefix so hand-off notes stay
+scannable:
 - **Navigation** — where this goes / comes from, back behaviour, deep-link entry.
 - **State** — which state this is and what triggers it (empty/error/loading/permission/offline).
 - **Content** — what real content replaces the greeked placeholder here.
 - **Interaction** — gestures, validation rules, disabled conditions, edge behaviour.
 Keep each note short and specific (e.g. *Navigation — "Continue" → OTP Verify; back returns to
-Sign Up*). If the MCP can't author native annotations, fall back to small drawn callout notes
-(numbered pin + text in Inter, `#333333` on `#F5F5F5`) placed beside the screen, and say so.
+Sign Up*).
+
+**Fallback (drawn callouts), if the MCP can't author native annotations** — and then they must be
+organised, not scattered:
+- Put all callouts in a **single reserved annotation lane** (a consistent band, e.g. directly below
+  each screen row at a fixed offset), never floating at ad-hoc y-positions that collide with branch
+  screens.
+- **Anchor every callout:** place a small **number badge** on the annotated element/screen and the
+  matching **numbered note** in the lane, so the link is unambiguous.
+- Each callout is an **auto-layout frame that fully contains its text** (category line + body), with
+  padding — **never an ~10px-tall box with the text overflowing** (the bug to avoid). Inter,
+  `#333333` on `#F5F5F5`.
+- Say in the hand-off that drawn callouts were used because native annotations weren't available.
 
 ## Layout / mapping checklist (run per journey)
 - [ ] Section named after the journey; placed below the previous with ≥240px gutter; **no overlap**
@@ -91,13 +116,18 @@ Sign Up*). If the MCP can't author native annotations, fall back to small drawn 
 - [ ] **Frames at full device size; Section sized to contain them** (frames never shrunk to fit the
       Section); no child overflows its frame.
 - [ ] Section sized to fully contain its screens + arrows + labels; **nothing cropped**.
-- [ ] Screens in flow order, ≥200px gaps; state variants below their happy screen.
-- [ ] Start terminator → first screen; End terminator(s) on terminal screens.
+- [ ] **All screens on the fixed grid** (happy path + branch/state screens), consistent column +
+      row pitch; **no two screen frames overlap anywhere in the Section** (verified via metadata).
+- [ ] Start terminator wired into the first screen; End terminator(s) wired from terminal screen(s),
+      placed adjacent — none floating or unconnected.
 - [ ] Decision diamonds at every documented branch (rotated-square diamonds, **not**
-      regular-polygons); outgoing arrows labeled with outcomes.
-- [ ] Arrows uniform (2px `#333333`, arrowhead), each **labeled with its trigger**; back/cancel/skip
-      and error/empty paths wired.
+      regular-polygons), condition centered; outgoing arrows labeled with outcomes.
+- [ ] Arrows uniform (2px `#333333`, arrowhead), **orthogonal only** (no diagonals — no line with
+      both width and height), each **labeled with its trigger**; back/cancel/skip and error/empty
+      paths wired.
 - [ ] **No arrow crosses a screen/card/symbol frame** — connectors run in the gutters or use
       off-page connectors.
+- [ ] Every symbol/label/callout frame **contains its text** (auto-height; none collapsed).
+- [ ] Annotations in a **reserved lane**, each **anchored** to its element by a number badge;
+      native Dev Mode annotations where available, sized drawn callouts otherwise.
 - [ ] Symbol + arrow style **identical to prior journeys**.
-- [ ] Dev Mode annotations attached, categorized, resolving to real nodes.

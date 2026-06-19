@@ -88,7 +88,9 @@ do either.
 - **Parent-contains-children invariant:** every frame's width/height must be **≥ its children's
   bounding box**. A child must never extend past its parent. (Same failure family as a frame
   collapsing to near-zero height while children sit below it — the parent must always contain its
-  children.)
+  children.) **This applies to *every* frame, not just screens** — map symbols (terminators,
+  decisions), arrow/label pills, callouts, badges and legend blocks must each contain their text
+  (auto-height; never a ~10px box with text spilling out).
 - If a smaller representation is ever genuinely wanted, **rescale the whole frame including its
   children** (uniform scale), never resize the frame box alone. Overview is what canvas zoom is for
   — a large board is expected and fine.
