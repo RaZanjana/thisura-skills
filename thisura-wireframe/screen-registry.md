@@ -65,7 +65,11 @@ the exact space the real element will occupy so nothing moves on reveal.
 - **`🗂 Screen Index`** frame on the wireframes page — human-readable: each screen's ID, name,
   surface, element list with owning journey + status (placeholder / revealed / deprecated /
   override), and a master link. This is the readable source of truth and the Phase 1 approval
-  artifact.
+  artifact. **Render it as a structured table, not a single text node:** a vertical **auto-layout**
+  frame with a header row and **one row per screen**, each row an auto-layout set of cells
+  (ID / name / surface / elements / owning journey / status), every cell its own **auto-height**
+  text node, the frame **hugging** its content. A single concatenated text blob (which overflows and
+  can't be read) is the failure to avoid.
 - **Machine-readable tag** on each master/snapshot frame via `sharedPluginData`
   (namespace `thisura`, keys `screenId`, `elementId`, `ownerJourney`, `status`, `state`) **if the
   MCP exposes plugin data**. If it doesn't, rely on the `🗂 Screen Index` + a strict frame-naming

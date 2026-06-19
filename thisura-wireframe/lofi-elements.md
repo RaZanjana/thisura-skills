@@ -51,6 +51,30 @@ scale and never mix arbitrary values:
 | **Image placeholder** | fill `#F5F5F5`, 1px `#CCCCCC`, radius `md`, centered "Image" label + diagonal cross |
 | **Status bar (mobile)** | height 44, simple time/signal/battery glyphs in `#333333` |
 
+## Text & auto-layout (the rule that prevents overlap — non-negotiable)
+Overlap inside screens comes from fixed-height text boxes and absolutely-positioned children. Never
+do either.
+- **Every text node uses auto-height** (Figma "Auto height" / vertical `resize`), **never a fixed
+  height.** A text box must grow with its content. A paragraph in a fixed 20px box overflows and
+  collides with the row below it — this is the #1 layout bug, so treat fixed-height text as
+  forbidden.
+- **Every container is a vertical auto-layout frame** — screen content stacks, panels, cards, list
+  rows, the case/transcript/suggestion panels, footer regions — with explicit **item spacing**
+  (8–16px) and **padding** (12–16px). Children then **reflow** when text grows; they can't overlap.
+  Set the container to **hug** height (or fixed device height for the screen frame, with the inner
+  stack hugging).
+- **Never absolute-position children at guessed `y` offsets.** If two siblings are 30px apart by
+  hard-coded `y` but one holds multi-line text, they will overlap. Spacing comes from auto-layout,
+  not coordinates.
+- **Copy length:** meaningful copy is a **short label or one-line message** (≤ ~80 chars). Do not
+  place explanatory paragraphs (error/empty descriptions, help text) as long real strings — trim to
+  one representative line, or greek the remainder in Flow Circular. If a genuine multi-line message
+  is required, it still must be an auto-height text node inside an auto-layout container.
+- **Shared structural elements use fixed widths** from the spec table (buttons, banners, nav,
+  badges) so the *same* element doesn't change size between snapshots as its text varies — only
+  free-flowing body text auto-sizes. (A banner that's 271px in one snapshot and 332px in another is
+  this bug.)
+
 ## Layout & device frames
 - **Mobile:** 375×812 portrait. Status bar top, native nav (back chevron + centered title), bottom
   tab bar where the journey uses one, safe areas respected.
@@ -69,8 +93,15 @@ scale and never mix arbitrary values:
 
 ## Consistency checklist (before mapping a journey)
 - [ ] Every button/input/nav/tab/card matches the spec table — same height, radius, fill, type.
-- [ ] Meaningful copy is **Inter**; all filler is **Flow Circular** (or the noted fallback).
+- [ ] **Every text node is auto-height; every container is auto-layout with spacing + padding.**
+- [ ] **No element overlaps a sibling** (the auto-layout reflow guarantees this — verify no
+      fixed-height text and no absolute `y` offsets remain).
+- [ ] Meaningful copy is **Inter** and short (≤ ~80 chars); long prose trimmed or greeked in **Flow
+      Circular** (or the noted fallback).
+- [ ] Shared structural elements (buttons, banners, nav, badges) use **fixed widths** — same size
+      across snapshots.
 - [ ] Greyscale only — no stray colour, shadow, or gradient.
 - [ ] Image placeholders use the standard grey-cross pattern, not real imagery.
-- [ ] Each screen frame is the correct device size; inner content hugs (nothing clipped).
+- [ ] Each screen frame is the correct device size; inner content hugs (nothing clipped or
+      overflowing its box).
 - [ ] Naming follows `{Screen} — {state}`; Section named after the journey.

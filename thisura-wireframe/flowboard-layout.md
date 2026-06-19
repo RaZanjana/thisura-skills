@@ -41,9 +41,10 @@ fill white, 1.5px `#333333` stroke, Inter labels in `#333333`.
   Each journey begins with a Start terminator into its first screen and ends with End terminator(s).
 - **Screen node** — the **lo-fi screen frame itself** acts as the process node; don't redraw a
   rectangle around it.
-- **Decision** — diamond, ~140×100, with the condition inside (e.g. "Logged in?"). Used at every
-  journey branch. Outgoing arrows are labeled with the outcomes (e.g. "Yes" / "No", "Has items" /
-  "Empty").
+- **Decision** — a **diamond**: a square **rotated 45°** (or a 4-point polygon), ~140×100 bounding
+  box, with the condition inside (e.g. "Logged in?"). **Do not use a default `regular-polygon`** —
+  that renders as a triangle/pentagon, not a diamond. Outgoing arrows are labeled with the outcomes
+  (e.g. "Yes" / "No", "Has items" / "Empty").
 - **Connector / off-page** — small circle ~40×40 with a letter (A, B…) to join screens that are far
   apart or continue on another row, instead of a long crossing arrow.
 - **Annotation marker** — see Dev Mode annotations below (not a drawn box by default).
@@ -61,6 +62,12 @@ fill white, 1.5px `#333333` stroke, Inter labels in `#333333`.
 - Because a Figma **design file has no auto-routing connectors**, arrows are drawn lines that **do
   not re-flow if a frame moves** — so finalize screen placement first, draw arrows last, and if a
   screen is repositioned during review, redraw its arrows.
+- **No arrow may cross a screen, card, or symbol frame.** Route connectors through the **reserved
+  gutters** — the ≥200px column gaps between screens and the ≥176px row gaps between rows. For a
+  branch or return that would otherwise cut across frames, drop the line into the gutter band and
+  run it there (as the UJ-1 Degraded branch lines do at the inter-row gutter), or use an **off-page
+  connector** circle to jump instead of drawing a long crossing line. Routing a horizontal line at a
+  card's vertical mid (through the card body) is the failure to avoid.
 
 ## Dev Mode annotations
 Attach **native Dev Mode annotations** (`node.annotations`) to the relevant screen or element —
@@ -79,8 +86,11 @@ Sign Up*). If the MCP can't author native annotations, fall back to small drawn 
 - [ ] Section sized to fully contain its screens + arrows + labels; **nothing cropped**.
 - [ ] Screens in flow order, ≥200px gaps; state variants below their happy screen.
 - [ ] Start terminator → first screen; End terminator(s) on terminal screens.
-- [ ] Decision diamonds at every documented branch; outgoing arrows labeled with outcomes.
+- [ ] Decision diamonds at every documented branch (rotated-square diamonds, **not**
+      regular-polygons); outgoing arrows labeled with outcomes.
 - [ ] Arrows uniform (2px `#333333`, arrowhead), each **labeled with its trigger**; back/cancel/skip
       and error/empty paths wired.
+- [ ] **No arrow crosses a screen/card/symbol frame** — connectors run in the gutters or use
+      off-page connectors.
 - [ ] Symbol + arrow style **identical to prior journeys**.
 - [ ] Dev Mode annotations attached, categorized, resolving to real nodes.

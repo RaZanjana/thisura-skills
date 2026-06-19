@@ -153,7 +153,10 @@ No Sections overlap; no frame cropped or left at default 100×100; every screen 
 journey flow (no orphans); traceability complete (every in-scope epic/requirement touched by a
 journey is represented). **Registry integrity:** every snapshot of a screen matches its master on
 shared/revealed elements (no drift); every reserved placeholder is revealed by some journey; no
-revealed element lacks a reserved slot; overrides recorded; deprecations rippled. Element + arrow +
+revealed element lacks a reserved slot; overrides recorded; deprecations rippled. **Layout
+integrity:** text nodes auto-height, containers auto-layout, no element overlaps a sibling, no text
+overflows its box, no connector crosses a frame, decision symbols are diamonds, the `🗂 Screen
+Index` is a structured table. Element + arrow +
 symbol style consistent across all journeys; fonts correct (Inter for meaning, Flow Circular for
 greeking). Report a short summary, including a registry status line (screens, elements,
 placeholders outstanding, overrides).
