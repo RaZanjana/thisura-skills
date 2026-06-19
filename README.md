@@ -19,11 +19,30 @@ Paste this into Terminal:
 curl -fsSL https://raw.githubusercontent.com/RaZanjana/thisura-skills/main/install.sh | bash
 ```
 
-That's the whole install. It drops the Thisura skills into `~/.claude/skills/` (creating the folder if it doesn't exist) and works with any model you use in Cursor — Claude, GPT, or Gemini. Then **restart Cursor** and type `/` in the Agent chat to confirm `thisura-style-guide` and `thisura-wireframe` loaded.
+The installer opens an **interactive picker** — move with ↑/↓, toggle with space, and press Enter to confirm (everything is selected by default):
+
+```
+Select Thisura skills to install:
+  ↑/↓ move · space toggle · a = all · enter = confirm
+
+ › [x] all                    — install everything below
+   [x] thisura-style-guide    — Figma design tokens + a bound style guide for dev hand-off
+   [x] thisura-wireframe      — Lo-fi journey wireframes in FigJam, then lo-fi screens in Figma
+```
+
+It drops the chosen skills into `~/.claude/skills/` (creating the folder if it doesn't exist) and works with any model you use in Cursor — Claude, GPT, or Gemini. Then **restart Cursor** and type `/` in the Agent chat to confirm they loaded.
 
 You don't need a Cursor project open, a git repo, or the Claude app installed — the skill lives at the OS level and loads on every launch.
 
 > **Re-running the same command updates the skill** to the latest version. That's also how you pull updates later — just run it again and restart Cursor.
+
+To skip the prompt (e.g. in a script), set `THISURA_SKILLS` — `all`, or a comma/space-separated list of skill names:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/RaZanjana/thisura-skills/main/install.sh | THISURA_SKILLS="thisura-wireframe" bash
+```
+
+When the command is piped without a terminal (e.g. CI) and `THISURA_SKILLS` isn't set, it installs everything.
 
 ### Pinning a specific version
 
