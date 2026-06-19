@@ -161,7 +161,9 @@ contains its children (no child bbox exceeds its parent frame); Sections are siz
 frames, not the reverse. **Map & annotation integrity:** no two screens overlap anywhere in any
 Section; connectors are orthogonal and cross no frame; terminators are wired to real first/last
 screens; decisions are diamonds; every symbol/callout frame contains its text; annotations sit in a
-reserved lane anchored to their elements. Element + arrow +
+reserved lane anchored to their elements. **Branching:** happy path is one straight spine, each
+alternate outcome is its own linear lane with fork + rejoin anchor pills (decisions inline at the
+fork), no connector spans more than one grid step, no diagonal screen staircase. Element + arrow +
 symbol style consistent across all journeys; fonts correct (Inter for meaning, Flow Circular for
 greeking). Report a short summary, including a registry status line (screens, elements,
 placeholders outstanding, overrides).

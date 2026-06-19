@@ -100,11 +100,15 @@ before involving the user**:
       its parent — compare child max-extent vs parent w/h via get_metadata)**; **no two screen
       frames overlap anywhere in the Section** (happy path or branch rows); no element overlaps a
       sibling; no text overflows its box.
-- [ ] **Map integrity** — connectors are **orthogonal** (no line with both width and height) and
-      **cross no screen/card/symbol frame**; Start/End terminators are wired to the real first/last
-      screens (none floating or unconnected); decision symbols are diamonds with centered labels;
-      every symbol/label/callout frame contains its text (none collapsed); annotations sit in a
-      reserved lane, each anchored to its element; every named slot has content (no empty labels).
+- [ ] **Map integrity** — connectors are **orthogonal** (no line with both width and height),
+      **cross no screen/card/symbol frame**, and **none spans more than one grid step** (longer
+      links use fork/rejoin anchor pills or off-page connectors — no thousand-pixel lines, no
+      diagonal screen staircase); branching uses the **spine + anchored lanes** model (happy path one
+      straight spine, each alternate outcome its own linear lane with fork + rejoin pills, decisions
+      inline at the fork); Start/End terminators are wired to the real first/last screens (none
+      floating or unconnected); decision symbols are diamonds with centered labels; every
+      symbol/label/callout frame contains its text (none collapsed); annotations sit in a reserved
+      lane, each anchored to its element; every named slot has content (no empty labels).
 - [ ] **Surface correct** — each screen is at its assigned device size.
 - [ ] **Annotations resolve** — each Dev Mode annotation is attached to a real node and states a
       real navigation/state/content/interaction note.

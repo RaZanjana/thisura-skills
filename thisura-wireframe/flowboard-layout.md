@@ -44,6 +44,37 @@ clear of them:
    `Figma:get_metadata` and confirm no two screen frames' boxes overlap (compare every pair's
    x/y/w/h). Fix overlaps first; arrows come last.
 
+## Branching & if-else layout (spine + anchored lanes)
+Decisions are where maps turn to spaghetti. The failure mode: decision diamonds parked in a
+detached row while their alternate outcomes drop **thousand-pixel connectors** down to screens
+scattered on a **diagonal staircase**. Never do that. Use the spine-and-anchored-lanes model:
+
+1. **One straight spine for the happy / success path.** The primary outcome of every decision (the
+   "Yes"/success branch) continues the spine left→right in a single row. This is the reference path
+   and stays linear — exactly like a non-branching journey.
+2. **Decisions sit inline at the fork**, on the spine, right where the path splits — not collected
+   in a separate row. The primary outcome continues the spine; only the **alternate** outcome leaves
+   it.
+3. **Each alternate outcome becomes its own short, left→right lane** — a mini happy path. Within a
+   lane, screens sit in one row at the shared pitch; **never** stair-step them diagonally. A lane is
+   either its own Figma **Section** named `{Journey} · Branch: {condition}`, or a stacked **swimlane
+   row** beneath the spine (consistent row pitch). Prefer a Section per branch when branches have
+   more than one screen.
+4. **Anchor forks and rejoins with labels, not long lines.** A branch lane **opens** with a small
+   **fork-entry pill** naming where it diverges and on what condition (e.g. `Caller identified? ·
+   No`) and **closes** with a **rejoin/terminal pill** (e.g. `Rejoin · End-call` or `→ End`). The
+   label carries the linkage, so there is **no physical connector running back to the spine.** This
+   is the rule that actually removes the spaghetti — segmenting paths without it just moves the long
+   line into the gap between sections.
+5. **Connectors stay local** — see the length cap in the Arrows section. Inside a lane or the spine,
+   connectors are short and orthogonal; anything that would span more than one grid step is replaced
+   by a fork/rejoin anchor or an off-page connector.
+
+Why not just "one Section for Yes, one for No": journeys usually have several decisions, so it's one
+spine plus *several* distinct branches, not a clean two-way split — and a Yes/No split still sprawls
+if the branch is wired back to the decision. Spine + anchored lanes generalizes to any number of
+decisions.
+
 ## Flowchart symbols (consistent greyscale, fixed style)
 Use proper flowchart symbols so the map reads as a flow, not just frames with lines. All symbols:
 fill white, 1.5px `#333333` stroke, Inter labels in `#333333`.
@@ -64,6 +95,10 @@ fill white, 1.5px `#333333` stroke, Inter labels in `#333333`.
   it does to screens.
 - **Connector / off-page** — small circle ~40×40 with a letter (A, B…) to join screens that are far
   apart or continue on another row, instead of a long crossing arrow.
+- **Fork / rejoin anchor** — a small labelled pill that opens or closes a branch lane in place of a
+  long connector back to the spine. Fork pill names the source decision + condition (e.g. `Caller
+  identified? · No`); rejoin pill names where the branch returns (e.g. `Rejoin · End-call`). Auto-
+  height, contains its text.
 - **Annotation marker** — see Dev Mode annotations below (not a drawn box by default).
 
 ## Arrows (one style everywhere)
@@ -86,6 +121,11 @@ fill white, 1.5px `#333333` stroke, Inter labels in `#333333`.
   run it there (as the UJ-1 Degraded branch lines do at the inter-row gutter), or use an **off-page
   connector** circle to jump instead of drawing a long crossing line. Routing a horizontal line at a
   card's vertical mid (through the card body) is the failure to avoid.
+- **Connector length cap.** A connector spans **at most one grid step** (one column or one row
+  pitch). Any relationship longer than that — a branch returning to the spine, a decision reaching a
+  distant screen — is expressed with a **fork/rejoin anchor pill** or an **off-page connector**,
+  never a long line. Thousand-pixel connectors snaking across the canvas (and the diagonal screen
+  staircase used to dodge them) are the exact failure this prevents.
 
 ## Annotations
 **Primary: native Dev Mode annotations** (`node.annotations`) attached to the relevant screen or
@@ -121,9 +161,14 @@ organised, not scattered:
 - [ ] Start terminator wired into the first screen; End terminator(s) wired from terminal screen(s),
       placed adjacent — none floating or unconnected.
 - [ ] Decision diamonds at every documented branch (rotated-square diamonds, **not**
-      regular-polygons), condition centered; outgoing arrows labeled with outcomes.
+      regular-polygons), condition centered, placed **inline at the fork** (not in a detached row);
+      outgoing arrows labeled with outcomes.
+- [ ] **Branching uses spine + anchored lanes** — happy path is one straight spine; each alternate
+      outcome is its own linear lane (section or swimlane); branches open with a **fork pill** and
+      close with a **rejoin/terminal pill**; no diagonal screen staircase.
 - [ ] Arrows uniform (2px `#333333`, arrowhead), **orthogonal only** (no diagonals — no line with
-      both width and height), each **labeled with its trigger**; back/cancel/skip and error/empty
+      both width and height), **none longer than one grid step** (longer links use anchor pills /
+      off-page connectors), each **labeled with its trigger**; back/cancel/skip and error/empty
       paths wired.
 - [ ] **No arrow crosses a screen/card/symbol frame** — connectors run in the gutters or use
       off-page connectors.
