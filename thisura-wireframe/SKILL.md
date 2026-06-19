@@ -1,5 +1,6 @@
 ---
 name: thisura-wireframe
+version: 1.0.0
 description: >-
   Maps a project's user journeys as low-fidelity flow maps on a FigJam board, one journey at a
   time, for client requirements verification and dev hand-off — then, once a flow is signed off,

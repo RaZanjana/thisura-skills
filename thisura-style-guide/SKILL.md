@@ -1,5 +1,6 @@
 ---
 name: thisura-style-guide
+version: 1.0.0
 description: >-
   Generates a reusable, well-structured design-token system and a bound Style Guide page
   inside a Figma file for developer hand-off. Use whenever the user wants to set up Figma

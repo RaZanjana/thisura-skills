@@ -25,6 +25,16 @@ You don't need a Cursor project open, a git repo, or the Claude app installed �
 
 > **Re-running the same command updates the skill** to the latest version. That's also how you pull updates later — just run it again and restart Cursor.
 
+### Pinning a specific version
+
+The installer pulls the tip of `main` by default. To install a specific release instead, set `THISURA_REF` to a git tag:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/RaZanjana/thisura-skills/main/install.sh | THISURA_REF=wireframe-v1.0.0 bash
+```
+
+After installing, the printed line shows the version, and you can always check the `version:` field at the top of each skill's `SKILL.md`.
+
 <details>
 <summary>Manual install (optional)</summary>
 
@@ -61,17 +71,39 @@ Each one asks a few setup questions, then gets to work. Full details in
 [`thisura-style-guide/README.md`](./thisura-style-guide/README.md) and
 [`thisura-wireframe/README.md`](./thisura-wireframe/README.md).
 
-## Contributing / updating the skill
+## Versioning
 
-Maintainers edit the markdown, commit, and push:
+Each skill is versioned **independently** using [Semantic Versioning](https://semver.org):
+
+- **MAJOR** — changes that break existing prompts or change the output behavior.
+- **MINOR** — new, backward-compatible capability.
+- **PATCH** — layout fixes, wording, and bug fixes.
+
+The version lives in two places that should always agree:
+
+1. The `version:` field in each skill's `SKILL.md` (the source of truth).
+2. A namespaced git tag — `style-guide-vX.Y.Z` / `wireframe-vX.Y.Z`.
+
+Each skill keeps its own history in a `CHANGELOG.md`:
+[`thisura-style-guide/CHANGELOG.md`](./thisura-style-guide/CHANGELOG.md) and
+[`thisura-wireframe/CHANGELOG.md`](./thisura-wireframe/CHANGELOG.md).
+
+## Contributing / updating a skill
+
+Maintainers edit the markdown, then cut a release:
 
 ```bash
+# 1. Make the change (keep it scoped to one skill per commit where possible)
+# 2. Bump the `version:` field in that skill's SKILL.md
+# 3. Move the entry from "Unreleased" into a new version section in its CHANGELOG.md
 git add .
-git commit -m "what changed"
+git commit -m "wireframe: <what changed>"
 git push
-```
 
-Keep changes scoped to one skill per commit where possible, and tag releases (`git tag v1.1.0 && git push --tags`) so people can pin a version.
+# 4. Tag the release (namespaced per skill) so people can pin it
+git tag wireframe-v1.1.0
+git push --tags
+```
 
 ## License
 
