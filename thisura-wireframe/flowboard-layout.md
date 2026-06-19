@@ -29,10 +29,15 @@ clear of them:
 3. **Size the Section to its content** — after drawing, verify the Section's height/width covers all
    its screens + arrows with margin; if a screen or arrow falls outside, the Section is cropping —
    grow it. Never leave a Section at a default size while content overflows.
-4. Within a Section, lay the journey's **snapshots** (derived from the masters) **left to right in
-   flow order**, in a consistent row (or rows), with a **fixed horizontal gap of ≥ 200px** between
-   screens so arrows and labels have room. State variants sit just **below** their happy screen. No
+4. Within a Section, lay the journey's **snapshots** (derived from the masters, **each at full
+   device size** — desktop 1440×1024, mobile 375×812) **left to right in flow order**, in a
+   consistent row (or rows), with a **fixed horizontal gap of ≥ 200px** between screens (so the
+   desktop pitch is ≥ 1640px per screen). State variants sit just **below** their happy screen. No
    two screens overlap; nothing is clipped.
+5. **Size the Section to fit the full-size frames — never shrink frames to fit the Section.** The
+   sizing dependency runs one way only: frames are full device size, and the Section grows to
+   contain them (plus padding). A short/narrow Section with thumbnail-shrunk frames is the failure
+   that makes content overflow each frame onto its neighbours.
 
 ## Flowchart symbols (consistent greyscale, fixed style)
 Use proper flowchart symbols so the map reads as a flow, not just frames with lines. All symbols:
@@ -83,6 +88,8 @@ Sign Up*). If the MCP can't author native annotations, fall back to small drawn 
 ## Layout / mapping checklist (run per journey)
 - [ ] Section named after the journey; placed below the previous with ≥240px gutter; **no overlap**
       with any other Section.
+- [ ] **Frames at full device size; Section sized to contain them** (frames never shrunk to fit the
+      Section); no child overflows its frame.
 - [ ] Section sized to fully contain its screens + arrows + labels; **nothing cropped**.
 - [ ] Screens in flow order, ≥200px gaps; state variants below their happy screen.
 - [ ] Start terminator → first screen; End terminator(s) on terminal screens.

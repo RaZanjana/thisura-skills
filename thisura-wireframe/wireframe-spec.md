@@ -95,10 +95,11 @@ before involving the user**:
 - [ ] **Snapshots consistent** — each recurring screen's snapshot matches its master on shared/
       revealed elements; not-yet-revealed elements show as placeholders (reserved slots), nothing
       reflowed; any modify/remove of an earlier-revealed element went through the ripple protocol.
-- [ ] **Layout integrity** — every text node is auto-height and every container auto-layout; **no
-      element overlaps a sibling**; no text overflows its box; **no connector crosses a
-      screen/card/symbol frame**; decision symbols are diamonds; every named slot has content (no
-      empty labels).
+- [ ] **Layout integrity** — every text node is auto-height and every container auto-layout; **each
+      screen frame equals its device size and contains its children (no child's bounding box exceeds
+      its parent — compare child max-extent vs parent w/h via get_metadata)**; no element overlaps a
+      sibling; no text overflows its box; **no connector crosses a screen/card/symbol frame**;
+      decision symbols are diamonds; every named slot has content (no empty labels).
 - [ ] **Surface correct** — each screen is at its assigned device size.
 - [ ] **Annotations resolve** — each Dev Mode annotation is attached to a real node and states a
       real navigation/state/content/interaction note.

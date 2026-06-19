@@ -156,7 +156,9 @@ shared/revealed elements (no drift); every reserved placeholder is revealed by s
 revealed element lacks a reserved slot; overrides recorded; deprecations rippled. **Layout
 integrity:** text nodes auto-height, containers auto-layout, no element overlaps a sibling, no text
 overflows its box, no connector crosses a frame, decision symbols are diamonds, the `🗂 Screen
-Index` is a structured table. Element + arrow +
+Index` is a structured table. **Frame sizing:** every screen frame equals its device size and
+contains its children (no child bbox exceeds its parent frame); Sections are sized to fit full-size
+frames, not the reverse. Element + arrow +
 symbol style consistent across all journeys; fonts correct (Inter for meaning, Flow Circular for
 greeking). Report a short summary, including a registry status line (screens, elements,
 placeholders outstanding, overrides).

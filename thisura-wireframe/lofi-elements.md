@@ -79,9 +79,22 @@ do either.
 - **Mobile:** 375×812 portrait. Status bar top, native nav (back chevron + centered title), bottom
   tab bar where the journey uses one, safe areas respected.
 - **Desktop:** 1440×1024. Top nav, content region, footer where relevant.
+- **Screen frames are authored at exact device size — this is a hard invariant.** A desktop screen
+  frame is 1440×1024; a mobile one is 375×812. **Never resize a screen frame smaller than its
+  device size, and never set a frame's box smaller than its content.** The content stack must fit
+  *inside* the frame (e.g. desktop content ≤ ~1392×976 with 24px padding). The recurring catastrophe
+  is a screen frame shrunk to a thumbnail (e.g. 605×430) while its content stays full-size
+  (1392×976) — the content then overflows the frame and lands on top of neighbouring screens. Don't.
+- **Parent-contains-children invariant:** every frame's width/height must be **≥ its children's
+  bounding box**. A child must never extend past its parent. (Same failure family as a frame
+  collapsing to near-zero height while children sit below it — the parent must always contain its
+  children.)
+- If a smaller representation is ever genuinely wanted, **rescale the whole frame including its
+  children** (uniform scale), never resize the frame box alone. Overview is what canvas zoom is for
+  — a large board is expected and fine.
 - Build each screen with **auto-layout** internally (vertical stack, hug height) so content isn't
   clipped — never absolute-position children at guessed `y` offsets. A screen frame is fixed to its
-  device width/height; its inner content stack hugs.
+  device width/height; its inner content stack hugs **within** that frame.
 
 ## Frame naming
 - **Section** = the **journey name**, verbatim from the User Journey file.
@@ -102,6 +115,9 @@ do either.
       across snapshots.
 - [ ] Greyscale only — no stray colour, shadow, or gradient.
 - [ ] Image placeholders use the standard grey-cross pattern, not real imagery.
+- [ ] **Each screen frame equals its device size** (desktop 1440×1024 / mobile 375×812); content
+      fits inside it; **no child's bounding box exceeds its parent frame** (parent contains
+      children).
 - [ ] Each screen frame is the correct device size; inner content hugs (nothing clipped or
       overflowing its box).
 - [ ] Naming follows `{Screen} — {state}`; Section named after the journey.
