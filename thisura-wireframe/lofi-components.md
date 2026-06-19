@@ -1,11 +1,28 @@
-# Lo-fi elements — fidelity, fonts, element specs & naming
+# Lo-fi components (Mode B) — fidelity, fonts, element specs & naming
 
-Because screens are drawn **ad-hoc** (no component library), consistency has to come from **fixed
-specs**: the same element gets the same size, radius, fill and type everywhere. Treat the tables
-below as the source of truth so journey 6 looks identical to journey 1.
+**Mode B only.** This runs in a **Figma Design file** (`figma.com/design/...`), **after** a
+journey's FigJam flow map (Mode A) is signed off. It produces polished lo-fi screens as
+**components** that the designer then maps manually against the FigJam journeys — it does **not**
+lay out a flow here.
+
+Because the FigJam flow has already fixed *what* screens exist, *which* elements each has, and
+*which* journey reveals each (the registry), Mode B is purely about rendering each registry screen
+cleanly as a reusable component. Consistency comes from **fixed specs** + **real components**: the
+same element gets the same size, radius, fill and type everywhere.
+
+> Read `screen-registry.md` first — the screen IDs, element list, reveal map and states all come
+> from the approved registry. Build only what the registry says; never invent screens or elements.
+
+## What Mode B produces
+- A **component per screen** (a Figma component / component set), built at exact device size, with
+  the elements the registry lists for that screen.
+- **State variants** (empty / loading / populated / error / …) as component-set variants where the
+  registry calls for them.
+- Components placed in a tidy library area (e.g. a `🧩 Components` page/section), **not** wired into
+  a flow — the designer instances and maps them against the FigJam journeys.
 
 ## Fidelity — strict low-fidelity, greyscale
-This is for **requirements verification**, not visual design. No brand colour, no hi-fi polish.
+This is still **requirements-grade** lo-fi, not visual design. No brand colour, no hi-fi polish.
 - Palette only: **white** `#FFFFFF` (canvas/surface), **light grey** `#F5F5F5` (fills/placeholders),
   **mid grey** `#CCCCCC` (borders/dividers), **dark grey** `#333333` (text/icons). Muted text
   `#777777` for secondary.
@@ -15,7 +32,8 @@ This is for **requirements verification**, not visual design. No brand colour, n
 - Keep structure, hierarchy and flow legible — that's the whole point.
 - **Not-yet-revealed elements** (a slot a later journey will fill) are drawn as **reserved
   placeholders**, not omitted — see the placeholder convention in `screen-registry.md`. This keeps
-  a screen's layout identical across journeys until the owning journey reveals the element.
+  a screen's layout identical across the journeys that instance it until the owning journey reveals
+  the element.
 
 ## Fonts (specific, enforced)
 - **Inter** — every piece of **meaningful** copy (titles, CTAs, nav labels, field labels, key
@@ -59,10 +77,9 @@ do either.
   collides with the row below it — this is the #1 layout bug, so treat fixed-height text as
   forbidden.
 - **Every container is a vertical auto-layout frame** — screen content stacks, panels, cards, list
-  rows, the case/transcript/suggestion panels, footer regions — with explicit **item spacing**
-  (8–16px) and **padding** (12–16px). Children then **reflow** when text grows; they can't overlap.
-  Set the container to **hug** height (or fixed device height for the screen frame, with the inner
-  stack hugging).
+  rows, footer regions — with explicit **item spacing** (8–16px) and **padding** (12–16px). Children
+  then **reflow** when text grows; they can't overlap. Set the container to **hug** height (or fixed
+  device height for the screen frame, with the inner stack hugging).
 - **Never absolute-position children at guessed `y` offsets.** If two siblings are 30px apart by
   hard-coded `y` but one holds multi-line text, they will overlap. Spacing comes from auto-layout,
   not coordinates.
@@ -71,8 +88,8 @@ do either.
   one representative line, or greek the remainder in Flow Circular. If a genuine multi-line message
   is required, it still must be an auto-height text node inside an auto-layout container.
 - **Shared structural elements use fixed widths** from the spec table (buttons, banners, nav,
-  badges) so the *same* element doesn't change size between snapshots as its text varies — only
-  free-flowing body text auto-sizes. (A banner that's 271px in one snapshot and 332px in another is
+  badges) so the *same* element doesn't change size between instances as its text varies — only
+  free-flowing body text auto-sizes. (A banner that's 271px in one screen and 332px in another is
   this bug.)
 
 ## Layout & device frames
@@ -84,42 +101,37 @@ do either.
   device size, and never set a frame's box smaller than its content.** The content stack must fit
   *inside* the frame (e.g. desktop content ≤ ~1392×976 with 24px padding). The recurring catastrophe
   is a screen frame shrunk to a thumbnail (e.g. 605×430) while its content stays full-size
-  (1392×976) — the content then overflows the frame and lands on top of neighbouring screens. Don't.
+  (1392×976) — the content then overflows the frame. Don't.
 - **Parent-contains-children invariant:** every frame's width/height must be **≥ its children's
-  bounding box**. A child must never extend past its parent. (Same failure family as a frame
-  collapsing to near-zero height while children sit below it — the parent must always contain its
-  children.) **This applies to *every* frame, not just screens** — map symbols (terminators,
-  decisions), arrow/label pills, callouts, badges and legend blocks must each contain their text
-  (auto-height; never a ~10px box with text spilling out).
+  bounding box**. A child must never extend past its parent. **This applies to *every* frame**, not
+  just screens — badges, callouts and legend blocks must each contain their text (auto-height;
+  never a ~10px box with text spilling out).
 - If a smaller representation is ever genuinely wanted, **rescale the whole frame including its
-  children** (uniform scale), never resize the frame box alone. Overview is what canvas zoom is for
-  — a large board is expected and fine.
+  children** (uniform scale), never resize the frame box alone.
 - Build each screen with **auto-layout** internally (vertical stack, hug height) so content isn't
-  clipped — never absolute-position children at guessed `y` offsets. A screen frame is fixed to its
-  device width/height; its inner content stack hugs **within** that frame.
+  clipped — never absolute-position children at guessed `y` offsets.
 
-## Frame naming
-- **Section** = the **journey name**, verbatim from the User Journey file.
-- **Screen frame** = `{Screen} — {state}` (journey is implied by the Section). Examples:
-  `Sign Up — empty`, `Sign Up — error`, `Dashboard — populated`. For cross-surface journeys, suffix
-  the surface when ambiguous: `Approval — populated (desktop)`.
-- Keep the **happy/populated** state as the first frame in flow order; place state variants
-  (empty/error/etc.) adjacent to their happy screen.
+## Component & naming conventions
+- **Component** = the screen, named `{Screen}` (matching the registry name); use a **component set**
+  with a `State` property when the screen has multiple states (`empty` / `loading` / `populated` /
+  `error` / …). Tag with `screenId` via `sharedPluginData` so it links back to the registry.
+- **State variant** = `State={state}` — keep the **populated** variant first.
+- Build elements that recur across screens (buttons, nav, inputs, cards) as their own **shared
+  components** so the spec table is enforced by reuse, not redrawn each time.
+- Place components in a dedicated library area, not inside a flow.
 
-## Consistency checklist (before mapping a journey)
+## Consistency checklist (before finishing a Mode B journey)
 - [ ] Every button/input/nav/tab/card matches the spec table — same height, radius, fill, type.
 - [ ] **Every text node is auto-height; every container is auto-layout with spacing + padding.**
-- [ ] **No element overlaps a sibling** (the auto-layout reflow guarantees this — verify no
-      fixed-height text and no absolute `y` offsets remain).
+- [ ] **No element overlaps a sibling** (verify no fixed-height text and no absolute `y` offsets).
 - [ ] Meaningful copy is **Inter** and short (≤ ~80 chars); long prose trimmed or greeked in **Flow
       Circular** (or the noted fallback).
 - [ ] Shared structural elements (buttons, banners, nav, badges) use **fixed widths** — same size
-      across snapshots.
+      across instances.
 - [ ] Greyscale only — no stray colour, shadow, or gradient.
 - [ ] Image placeholders use the standard grey-cross pattern, not real imagery.
 - [ ] **Each screen frame equals its device size** (desktop 1440×1024 / mobile 375×812); content
-      fits inside it; **no child's bounding box exceeds its parent frame** (parent contains
-      children).
-- [ ] Each screen frame is the correct device size; inner content hugs (nothing clipped or
-      overflowing its box).
-- [ ] Naming follows `{Screen} — {state}`; Section named after the journey.
+      fits inside it; **no child's bounding box exceeds its parent frame**.
+- [ ] Screens built as **components / component sets**, tagged with `screenId`; states as variants.
+- [ ] Naming follows `{Screen}` + `State={state}`; matches the registry.
+- [ ] Every screen + element + state traces to the approved registry — nothing invented in Mode B.

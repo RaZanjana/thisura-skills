@@ -7,7 +7,7 @@ A small collection of reusable [Agent Skills](https://www.anthropic.com/news/ski
 | Skill | What it does |
 |-------|--------------|
 | [`thisura-style-guide/`](./thisura-style-guide) | Builds a Figma design-token system (Primitives, Colors, Breakpoints), local styles, and a bound Style Guide page for dev hand-off. Tailwind v4 naming; shadcn for web, Gluestack for mobile. See its [README](./thisura-style-guide/README.md). |
-| [`thisura-wireframe/`](./thisura-wireframe) | Generates low-fidelity wireframes in a Figma file, **one user journey at a time**, from your PRD, Themes & Epics, and User Journey docs. Greyscale screens, flowchart-style arrows, Dev Mode annotations, a Section per journey. Keeps **recurring screens consistent** across journeys via a screen registry + master/snapshot derivation (placeholders reveal as each journey introduces them), with a self-audit and a review stop between journeys. See its [README](./thisura-wireframe/README.md). |
+| [`thisura-wireframe/`](./thisura-wireframe) | Wireframes your product **one user journey at a time**, from your PRD, Themes & Epics, and User Journey docs, in two modes. **Mode A (FigJam):** maps each journey as a low-fidelity flow map on a FigJam board — greyscale screen boxes, native connectors, decision diamonds, sticky-note annotations, a Section per journey. **Mode B (Figma Design):** once a flow is signed off, generates polished lo-fi **screen components** (with state variants) for you to map against the journeys. Keeps **recurring screens consistent** via a screen registry + master/snapshot derivation, with a self-audit and a review stop between journeys. See its [README](./thisura-wireframe/README.md). |
 
 More skills may be added as sibling folders over time.
 
@@ -51,10 +51,10 @@ Style guide:
 Use /thisura-style-guide and generate a style guide for the project in this Figma file: [paste Figma URL]
 ```
 
-Wireframes (it asks for your PRD, Themes & Epics, and User Journey docs as setup questions):
+Wireframes (point it at a **FigJam board**; it asks for your PRD, Themes & Epics, and User Journey docs as setup questions):
 
 ```
-Use /thisura-wireframe to wireframe the journeys for this project in this Figma file: [paste Figma URL]
+Use /thisura-wireframe to wireframe the journeys for this project in this FigJam board: [paste FigJam board URL]
 ```
 
 Each one asks a few setup questions, then gets to work. Full details in

@@ -1,11 +1,17 @@
 # Screen registry — identity, snapshots, reveal & cross-journey protocols (read before drawing)
 
-This is what keeps recurring screens **consistent across journeys**. A screen is **not owned by one
-journey** — the same logical screen recurs, and each journey can add to it. To stop the wireframes
-drifting into N slightly-different copies of "Home", the skill **does not redraw screens from
-memory**. It maintains an explicit **Screen Registry** that lives in the Figma file, keeps **one
-canonical master per screen**, and **derives** each journey's view of that screen from the master.
-The skill executes against the registry; it never recalls a screen.
+This is what keeps recurring screens **consistent across journeys**, and it works the same in both
+modes (FigJam flow map and Figma Design components). A screen is **not owned by one journey** — the
+same logical screen recurs, and each journey can add to it. To stop the wireframes drifting into N
+slightly-different copies of "Home", the skill **does not redraw screens from memory**. It maintains
+an explicit **Screen Registry** that lives in the file, keeps **one canonical master per screen**,
+and **derives** each journey's view of that screen from the master. The skill executes against the
+registry; it never recalls a screen.
+
+> In **Mode A (FigJam)** a master/snapshot is a **screen box** (`createShapeWithText`). In
+> **Mode B (Figma Design)** the same screen is realized as a lo-fi **component**. The registry,
+> IDs, reveal logic and protocols below are identical across modes — only the rendered node type
+> differs.
 
 > The one rule that makes this work: **the registry + masters are the source of truth, not the
 > chat.** Read them at the start of every run. If a value isn't in the registry, it isn't known —
@@ -19,12 +25,13 @@ The skill executes against the registry; it never recalls a screen.
 - **Element** — a slot on a screen (`SCR-HOME/cta-primary`, `SCR-HOME/promo-section`) with a stable
   ID, an **owning journey** (the *first* journey, in file order, that reveals it), and an optional
   list of **also-used-by** journeys.
-- **Master** — one fully-revealed frame per screen, holding the **latest canonical content** (every
-  element that any journey ever reveals), lives in a reference section. Not part of any journey
-  flow.
-- **Snapshot** — a journey's view of a screen: a **duplicate of the master** with not-yet-revealed
+- **Master** — one fully-revealed representation per screen, holding the **latest canonical
+  content** (every element that any journey ever reveals), lives in the `🧩 Master Screens`
+  reference Section. Not part of any journey flow. In FigJam it's a **master box**; in Figma Design
+  it's the screen's **component**.
+- **Snapshot** — a journey's view of a screen: a **clone of the master** with not-yet-revealed
   elements shown as **placeholders** and the step's **state** applied. Snapshots are what the flow
-  arrows point at.
+  connectors point at.
 
 ## Phase 1 pre-pass (build the registry BEFORE drawing anything)
 Analyse **all** journeys + docs together (not journey-by-journey) and produce:
@@ -44,44 +51,52 @@ journeys will add.
 For a screen `S`, journey `J` (file-order rank `r(J)`), state `st`:
 ```
 snapshot(S, J, st) =
-  duplicate(master(S))                       # identical skeleton + shared elements
+  clone(master(S))                           # identical content + element list
   for each element e in S:
      reveal e   if r(ownerJourney(e)) <= r(J)  AND e not deprecated
-     else placeholder(e)                       # reserved slot, not removed → no reflow
+     else placeholder(e)                       # listed but greyed → screen content stays stable
   apply state st
 ```
-Because every snapshot starts from the same master skeleton and every element **slot exists from
-the first snapshot** (as placeholder or real), shared elements are identical by construction and
-**revealing is an in-place swap, never an insert** — the layout never shifts between a screen's
-snapshots. Drift and reflow are structurally impossible, not something to "remember".
+Because every snapshot starts from the same master and every element is **listed from the first
+snapshot** (as placeholder or real), shared elements are identical by construction and **revealing
+is an in-place swap, never an insert** — a screen's content stays stable across its snapshots.
+Drift is structurally impossible, not something to "remember".
 
 ## Placeholder convention
-A placeholder is the **reserved slot** for a not-yet-revealed element: a `#F5F5F5` box at the
-element's real footprint, 1px `#CCCCCC` dashed border, a small Flow-Circular caption naming what it
-will become and its owning journey (e.g. *"Checkout CTA · reveals in Journey: Purchase"*). It holds
-the exact space the real element will occupy so nothing moves on reveal.
+A placeholder is a not-yet-revealed element kept **listed but visibly deferred** so the screen's
+content is stable across journeys:
+- **FigJam (Mode A):** a greyed bullet in the screen box, tagged with what it becomes and its
+  owning journey — e.g. `• (later) Checkout CTA — reveals in: Purchase`. The slot stays in the box,
+  so the box content doesn't change shape when the element is later revealed.
+- **Figma Design (Mode B):** the **reserved slot** at the element's footprint — a `#F5F5F5` box,
+  1px `#CCCCCC` dashed border, a small Flow-Circular caption naming what it becomes and its owning
+  journey. It holds the exact space so nothing reflows on reveal.
 
 ## Storage (where the registry lives)
-- **`🗂 Screen Index`** frame on the wireframes page — human-readable: each screen's ID, name,
-  surface, element list with owning journey + status (placeholder / revealed / deprecated /
-  override), and a master link. This is the readable source of truth and the Phase 1 approval
-  artifact. **Render it as a structured table, not a single text node:** a vertical **auto-layout**
-  frame with a header row and **one row per screen**, each row an auto-layout set of cells
-  (ID / name / surface / elements / owning journey / status), every cell its own **auto-height**
-  text node, the frame **hugging** its content. A single concatenated text blob (which overflows and
-  can't be read) is the failure to avoid.
-- **Machine-readable tag** on each master/snapshot frame via `sharedPluginData`
+- **`🗂 Screen Index`** — human-readable: each screen's ID, name, surface, element list with owning
+  journey + status (placeholder / revealed / deprecated / override), and a master reference. This is
+  the readable source of truth and the Phase 1 approval artifact. **Render it as a structured
+  table, not a single text node:**
+  - **FigJam (Mode A):** a native FigJam **table** (`create-table`) with a header row and one row
+    per screen (cells: ID / name / surface / elements / owning journey / status).
+  - **Figma Design (Mode B):** a vertical **auto-layout** frame with a header row and one
+    auto-layout row per screen, every cell its own **auto-height** text node, the frame **hugging**
+    its content.
+  A single concatenated text blob (which overflows and can't be read) is the failure to avoid.
+- **Machine-readable tag** on each master/snapshot node via `sharedPluginData`
   (namespace `thisura`, keys `screenId`, `elementId`, `ownerJourney`, `status`, `state`) **if the
-  MCP exposes plugin data**. If it doesn't, rely on the `🗂 Screen Index` + a strict frame-naming
-  convention (below) as the fallback registry.
+  MCP exposes plugin data** (it works on FigJam nodes too). If it doesn't, rely on the
+  `🗂 Screen Index` + a strict naming convention (below) as the fallback registry.
 - **Master section** — `🧩 Master Screens`, a reference Section holding one master per screen,
   outside the journey Sections.
+- **Inspection:** read the live board/file before any change. In FigJam use **`get_figjam`**
+  (`get_metadata` is design-only and fails on a board); in Figma Design use `get_metadata`.
 
-## Frame naming (registry-aware)
+## Node naming (registry-aware)
 - Master: `[MASTER] {Screen} ({surface})` — e.g. `[MASTER] Home (mobile)`.
 - Snapshot: `{Screen} — {state}` inside the journey Section (journey implied by Section), tagged
   with `screenId`. The same screen across journeys shares `screenId` but lives as a separate
-  snapshot frame in each Section.
+  snapshot node (box in FigJam / component instance in Figma) in each Section.
 
 ---
 

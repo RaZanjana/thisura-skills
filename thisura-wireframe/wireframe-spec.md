@@ -2,7 +2,9 @@
 
 This file is the **reasoning** half of the skill: how to turn the input docs into a correct,
 complete, per-journey screen plan, and how to **audit each journey back against the docs** before
-asking the user to review. The skill draws nothing until Phase 1 here is approved.
+asking the user to review. It is **tool-agnostic** — the parsing, traceability and audit logic
+apply to both Mode A (FigJam flow map) and Mode B (Figma Design components). The skill draws
+nothing until Phase 1 here is approved.
 
 ## The inputs and what to pull from each
 - **User Journey file → the spine.** This drives everything. Extract the **ordered list of
@@ -54,16 +56,18 @@ Default "key states": **populated (happy)**, **empty**, **error**. Full set (whe
 deep coverage): **empty · loading · populated/success · error · validation · permission-denied ·
 offline**. Only create a state if the journey/PRD implies it exists — don't pad screens with states
 the product doesn't have. Branch points in the journey (a decision: logged in? has items? role?)
-become **decision diamonds** in the flow (see `flowboard-layout.md`), each branch leading to its
+become **decision diamonds** in the flow (see `figjam-flow.md`), each branch leading to its
 own screen/state.
 
 ## Copy rule (what gets real text)
 Real, plausible **English** copy goes only on elements that **carry meaning** for understanding the
 flow: primary/secondary CTAs, nav labels, screen titles, key headings, form field labels, critical
 content lines, error/empty messages. Everything else — body paragraphs, list filler, secondary
-descriptions — is **greeked** (placeholder), set in Flow Circular per `lofi-elements.md`. **Never
-invent features, requirements, or screens** that aren't in the inputs; if the docs are thin on a
-screen, keep it sparse rather than inventing detail.
+descriptions — is treated as **placeholder**: in **FigJam (Mode A)** summarized as a
+`(placeholder)` bullet in the screen box (see `figjam-flow.md`); in **Figma Design (Mode B)**
+greeked in Flow Circular per `lofi-components.md`. **Never invent features, requirements, or
+screens** that aren't in the inputs; if the docs are thin on a screen, keep it sparse rather than
+inventing detail.
 
 ## Traceability gate (must hold across the whole set)
 - Every **journey** in the User Journey file is either built or explicitly excluded.
@@ -93,23 +97,21 @@ before involving the user**:
 - [ ] **No orphan / unreachable screen** in the Section; every screen has an inbound connection
       (except the start terminator's first screen).
 - [ ] **Snapshots consistent** — each recurring screen's snapshot matches its master on shared/
-      revealed elements; not-yet-revealed elements show as placeholders (reserved slots), nothing
-      reflowed; any modify/remove of an earlier-revealed element went through the ripple protocol.
-- [ ] **Layout integrity** — every text node is auto-height and every container auto-layout; **each
-      screen frame equals its device size and contains its children (no child's bounding box exceeds
-      its parent — compare child max-extent vs parent w/h via get_metadata)**; **no two screen
-      frames overlap anywhere in the Section** (happy path or branch rows); no element overlaps a
-      sibling; no text overflows its box.
-- [ ] **Map integrity** — connectors are **orthogonal** (no line with both width and height),
-      **cross no screen/card/symbol frame**, and **none spans more than one grid step** (longer
-      links use fork/rejoin anchor pills or off-page connectors — no thousand-pixel lines, no
-      diagonal screen staircase); branching uses the **spine + anchored lanes** model (happy path one
-      straight spine, each alternate outcome its own linear lane with fork + rejoin pills, decisions
-      inline at the fork); Start/End terminators are wired to the real first/last screens (none
-      floating or unconnected); decision symbols are diamonds with centered labels; every
-      symbol/label/callout frame contains its text (none collapsed); annotations sit in a reserved
-      lane, each anchored to its element; every named slot has content (no empty labels).
-- [ ] **Surface correct** — each screen is at its assigned device size.
-- [ ] **Annotations resolve** — each Dev Mode annotation is attached to a real node and states a
-      real navigation/state/content/interaction note.
+      revealed elements; not-yet-revealed elements show as placeholders; any modify/remove of an
+      earlier-revealed element went through the ripple protocol.
+- [ ] **Board integrity (Mode A — FigJam)** — every screen box sized with `fitShapeToText` (no
+      clipped text); **no two boxes overlap** anywhere in the Section (happy path or branch rows);
+      every connector attaches two real nodes (no floating endpoints) and is **labeled** with its
+      trigger; branching uses the **spine + short lanes** model (happy path one straight spine, each
+      alternate outcome its own row/sub-Section, fork connectors labeled with the condition, no
+      diagonal staircase); Start/End terminators connected to the real first/last boxes (none
+      floating); decisions are `DIAMOND` shapes; stickies sit near their box (not scattered); every
+      named slot has content (no empty labels). See `figjam-flow.md`.
+- [ ] **Layout integrity (Mode B — Figma Design)** — every text node auto-height, every container
+      auto-layout; each screen frame equals its device size and contains its children; no two frames
+      overlap; no text overflows its box. See `lofi-components.md`.
+- [ ] **Surface correct** — each screen is at its assigned surface (mobile/desktop), and at its
+      device size in Mode B.
+- [ ] **Annotations resolve** — each annotation (FigJam sticky in Mode A; Dev Mode annotation in
+      Mode B) sits by a real node and states a real navigation/state/content/interaction note.
 Only after every box passes do you stop and hand the journey to the user for review.
