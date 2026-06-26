@@ -2,18 +2,15 @@
 name: thisura-wireframe
 version: 1.0.0
 description: >-
-  Maps a project's user journeys as low-fidelity flow maps on a FigJam board, one journey at a
-  time, for client requirements verification and dev hand-off — then, once a flow is signed off,
-  generates polished lo-fi screens as components in a Figma Design file. Reads a project's PRD,
-  Themes & Epics, User Journey, and (optional) UX Specification, then draws greyscale screen
-  boxes (title + key elements) wired with native FigJam connectors, decision diamonds and
-  start/end terminators, with sticky-note hand-off annotations — grouping each journey into its
-  own FigJam Section. Use whenever the user wants lo-fi wireframes, a wireframe flow, a journey
-  flow map, a screen map, or wants to wireframe journeys from project docs — for mobile, desktop,
-  both, or a mixed app+admin scope. Trigger for requests mentioning "wireframe", "lo-fi /
-  low-fidelity", "flow map", "wireframe the journeys/flows", "screen map", "wireframe spec to
-  FigJam", or "wireframe the [journey]". Do NOT use to build hi-fi UI, design systems/tokens
-  (that's thisura-hifi), or code.
+  Maps a project's user journeys as low-fidelity wireframes from its PRD, Themes & Epics, and User
+  Journey docs, one journey at a time, with a self-audit and a review stop between journeys. Mode A
+  (default): draws each journey as a flow map on a FigJam board — greyscale screen boxes, native
+  connectors, decision diamonds, terminators, sticky annotations, one Section per journey. Mode B
+  (after sign-off): generates lo-fi screen components with state variants in a Figma Design file.
+  Use for lo-fi / low-fidelity wireframes, a flow map, a screen map, or to wireframe journeys from
+  project docs — for mobile, desktop, both, or a mixed app+admin scope. Triggers: "wireframe",
+  "lo-fi / low-fidelity", "flow map", "screen map", "wireframe the journeys/flows". Not for hi-fi UI
+  or design systems / tokens (that's thisura-hifi) or code.
 ---
 
 # Thisura Wireframe — Journey-by-Journey Lo-Fi Builder
@@ -171,10 +168,13 @@ Out of scope reply. Confirm the resolved scope back before Phase 1.
 ---
 
 ## Workflow
-Always read `wireframe-spec.md` (parsing + traceability + the self-audit checklist),
-`screen-registry.md` (screen identity, snapshots, reveal + ripple/manual-edit protocols), then
-`figjam-flow.md` (board structure, screen-box spec, flowchart shapes, connectors, stickies,
-placement) **before drawing**. For Mode B, also read `lofi-components.md`.
+**Read only what the current mode needs, and never re-read a file already loaded this session.**
+- **Mode A (FigJam flow map)** — read `wireframe-spec.md` (parsing + traceability + self-audit
+  checklist), `screen-registry.md` (screen identity, snapshots, reveal + ripple/manual-edit
+  protocols), then `figjam-flow.md` (board structure, screen-box spec, flowchart shapes,
+  connectors, stickies, placement) **before drawing**. *Skip `lofi-components.md`.*
+- **Mode B (lo-fi components, after sign-off)** — read `lofi-components.md` + `screen-registry.md`
+  (for the registry). *You don't need the FigJam flow files unless re-reading the approved flow.*
 
 ```
 Step 0 Intake → P1 Parse + build registry (approve) → P2 Per-journey loop (derive boxes → connect → annotate → audit → STOP/review) → P3 Final validation
