@@ -9,6 +9,9 @@ Versions are tagged in git as `wireframe-vX.Y.Z`.
 
 ## [Unreleased]
 
+### Changed
+- Point cross-references for hi-fi UI / design tokens at `thisura-hifi` (the standalone `thisura-style-guide` skill is retired and folded into `thisura-hifi`'s Foundations phase).
+
 ## [1.0.0] — 2026-06-19
 
 First stable release. Maps a project's user journeys as low-fidelity flow maps

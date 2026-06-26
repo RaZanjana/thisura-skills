@@ -8,7 +8,7 @@ Breakpoints alias back to. Two things live here: Tailwind colors and raw pixel v
 ## 1. Sourcing rule
 Tailwind v4 ships oklch; Figma stores hex. Use **exact** hex. Priority: (1) a repo's compiled
 Tailwind output / `@theme`; (2) the official palette (`tailwindcss.com/docs/colors`), oklch→hex.
-Confirm the project's Tailwind minor version.
+Confirm the project's Tailwind minor version (the architecture doc usually states it).
 
 ## 2. Color ramps — `tailwind colors/*`
 ```
@@ -40,6 +40,10 @@ A brand guide often defines several colors. Capture all of them, don't collapse 
 5. **Confirm with the user** before writing — show the detected colors, their inferred roles, and the ramps.
 
 Single-color guide → just `brand/*` (unchanged). No brand guide → propose primary (+ secondary if wanted), approve, then ramp.
+
+> In HiFi, also create the **project-specific role tokens** the brief/PRD imply (e.g. a dedicated
+> CTA colour, accent/transition surfaces). Those live in `Colors/Other` (next file) as semantic
+> tokens aliasing these ramps — not as raw values on elements.
 
 ## 4. Raw pixel scale — `px/*`
 Source of truth for every dimensional token. Name by literal value:

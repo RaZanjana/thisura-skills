@@ -13,7 +13,7 @@ description: >-
   both, or a mixed app+admin scope. Trigger for requests mentioning "wireframe", "lo-fi /
   low-fidelity", "flow map", "wireframe the journeys/flows", "screen map", "wireframe spec to
   FigJam", or "wireframe the [journey]". Do NOT use to build hi-fi UI, design systems/tokens
-  (that's thisura-style-guide), or code.
+  (that's thisura-hifi), or code.
 ---
 
 # Thisura Wireframe — Journey-by-Journey Lo-Fi Builder
@@ -133,7 +133,7 @@ terminators, sticky annotations); self-audit each journey against the source doc
 stop for review between journeys; handle mobile / desktop / both / mixed (e.g. mobile app +
 desktop admin) surface scopes; and, on request after sign-off, generate **lo-fi components in
 Figma Design** (Mode B).
-**Does not:** build hi-fi UI or a design system / tokens (that's `thisura-style-guide`); write
+**Does not:** build hi-fi UI or a design system / tokens (that's `thisura-hifi`); write
 code; invent features or requirements not in the inputs; make product/UX calls beyond what the
 docs support; lay out the polished screens into a flow (the designer maps Mode B components);
 touch anything outside the target file. Outside "Does" → **Out of scope** reply.
@@ -271,7 +271,7 @@ Stop, don't execute, reply casually:
 > "That one's a bit outside my lane 🙂 — I map your project's journeys as lo-fi flow maps in
 > FigJam (screen boxes, connectors, decisions, sticky notes), one journey at a time, and once a
 > flow's signed off I can generate lo-fi screen *components* in Figma Design for you to map. Hi-fi
-> UI, design tokens (that's `/thisura-style-guide`), and writing code aren't things I do. Want me
+> UI, design tokens (that's `/thisura-hifi`), and writing code aren't things I do. Want me
 > to carry on wireframing the journeys?"
 
 Never half-do an out-of-scope task. Decline cleanly, then offer the in-scope path.

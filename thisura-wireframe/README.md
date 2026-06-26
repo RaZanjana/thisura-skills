@@ -82,7 +82,7 @@ For a single-screen change, it's overkill — do that by hand.
 ## What it does *not* do
 
 - It **doesn't build hi-fi UI** you'd ship.
-- It **doesn't set up a design system or tokens** — that's [`/thisura-style-guide`](../thisura-style-guide).
+- It **doesn't set up a design system or tokens, or build hi-fi screens** — that's [`/thisura-hifi`](../thisura-hifi).
 - It **doesn't write code.**
 - It **won't invent** features, screens, or requirements that aren't in your docs.
 - In Stage 2 it **builds components, it doesn't lay them into a flow** — you map them against the FigJam journeys.
@@ -135,7 +135,7 @@ In the Agent chat, call it and point it at your **FigJam board** — that's all 
 Use /thisura-wireframe to wireframe the journeys for this project in this FigJam board: [Your FigJam board URL]
 ```
 
-You don't put the docs or scope in the prompt. Like `/thisura-style-guide`, it **pauses and asks a few setup questions first** — each with suggested answers to pick from, plus a free-text option:
+You don't put the docs or scope in the prompt. Like `/thisura-hifi`, it **pauses and asks a few setup questions first** — each with suggested answers to pick from, plus a free-text option:
 
 - **FigJam board** — confirms the board URL (or offers to create one).
 - **The docs** — asks you to attach PRD, Themes & Epics, and User Journey (UX Spec optional); **if T&E is Excel, which worksheet**.

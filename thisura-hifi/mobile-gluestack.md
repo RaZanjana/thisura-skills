@@ -20,8 +20,9 @@ Typical aliasing: `background/0 → white`, `background/950 → neutral/950`, `t
 `typography/0 → white`, `outline/200 → neutral/200`, `error → red/*`, `success → green/*`,
 `warning → amber/*`, `info → blue/*`. Dark re-points per the provider's dark block.
 
-### Other/  — placeholder + alpha colours
-Labelled placeholder for project-specific colours, **plus standalone alpha colours**:
+### Other/  — project role tokens + alpha colours
+Project-specific semantic colours (e.g. a dedicated CTA/accent role from the brief) that still
+**alias a primitive/brand ramp, never a raw value**, **plus standalone alpha colours**:
 `Other/overlay/scrim` (black 60%), `Other/overlay/hover` (black 8%), `Other/overlay/pressed`
 (black 12%), `Other/overlay/shadow` (black 10%), `Other/overlay/on-dark` (white 10%). Set hex + alpha directly.
 
@@ -48,7 +49,7 @@ Mirror Gluestack's `size` scale; per-mode values:
 
 ### typography/weight, typography/font  (constant)
 `weight/{…}` (raw numbers per Gluestack fontWeight); `font/{…}` (family strings).
-**Line-height is NOT a variable** — set as a % in each text style (Phase 4).
+**Line-height is NOT a variable** — set as a % in each text style (the text-styles step).
 
 ### spacing/  (Tailwind-named, alias px) — ≤16px constant; ≥24px step down (Mobile ×0.85 vs Tablet)
 `6 (24)→20 · 8 (32)→28 · 10 (40)→32 · 12 (48)→40 · 16 (64)→56 · 20 (80)→68 · 24 (96)→80` (Mobile column; Tablet = base).

@@ -16,14 +16,14 @@
 set -euo pipefail
 
 REPO="RaZanjana/thisura-skills"
-# Branch or tag to install. Override with THISURA_REF, e.g. THISURA_REF=style-guide-v1.0.0
+# Branch or tag to install. Override with THISURA_REF, e.g. THISURA_REF=hifi-v1.0.0
 REF="${THISURA_REF:-main}"
 DEST="$HOME/.claude/skills"
 
 # Available skills (index-aligned with DESCRIPTIONS).
-SKILLS=("thisura-style-guide" "thisura-wireframe")
+SKILLS=("thisura-hifi" "thisura-wireframe")
 DESCRIPTIONS=(
-  "Figma design tokens + a bound style guide for dev hand-off"
+  "High-fidelity Figma screens from project docs — tokens, components, screens"
   "Lo-fi journey wireframes in FigJam, then lo-fi screens in Figma"
 )
 

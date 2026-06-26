@@ -2,7 +2,7 @@
 
 Platform = web. Build `Colors` and `Breakpoints`. Every token aliases a Primitive — no raw
 hex/px outside `Primitives`. shadcn defaults are oklch; convert to hex precisely, or source from
-the project's `globals.css`.
+the project's `globals.css` (the architecture doc names the file).
 
 ---
 
@@ -25,17 +25,22 @@ Dark re-points per `.dark`. Typical aliasing: `background → white`, `foregroun
 `muted → neutral/100`, `muted-foreground → neutral/500`, `border/input → neutral/200`,
 `primary → brand/500`, `destructive → red/*`.
 
-### Other/  — placeholder + alpha colours
-A labelled placeholder for project-specific colours, **plus the standalone alpha colours**
-(semi-transparent; Figma can't alias-with-opacity): `Other/overlay/scrim` (black 60%),
-`Other/overlay/hover` (black 8%), `Other/overlay/pressed` (black 12%), `Other/overlay/shadow`
-(black 10%), `Other/overlay/on-dark` (white 10%). Set hex + alpha directly.
+### Other/  — project role tokens + alpha colours
+Project-specific semantic colours that enforce **brand-colour discipline** (e.g. a dedicated CTA
+colour, accent/transition surfaces from the brief) — each still **aliases a primitive/brand ramp,
+never a raw value** — **plus the standalone alpha colours** (semi-transparent; Figma can't
+alias-with-opacity): `Other/overlay/scrim` (black 60%), `Other/overlay/hover` (black 8%),
+`Other/overlay/pressed` (black 12%), `Other/overlay/shadow` (black 10%), `Other/overlay/on-dark`
+(white 10%). Set hex + alpha directly.
 
 ---
 
 ## Breakpoints collection  (modes — values VARY per mode)
 Modes: **Large Desktop** (>1440) · **Standard Desktop** (1280–1440) · **Tablet** (768–1279) · **Mobile** (<768).
 No `breakpoint` group — the modes are the breakpoints. Everything dimensional aliases `px/*`.
+
+> Use only the modes the project's locked breakpoints require (e.g. Desktop 1440 + Mobile 390 →
+> Standard Desktop + Mobile). Don't invent modes the build won't bind.
 
 ### typography/size  (alias px; display shrinks, body constant)
 | token | L.Desktop | S.Desktop | Tablet | Mobile |
@@ -53,7 +58,7 @@ No `breakpoint` group — the modes are the breakpoints. Everything dimensional 
 
 ### typography/weight, typography/font  (constant across modes)
 `weight/{thin=100 … black=900}` (raw numbers); `font/sans`, `font/mono` (family strings from brand/approval).
-**Line-height is NOT a variable** — set it as a % in each text style (Phase 4).
+**Line-height is NOT a variable** — set it as a % in each text style (the text-styles step).
 
 ### spacing/  (Tailwind-named, alias px) — ≤16px constant; ≥24px step down
 Rule: Tablet ×0.85, Mobile ×0.70 for tokens ≥24px, rounded to the 4px grid.
