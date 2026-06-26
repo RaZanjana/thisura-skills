@@ -27,9 +27,10 @@ Hard rules to prevent it:
   set it to hug and rebuild it.
 
 ## Page shell
-- Page frame `🎨 Style Guide`: **vertical auto-layout**; width fixed **1280** (1200 content + 40 padding each side); padding **64**; item spacing **64**; fill = neutral-50/canvas; **Clip content OFF**.
+- Page frame `🎨 Style Guide`: **vertical auto-layout**; width **FIXED 1280** (1152 content + 64 padding each side); padding **64**; item spacing **64**; fill = neutral-50/canvas; **Clip content OFF**.
+  - ⚠️ **The width must be a real FIXED width, not hug.** Set `counterAxisSizingMode = 'FIXED'` then `resize(1280, h)`. If the page is left hugging its widest child (`counterAxisSizingMode = 'AUTO'`), it shrinks to ~one card wide (~530px) and the **wrapping colour grid collapses to a single tall column** — the whole page becomes a narrow strip. This is a real, recurring break: after building, **assert `page.width === 1280`** (not ~530).
 - Title block (top): vertical auto-layout, hug — H1 title + caption line.
-- Each **Section**: vertical auto-layout, **width = Fill container**, item spacing **24** — a header label (overline) then the section body. Hug height. Clip content OFF.
+- Each **Section**: vertical auto-layout, **width = Fill container**, item spacing **24** — a header label (overline) then the section body. Hug height. Clip content OFF. **No section fill** — sections are transparent; the only background is the page canvas (don't add a per-section bg colour).
 
 ## Colour card grid
 - Grid: **horizontal auto-layout with WRAP**, width Fill, **height HUG**, horizontal + vertical gap **16**, align start. (With wrapping, the grid height must hug to all rows — never a fixed small height.)
@@ -87,6 +88,8 @@ columns start at a different x) or **centring** content (so nothing aligns). Rul
   neighbours; Clip content OFF. (Don't render only labels — include the actual shadowed box.)
 
 ## Sizing checklist — must all pass before finishing
+- [ ] **Page width is FIXED 1280** (assert `page.width === 1280`, not hug/~530) so the colour grid wraps into multiple columns instead of one tall stack.
+- [ ] **No per-section background fill** — sections transparent; only the page canvas has a fill.
 - [ ] Page, every section, every grid/row/table uses **auto-layout**.
 - [ ] **No frame collapsed to ~10px**: every card/grid/cell **height ≈ its content** (colour card ≈169, grid hugs all rows). Children flow via auto-layout, never placed at fixed `y`.
 - [ ] **No frame left at the default 100×100**; every container hugs or fills.

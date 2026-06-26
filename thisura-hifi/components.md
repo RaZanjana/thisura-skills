@@ -39,6 +39,29 @@ already exists.
 - Keep the library free of assets that imply **non-goals** (e.g. a search icon when site search is
   out of scope — Standard #9 / scope guard).
 
+## Components board — organisation pattern (handoff layout, Standard #10)
+The board has a **consistent structure** — match it for every new component. **Never drop a bare
+master loose at the bottom of the board** (a recurring break: it ignores the rhythm and reads as
+unfinished). Always place a new component inside the structure below.
+
+- **Board** (`🧩 Components`): a single **vertical auto-layout** frame, **gap 72**, **padding 48**,
+  hug width + height. Sections flow as its children — appended sections seat themselves.
+- **Section** (one per component group, e.g. *Icons*, *Button*, *Cards*, *Footer*, *Overlays*,
+  *Utility bar*): a **vertical auto-layout**, **gap 20**, hug, transparent fill, clip OFF, containing:
+  1. a **heading** text — *Manrope SemiBold 18*, foreground;
+  2. an optional **sub-label** text — *Inter Regular 14*, muted-foreground (the one-line description);
+  3. **content** holding one **labelled sub-frame per component** (vertical auto-layout, gap 8):
+     a **component label** (*Inter SemiBold 14*) + an optional **props/states desc** (*Inter Regular 12*,
+     muted) + the **master** (for icons, the small cell is the master with its name label above).
+- **Reuse the exact text styles, never re-type fonts/sizes/colours.** The reliable way is to
+  **`clone()` an existing board label** (heading / sub / component-label / desc) and only change its
+  `.characters` — the clone keeps the bound text style, fill and font (load the font first).
+- **Put a new component in the matching existing section** rather than a new one when one fits:
+  a new icon → append a cell to the **Icons** row; a new card → add a sub-frame to the **Cards**
+  section; only **create a new titled section** for a genuinely new component family (e.g. a utility
+  bar). After appending, the board's auto-layout reflows everything — verify no master is left
+  parented directly to the board.
+
 ## Then
 Place instances on the screen (Phase 3) and **screenshot each new component** for the review.
 **Stamp the master** with a `thisura` `sharedPluginData` fingerprint (status, variants, a hash of

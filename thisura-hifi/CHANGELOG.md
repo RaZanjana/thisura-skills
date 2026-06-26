@@ -11,6 +11,10 @@ Versions are tagged in git as `hifi-vX.Y.Z`.
 
 ### Changed
 - Token-usage optimization (no behavior change): trimmed the always-on `description`, and added a "reference read map" so only the files a step needs are loaded (e.g. one platform file, not both; resume skips the token specs; no re-reading within a session).
+- `style-guide-layout.md`: the page-shell rule now requires a **real FIXED 1280px page width** (not hug) with an explicit warning + assertion — a hugging page collapses the wrapping colour grid into a single tall column. Added "no per-section background fill" to the rule and the sizing checklist.
+
+### Added
+- `components.md`: a **"Components board — organisation pattern"** section codifying the board's titled-section structure (board = vertical auto-layout gap 72 / pad 48; section = heading *Manrope SemiBold 18* + sub *Inter Regular 14* + per-component sub-frames with *Inter SemiBold 14* label + *Inter Regular 12* desc + master). New components must join the matching existing section (icon → Icons row, card → Cards section) or get a new titled section — **never a bare master dropped loose at the board bottom** — and labels must **clone existing board label styles** to keep typography/colour/spacing consistent.
 
 ## [1.0.0] — 2026-06-26
 
