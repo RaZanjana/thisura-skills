@@ -2,18 +2,14 @@
 name: thisura-hifi
 version: 1.0.0
 description: >-
-  Produces production-grade, developer-handoff-ready high-fidelity (HiFi) screens in Figma — token-
-  driven, component-based, responsive, and WCAG-AA validated. Runs the full pipeline from a
-  project's BMAD/WDS artifacts (PRD, architecture, epics & stories): sets up the design-token
-  system + a bound Style Guide page (folded in as the Foundations phase — no separate style-guide
-  skill needed), builds components on demand, then assembles desktop + mobile screens one story at
-  a time, each behind a stakeholder review gate. It detects and absorbs the designer's manual Figma
-  edits, annotates user flow, and keeps a build-log memory. Use whenever the user wants to build,
-  generate, or continue HiFi / high-fidelity Figma screens or a design system from project
-  requirements, or set up design tokens + a style guide as the foundation for screens. Triggers:
-  "HiFi", "high-fidelity", "build the screens in Figma", "design system + screens", "hand-off-ready
-  Figma", "next story's design". Do NOT use for lo-fi wireframes / flow maps (that's
-  thisura-wireframe) or for writing application code.
+  Builds production-ready, hand-off high-fidelity (HiFi) Figma screens from a project's BMAD/WDS
+  docs (PRD, architecture, epics & stories): sets up the design tokens + a bound Style Guide page
+  (folded in as the Foundations phase — no separate style-guide skill needed), builds components on
+  demand, then assembles desktop + mobile screens one story at a time behind a stakeholder review
+  gate, with manual-edit absorption, WCAG AA checks, and a resumable build-log memory. Use to build,
+  generate, or continue HiFi / high-fidelity Figma screens or a design system from requirements, or
+  set up design tokens + a style guide as the foundation for screens. Not for lo-fi wireframes /
+  flow maps (that's thisura-wireframe) or for writing code.
 ---
 
 # Thisura HiFi — High-Fidelity Figma Design Builder
@@ -135,15 +131,22 @@ Step 0 Orient/setup → Phase 1 Foundations & tokens (review) → [ per-story lo
    (desktop+mobile) → annotate → AA audit → update build log → ★ STOP for review ★ → next story
 ```
 
-- **Phase 1 — Foundations & tokens** → read `foundations-tokens.md` (which drives `primitives.md`,
-  `web-shadcn.md` **or** `mobile-gluestack.md`, and `style-guide-layout.md`). The first review gate.
-- **Phase 2 — Components on demand** → read `components.md`.
-- **Phase 3 — Screens** → read `screens.md`.
-- **The per-story loop + manual-change absorption** → read `per-story-loop.md` (the critical loop).
-- **Resuming an in-progress file** → read `continue-resume.md` (resume protocol + fingerprints + checkpoint).
-- **WCAG AA gate** → read `accessibility.md`.
-- **Build-log memory + the numbered Standards** → read `build-log.md`.
-- **Troubleshooting** → `troubleshooting.md`.
+### Reference read map — load ONLY what the current step needs
+Open a reference file only when you reach its step, and **never re-read a file already loaded this
+session.** Reading every file up front wastes context.
+
+| When | Read | Skip |
+|---|---|---|
+| Step 0 / setup | (nothing — this SKILL.md is enough) | all refs |
+| **Phase 1 — Foundations** | `foundations-tokens.md`, `primitives.md`, `style-guide-layout.md`, **and exactly one platform file**: `web-shadcn.md` *(web)* **or** `mobile-gluestack.md` *(mobile)* | the other platform file |
+| **Phase 2 — Components** | `components.md` | token specs, screens |
+| **Phase 3 — Screens** | `screens.md`, then `accessibility.md` for the AA gate | token specs |
+| **Per-story loop** | `per-story-loop.md`, `build-log.md` | foundations specs |
+| **Resume / Continue** | `continue-resume.md`, `build-log.md` | the token specs (unless explicitly refreshing foundations) |
+| A failure occurs | the matching row of `troubleshooting.md` | the rest |
+
+The numbered **Standards** live in `build-log.md`; other files cite them by number, so you don't
+re-read the list.
 
 ## Core principles
 1. **Tokens → Components → Screens.** Foundation first; screens are assembled from instances.

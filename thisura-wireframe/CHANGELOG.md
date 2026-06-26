@@ -11,6 +11,7 @@ Versions are tagged in git as `wireframe-vX.Y.Z`.
 
 ### Changed
 - Point cross-references for hi-fi UI / design tokens at `thisura-hifi` (the standalone `thisura-style-guide` skill is retired and folded into `thisura-hifi`'s Foundations phase).
+- Token-usage optimization (no behavior change): trimmed the always-on `description`, and made the Workflow load only the current mode's reference files (Mode A skips `lofi-components.md`; Mode B skips the FigJam flow files; no re-reading within a session).
 
 ## [1.0.0] — 2026-06-19
 

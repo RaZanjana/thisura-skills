@@ -9,6 +9,9 @@ Versions are tagged in git as `hifi-vX.Y.Z`.
 
 ## [Unreleased]
 
+### Changed
+- Token-usage optimization (no behavior change): trimmed the always-on `description`, and added a "reference read map" so only the files a step needs are loaded (e.g. one platform file, not both; resume skips the token specs; no re-reading within a session).
+
 ## [1.0.0] — 2026-06-26
 
 First stable release. Runs the full high-fidelity Figma pipeline — tokens →
