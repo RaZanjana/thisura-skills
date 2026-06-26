@@ -6,7 +6,7 @@ A small collection of reusable [Agent Skills](https://www.anthropic.com/news/ski
 
 | Skill | What it does |
 |-------|--------------|
-| [`thisura-style-guide/`](./thisura-style-guide) | Builds a Figma design-token system (Primitives, Colors, Breakpoints), local styles, and a bound Style Guide page for dev hand-off. Tailwind v4 naming; shadcn for web, Gluestack for mobile. See its [README](./thisura-style-guide/README.md). |
+| [`thisura-hifi/`](./thisura-hifi) | Builds **production-ready high-fidelity Figma screens** from your project's planning docs (PRD, architecture, epics & stories), **one story at a time** with a review stop each round. Sets up the design-token system + a bound Style Guide page (the old `thisura-style-guide` workflow, now folded in as its first phase), builds components on demand, then assembles desktop + mobile screens from instances — with breakpoint-mode binding, AC-required states, flow annotations, a WCAG AA contrast audit, manual-edit absorption, and a build-log memory. shadcn for web, Gluestack for mobile; Tailwind v4 naming. See its [README](./thisura-hifi/README.md). |
 | [`thisura-wireframe/`](./thisura-wireframe) | Wireframes your product **one user journey at a time**, from your PRD, Themes & Epics, and User Journey docs, in two modes. **Mode A (FigJam):** maps each journey as a low-fidelity flow map on a FigJam board — greyscale screen boxes, native connectors, decision diamonds, sticky-note annotations, a Section per journey. **Mode B (Figma Design):** once a flow is signed off, generates polished lo-fi **screen components** (with state variants) for you to map against the journeys. Keeps **recurring screens consistent** via a screen registry + master/snapshot derivation, with a self-audit and a review stop between journeys. See its [README](./thisura-wireframe/README.md). |
 
 More skills may be added as sibling folders over time.
@@ -26,7 +26,7 @@ Select Thisura skills to install:
   ↑/↓ move · space toggle · a = all · enter = confirm
 
  › [x] all                    — install everything below
-   [x] thisura-style-guide    — Figma design tokens + a bound style guide for dev hand-off
+   [x] thisura-hifi           — High-fidelity Figma screens from project docs — tokens, components, screens
    [x] thisura-wireframe      — Lo-fi journey wireframes in FigJam, then lo-fi screens in Figma
 ```
 
@@ -61,11 +61,11 @@ If you'd rather not run the script:
 
 ```bash
 git clone https://github.com/RaZanjana/thisura-skills.git
-cp -r thisura-skills/thisura-style-guide ~/.claude/skills/        # copy
-cp -r thisura-skills/thisura-wireframe   ~/.claude/skills/
+cp -r thisura-skills/thisura-hifi      ~/.claude/skills/        # copy
+cp -r thisura-skills/thisura-wireframe ~/.claude/skills/
 # or symlink so git pull keeps them fresh:
-ln -s "$(pwd)/thisura-skills/thisura-style-guide" ~/.claude/skills/thisura-style-guide
-ln -s "$(pwd)/thisura-skills/thisura-wireframe"   ~/.claude/skills/thisura-wireframe
+ln -s "$(pwd)/thisura-skills/thisura-hifi"      ~/.claude/skills/thisura-hifi
+ln -s "$(pwd)/thisura-skills/thisura-wireframe" ~/.claude/skills/thisura-wireframe
 ```
 Cursor also reads `.agents/skills/` and per-project `.claude/skills/` — any of those work.
 </details>
@@ -74,10 +74,10 @@ Cursor also reads `.agents/skills/` and per-project `.claude/skills/` — any of
 
 Each skill has its own README with prerequisites and a sample prompt.
 
-Style guide:
+HiFi screens (point it at a **Figma file**; it asks you to confirm your planning docs and lock breakpoints/theme/framework as setup questions, then builds tokens + style guide, then screens story by story):
 
 ```
-Use /thisura-style-guide and generate a style guide for the project in this Figma file: [paste Figma URL]
+Use /thisura-hifi to build the HiFi screens for this project in this Figma file: [paste Figma URL]
 ```
 
 Wireframes (point it at a **FigJam board**; it asks for your PRD, Themes & Epics, and User Journey docs as setup questions):
@@ -87,7 +87,7 @@ Use /thisura-wireframe to wireframe the journeys for this project in this FigJam
 ```
 
 Each one asks a few setup questions, then gets to work. Full details in
-[`thisura-style-guide/README.md`](./thisura-style-guide/README.md) and
+[`thisura-hifi/README.md`](./thisura-hifi/README.md) and
 [`thisura-wireframe/README.md`](./thisura-wireframe/README.md).
 
 ## Versioning
@@ -101,10 +101,10 @@ Each skill is versioned **independently** using [Semantic Versioning](https://se
 The version lives in two places that should always agree:
 
 1. The `version:` field in each skill's `SKILL.md` (the source of truth).
-2. A namespaced git tag — `style-guide-vX.Y.Z` / `wireframe-vX.Y.Z`.
+2. A namespaced git tag — `hifi-vX.Y.Z` / `wireframe-vX.Y.Z`.
 
 Each skill keeps its own history in a `CHANGELOG.md`:
-[`thisura-style-guide/CHANGELOG.md`](./thisura-style-guide/CHANGELOG.md) and
+[`thisura-hifi/CHANGELOG.md`](./thisura-hifi/CHANGELOG.md) and
 [`thisura-wireframe/CHANGELOG.md`](./thisura-wireframe/CHANGELOG.md).
 
 ## Contributing / updating a skill

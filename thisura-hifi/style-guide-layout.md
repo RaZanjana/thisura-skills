@@ -1,4 +1,4 @@
-# Style Guide — layout construction (shared, Phase 5)
+# Style Guide — layout construction (shared, Foundations step)
 
 The Style Guide page MUST be built with **Figma auto-layout and hug/fill sizing throughout**.
 Do **NOT** absolute-position elements with guessed `x/y` and fixed `width/height` — that is what
@@ -99,6 +99,6 @@ columns start at a different x) or **centring** content (so nothing aligns). Rul
 - [ ] Card/label text is never fix-width-clipped (hug or wrap; card wide enough).
 - [ ] **Clip content OFF** on sections; light chips carry a border.
 
-## Update mode
+## Update / refresh mode
 When refreshing, rebuild the page with these exact rules so structure/layout stay identical —
 only values change. Don't patch the old absolute-positioned page; regenerate it cleanly.
