@@ -8,7 +8,12 @@ Each row is a symptom → likely cause → fix. Promote any recurring one into a
 | Text renders **black** unexpectedly | Bound to a non-existent variable name (missing prefix) | Verify exact names; rebind; re-audit |
 | **Contrast ~4.3–4.4** on tinted band/chip | Muted text on light-gray bg | White card + border + shadow, or darken the text token |
 | **Shadow / focus ring invisible** | Hugging parent has clip-content on | Clip-content **off** on ancestors of shadowed / outside-stroke nodes |
-| Frame **collapsed to ~10px** | `resize()` reset auto-layout sizing to FIXED | Set `layoutSizing*='HUG'/'FILL'` **after** resize |
+| Frame **collapsed to ~10px** | `resize(w, 10)` or `resize()` left `FIXED` stub height on a hug column | Never stub-height; append children → `primaryAxisSizingMode AUTO` → set `HUG`/`FILL` (Standard #25) |
+| Text renders **one character per line** (vertical letter stack) | `TEXT` with `FILL` inside parent width 0–10px | Parent must have real width first; `textAutoResize HEIGHT` + `STRETCH`; run zero-width scan (Standard #26–#27) |
+| **Footer above form body** on screen | Content column hugged to ~10px; form overflows below footer in paint order | Fix column/field wrappers to HUG; verify `Header → Content → Footer` child heights in tree |
+| **Textarea value** stuck `textAutoResize NONE` | `layoutSizing*` set before `textAutoResize` in API script | Set `textAutoResize HEIGHT` first, then `FILL` / `HUG` |
+| Components-board **Forms section ~100px wide** | Section/content frames left `FIXED`/`HUG` at default after clone | Section + `content` + blocks: `counterAxisSizingMode AUTO`; masters 360px not squeezed |
+| Checkbox label clipped / single-line | `textAutoResize NONE`, `counterAxisAlignItems CENTER` | `HEIGHT` + `counterAxisAlignItems MIN`; box 16×16 `FIXED` |
 | `HUG`/`FILL` throws | Node not yet in an auto-layout parent | `appendChild` first, then set sizing |
 | Image fill **renders blank** | Wrong declared type / cached failed decode | Convert / re-encode (new hash), correct Content-Type; verify via `get_screenshot` |
 | Slot/child **won't move in instance** | Positions can't be overridden per-instance | Make it responsive in the master (`SCALE` / `STRETCH`) |

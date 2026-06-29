@@ -1,6 +1,6 @@
 ---
 name: thisura-hifi
-version: 1.0.0
+version: 1.1.0
 description: >-
   Builds production-ready, hand-off high-fidelity (HiFi) Figma screens from a project's BMAD/WDS
   docs (PRD, architecture, epics & stories): sets up the design tokens + a bound Style Guide page
@@ -141,6 +141,7 @@ session.** Reading every file up front wastes context.
 | **Phase 1 — Foundations** | `foundations-tokens.md`, `primitives.md`, `style-guide-layout.md`, **and exactly one platform file**: `web-shadcn.md` *(web)* **or** `mobile-gluestack.md` *(mobile)* | the other platform file |
 | **Phase 2 — Components** | `components.md` | token specs, screens |
 | **Phase 3 — Screens** | `screens.md`, then `accessibility.md` for the AA gate | token specs |
+| **Layout defect / responsive bug** | `components.md` (Responsive auto-layout contract), `troubleshooting.md` | foundations specs |
 | **Per-story loop** | `per-story-loop.md`, `build-log.md` | foundations specs |
 | **Resume / Continue** | `continue-resume.md`, `build-log.md` | the token specs (unless explicitly refreshing foundations) |
 | A failure occurs | the matching row of `troubleshooting.md` | the rest |

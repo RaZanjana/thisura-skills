@@ -41,6 +41,25 @@ surfaces any out-of-scope link immediately.
   keep previews view-only if filtering lives elsewhere (Standard #21).
 - Don't add assets that imply non-goals.
 
+## Layout verification gate (Standard #27 — before AA and review)
+
+Screens are assembled from instances — **if a master is broken, every screen breaks.** After
+composing each screen (and after any layout fix pass), verify:
+
+1. **Child order & heights** — screen frame children: `Header` → `Content` → `Footer`; `Content`
+   height must hug the form/body (not ~10–150px while fields visually overflow).
+2. **Zero-width text scan** — no `TEXT` with meaningful copy and `width < 8px` (intro, labels,
+   errors, privacy line, textarea values).
+3. **Field grid** — desktop: two-column rows use `HORIZONTAL` + equal `layoutGrow`; mobile: rows
+   `VERTICAL`; controls `layoutSizingHorizontal FILL` + `layoutAlign STRETCH`.
+4. **CTA width** — primary submit `FILL` on mobile, `HUG` acceptable on desktop unless full-width
+   is specified.
+5. **`get_screenshot`** desktop + mobile — confirm no letter-stacks, no footer-in-the-middle, no
+   overlapping fields.
+
+If a defect traces to a component master, **fix the master on the Components board first**, then
+re-check all instances (Standard #25–#26, `components.md`).
+
 ## Definition of done (per screen)
 - [ ] Manual changes detected & absorbed at story start (`per-story-loop.md`).
 - [ ] Desktop + mobile built; mobile beside desktop; breakpoint mode bound.
@@ -49,6 +68,7 @@ surfaces any out-of-scope link immediately.
 - [ ] Required states covered; clip-content correct around shadows/rings.
 - [ ] Global chrome present (header + footer).
 - [ ] Desktop CTAs/links annotated.
+- [ ] Layout verification gate passed (zero-width scan + screenshot; Standard #27).
 - [ ] WCAG AA audit: 0 failures (image/gradient text verified).
 - [ ] Build log updated (registry + story log + open items).
 - [ ] **Reviewed with stakeholder; explicit sign-off received.**

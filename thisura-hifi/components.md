@@ -30,6 +30,60 @@ already exists.
 - **Documentation on the board**: a titled section + a label (name, variants/states, notes) so it
   reads as a handoff artifact (Standard #10, #13).
 
+## Responsive auto-layout contract (CRITICAL — Standards #25–#27)
+
+Form controls, labels, and any multi-line copy **must be responsive in the component master** —
+instances inherit layout; you cannot fix a broken master on the screen later.
+
+### Never do this
+- `resize(frame, width, 10)` (or any stub height) on an auto-layout column, field wrapper, or form
+  section — it leaves `FIXED` vertical sizing and collapses hug.
+- Set `layoutSizingHorizontal: FILL` on `TEXT` **before** the parent has a real width — FILL in a
+  0–10px-wide parent → **0px text width** → one character per line (the vertical “letter stack” bug).
+- Leave `textAutoResize: NONE` on value/label/body copy that should wrap.
+- Nest a **component instance** inside another component master while building (`createInstance` inside
+  `createComponent`) — Figma rejects it; duplicate the shell instead or compose on the screen.
+- Let a Components-board **section** or **content** frame hug to ~100px while masters are 360px wide
+  — labels and variant grids get squeezed.
+
+### Shell patterns (form family)
+
+| Component | Shell | Value / label child |
+|---|---|---|
+| **Input / Select** | `HORIZONTAL`, fixed **360×44** showcase width, padding `spacing/3` × `spacing/2`, `clip OFF` | `Value`: `textAutoResize HEIGHT`, `layoutGrow 1`, `FILL` + `STRETCH` |
+| **Select** | + `primaryAxisAlignItems SPACE_BETWEEN`; chevron `HUG` | same as Input |
+| **Textarea** | `VERTICAL`, `counterAxis FIXED` 360px, `primaryAxis AUTO` (min ~96px), padding bound | `Value`: set `textAutoResize HEIGHT` **first**, then `FILL` / `HUG` |
+| **Checkbox** | `HORIZONTAL`, `counterAxisAlignItems MIN`, `primaryAxis AUTO`, width 360, `clip OFF` | `Box` 16×16 `FIXED`; `Label` `HEIGHT` + `layoutGrow 1` + `FILL` |
+
+Set interaction states on the shell (border → `Theme/border` | `Theme/ring` | `Theme/destructive`);
+keep child text responsive across all variants.
+
+### Property order for text (Figma API)
+When scripting, set **`textAutoResize` before `layoutSizing*`** — reversing the order can leave
+`NONE` stuck on textarea values.
+
+### Board section after `combineAsVariants`
+1. Section frame: `VERTICAL`, `gap 20`, **HUG width + height** (`counterAxisSizingMode AUTO`).
+2. `content` child: `VERTICAL`, `gap 32`, **HUG width** — must be ≥ widest master (360px+).
+3. Each labelled block: `VERTICAL`, `gap 8`, **HUG**; component set `HUG` — never squeezed inside a
+   fixed-narrow parent.
+4. Variant set: `HORIZONTAL` grid, `itemSpacing 24`, `clip OFF`.
+
+### Post-create verification (required before Phase 3)
+Run on the **master** and on one **FILL-width instance** in a test frame:
+
+```js
+// Zero-width text scan — flag any TEXT wider than a couple chars with width < 8
+const bad = node.findAll(n => n.type === 'TEXT' && (n.characters?.length || 0) > 3 && n.width < 8);
+// Column collapse — flag containers that should hug but height ≤ 15 while children overflow
+```
+
+Then `get_screenshot` the Components-board row **and** the screen — layout bugs show up in the
+render even when the tree looks plausible.
+
+> **Why:** Story 2.7 (HES) surfaced all of the above in one pass — collapsed form columns, footer
+> above the form, and 0-width FILL text. Fixing masters + adding this contract prevents recurrence.
+
 ## Placement & hygiene
 - Component **masters live only on the `🧩 Components` board**; screens use **instances** (Standard #13).
 - After `clone()` / create, verify the master's parent is the Components board — an unparented

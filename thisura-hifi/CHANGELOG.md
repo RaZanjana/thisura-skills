@@ -9,12 +9,22 @@ Versions are tagged in git as `hifi-vX.Y.Z`.
 
 ## [Unreleased]
 
-### Changed
-- Token-usage optimization (no behavior change): trimmed the always-on `description`, and added a "reference read map" so only the files a step needs are loaded (e.g. one platform file, not both; resume skips the token specs; no re-reading within a session).
-- `style-guide-layout.md`: the page-shell rule now requires a **real FIXED 1280px page width** (not hug) with an explicit warning + assertion — a hugging page collapses the wrapping colour grid into a single tall column. Added "no per-section background fill" to the rule and the sizing checklist.
+## [1.1.0] — 2026-06-29
 
 ### Added
-- `components.md`: a **"Components board — organisation pattern"** section codifying the board's titled-section structure (board = vertical auto-layout gap 72 / pad 48; section = heading *Manrope SemiBold 18* + sub *Inter Regular 14* + per-component sub-frames with *Inter SemiBold 14* label + *Inter Regular 12* desc + master). New components must join the matching existing section (icon → Icons row, card → Cards section) or get a new titled section — **never a bare master dropped loose at the board bottom** — and labels must **clone existing board label styles** to keep typography/colour/spacing consistent.
+- **`components.md` — Responsive auto-layout contract (Standards #25–#27):** shell patterns for
+  Input/Select/Textarea/Checkbox; never stub-height `resize(w, 10)`; text FILL property order;
+  board-section hug rules; post-create zero-width scan + screenshot gate.
+- **`screens.md` — Layout verification gate** before AA/review (child order, zero-width scan,
+  field grid, mobile CTA width, screenshot).
+- **`troubleshooting.md`:** rows for vertical letter-stack text, footer-above-form, collapsed board
+  section, textarea `NONE` auto-resize, checkbox label clip.
+- **`build-log.md`:** Standards #25 (no placeholder-height auto-layout), #26 (text FILL contract),
+  #27 (layout verification gate).
+
+### Changed
+- Promoted HES Story 2.7 layout-incident learnings into enforceable standards so component masters
+  stay responsive before screen assembly.
 
 ## [1.0.0] — 2026-06-26
 
@@ -32,5 +42,6 @@ at a time, with a stakeholder review gate.
 - WCAG AA resolving-contrast audit as a gate, the 23-point standards checklist, and a build-log workflow memory.
 - Design-friendly Voice guidance for clearer, less robotic output.
 
-[Unreleased]: https://github.com/RaZanjana/thisura-skills/compare/hifi-v1.0.0...HEAD
+[Unreleased]: https://github.com/RaZanjana/thisura-skills/compare/hifi-v1.1.0...HEAD
+[1.1.0]: https://github.com/RaZanjana/thisura-skills/releases/tag/hifi-v1.1.0
 [1.0.0]: https://github.com/RaZanjana/thisura-skills/releases/tag/hifi-v1.0.0

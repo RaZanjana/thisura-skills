@@ -60,6 +60,17 @@ Location: `…/design-artifacts/figma-build-log.md`. Keep it concise — necessa
 22. Image uploads: verify real type, correct Content-Type, re-encode to bust a cached bad decode.
 23. **Review every step/story with the stakeholder; proceed only on explicit sign-off.**
 24. **Checkpoint at end of session** — update the build log + re-stamp `thisura` fingerprints on masters/frames so resume detects drift reliably.
+25. **No placeholder-height auto-layout** — never `resize(w, 10)` (or any token height) on a hug
+    container; never leave `primaryAxisSizingMode: FIXED` with a stub height on a column that should
+    grow. Append children first, then set `AUTO` (HUG) / `FILL` sizing.
+26. **Text FILL contract** — multi-line copy: `textAutoResize = HEIGHT` → `layoutAlign = STRETCH` →
+    `layoutSizingHorizontal = FILL` → `layoutSizingVertical = HUG`, **only after** the parent has a
+    real width. Run the zero-width scan (Standard #27) before marking a component or screen done.
+27. **Layout verification gate** — after every component create/extend and every screen compose,
+    inspect for: any `TEXT` with `width < 8` (per-character vertical stack); content column hugging
+    to ~10px while children overflow; footer sitting above body content; board section squeezed
+  below master width. Fix on the **component master first**, then re-check instances. `get_screenshot`
+    both the Components board cell and the screen frame.
 
 > **Why:** Standards #1–N are past defects/decisions promoted into rules. The log is how the
 > system learns across sessions and agents and stops repeating mistakes.
