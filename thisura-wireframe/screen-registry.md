@@ -66,7 +66,7 @@ Drift is structurally impossible, not something to "remember".
 A placeholder is a not-yet-revealed element kept **listed but visibly deferred** so the screen's
 content is stable across journeys:
 - **FigJam (Mode A):** a greyed bullet in the screen box, tagged with what it becomes and its
-  owning journey — e.g. `• (later) Checkout CTA — reveals in: Purchase`. The slot stays in the box,
+  owning journey — e.g. `• (later) Checkout CTA (reveals in: Purchase)`. The slot stays in the box,
   so the box content doesn't change shape when the element is later revealed.
 - **Figma Design (Mode B):** the **reserved slot** at the element's footprint — a `#F5F5F5` box,
   1px `#CCCCCC` dashed border, a small Flow-Circular caption naming what it becomes and its owning
@@ -94,9 +94,10 @@ content is stable across journeys:
 
 ## Node naming (registry-aware)
 - Master: `[MASTER] {Screen} ({surface})` — e.g. `[MASTER] Home (mobile)`.
-- Snapshot: `{Screen} — {state}` inside the journey Section (journey implied by Section), tagged
+- Snapshot: `{Screen} ({state})` inside the journey Section (journey implied by Section), tagged
   with `screenId`. The same screen across journeys shares `screenId` but lives as a separate
   snapshot node (box in FigJam / component instance in Figma) in each Section.
+  Do not use em dashes in snapshot titles or placeholder bullets.
 
 ---
 

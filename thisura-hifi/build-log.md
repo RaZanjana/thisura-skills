@@ -71,6 +71,9 @@ Location: `…/design-artifacts/figma-build-log.md`. Keep it concise — necessa
     to ~10px while children overflow; footer sitting above body content; board section squeezed
   below master width. Fix on the **component master first**, then re-check instances. `get_screenshot`
     both the Components board cell and the screen frame.
+28. **No em dashes in generated artifacts** — never write `—` or `–` into UI copy, labels,
+    annotations, stickies, chat to the designer, or reviewer-facing layer names. Use a comma,
+    period, or parentheses. (Skill docs may use em dashes; Figma output and designer chat must not.)
 
 > **Why:** Standards #1–N are past defects/decisions promoted into rules. The log is how the
 > system learns across sessions and agents and stops repeating mistakes.

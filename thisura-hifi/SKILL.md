@@ -1,15 +1,16 @@
 ---
 name: thisura-hifi
-version: 1.1.0
+version: 1.2.1
 description: >-
-  Builds production-ready, hand-off high-fidelity (HiFi) Figma screens from a project's BMAD/WDS
-  docs (PRD, architecture, epics & stories): sets up the design tokens + a bound Style Guide page
-  (folded in as the Foundations phase — no separate style-guide skill needed), builds components on
-  demand, then assembles desktop + mobile screens one story at a time behind a stakeholder review
-  gate, with manual-edit absorption, WCAG AA checks, and a resumable build-log memory. Use to build,
-  generate, or continue HiFi / high-fidelity Figma screens or a design system from requirements, or
-  set up design tokens + a style guide as the foundation for screens. Not for lo-fi wireframes /
-  flow maps (that's thisura-wireframe) or for writing code.
+  Builds production-ready, hand-off high-fidelity (HiFi) Figma screens from a project's planning
+  docs (PRD, architecture, epics & stories — auto-found from BMAD/WDS folders when present): sets up
+  the design tokens + a bound Style Guide page (folded in as the Foundations phase — no separate
+  style-guide skill needed), builds components on demand, then assembles desktop + mobile screens
+  one story at a time behind a stakeholder review gate, with manual-edit absorption, WCAG AA checks,
+  and a resumable build-log memory. Use to build, generate, or continue HiFi / high-fidelity Figma
+  screens or a design system from requirements, or set up design tokens + a style guide as the
+  foundation for screens. Not for lo-fi wireframes / flow maps (that's thisura-wireframe) or for
+  writing code.
 ---
 
 # Thisura HiFi — High-Fidelity Figma Design Builder
@@ -40,16 +41,25 @@ language; the internal model (phases, registry, standards) stays under the hood.
   | Phase 1–3 / per-story loop | "tokens & style guide → components → screens, one story at a time" |
   | Primitives / Colors / Breakpoints / aliasing / scoping | "the token groups; one token pointing at another; where it shows in the pickers" |
   | Build log / registry / workflow memory | "my running notes on what's built and the rules so far" |
-  | Manual-change absorption / promote to standard | "I noticed your edit — I'll keep it and make it the new rule everywhere" |
+  | Manual-change absorption / promote to standard | "I noticed your edit. I'll keep it and make it the new rule everywhere" |
   | Breakpoint mode binding | "the screen resizes itself per device" |
   | Resolving contrast audit / AA gate | "an accessibility check before I call it done" |
   | Annotations | "I label where each button/link goes for the devs" |
   | Slot / instance / variant | (keep — designers know these) |
+  | BMAD / WDS / planning_artifacts / auto-discovery | "I'll look for your project docs" |
+  | Implementation readiness | "whether planning says you're ready to build screens" |
+  | DESIGN.md / EXPERIENCE.md | "your UX design notes" / "how it should look and behave" |
+  | wireframe-status | "which journeys you've already signed off in FigJam" |
+  | Tiered gates | "what we need to start tokens" vs "what we need for the first screen" |
 - **Keep the real Figma nouns** a designer already knows: variables, styles, modes, component,
   variant, instance, slot, frame, page, auto-layout.
 - **Headings shown to the user are plain** — never title a message "Phase 1/2/3"; use phase numbers
   only in your own planning.
 - Short and concrete. If a precise term is unavoidable, gloss it in plain words the first time.
+- **No em dashes in generated artifacts.** Never use `—` (or en dashes `–`) in anything written for
+  the designer or put into Figma: chat messages, UI copy, labels, annotations, stickies, layer
+  names shown to reviewers. Use a comma, period, or parentheses instead. Skill-doc prose may keep
+  em dashes; generated output must not.
 
 ---
 
@@ -68,25 +78,34 @@ anything outside the target Figma file. Outside "Does" → **Out of scope** repl
 
 ---
 
-## Required inputs — confirm before HiFi
-HiFi is *visual requirements engineering* — it works from real project artifacts, produced upstream
-by the BMAD/WDS skills. **If any are missing, stop and have them produced first** (don't invent
-them). Confirm:
+## What you need from planning (tiered — don't block on everything)
+HiFi works from real project docs. **Read `adapters/bmad-inputs.md` first** and auto-find what you
+can. Confirm findings in plain language. **Do not invent** missing requirements.
 
-| Input | Produced by | Why HiFi needs it |
-|---|---|---|
-| **Product Brief** | `wds-1-project-brief` / `bmad-product-brief` | Vision, success criteria, brand rules |
-| **Trigger Map + Personas** | `wds-2-trigger-mapping` | Who you design for; what each persona must feel |
-| **UX Scenarios** | `wds-3-scenarios` / `wds-4-ux-design` | Journeys & screen flows to realize |
-| **PRD** | `bmad-prd` | FRs/NFRs, page/template inventory, **non-goals** (scope guard) |
-| **Architecture** | `bmad-create-architecture` | Tech stack (shadcn/Tailwind, Gluestack), routes/slugs, token convention |
-| **Epics & Stories** | `bmad-create-epics-and-stories`, `bmad-create-story` | The unit of work: each story = a screen/section + UX acceptance criteria |
-| **Implementation Readiness** | `bmad-check-implementation-readiness` | Confirms specs are aligned & buildable |
-| **Sprint status / order** | `bmad-sprint-planning` | The build sequence (epic/story order) |
-| **Brand / CI manual** | brand team | Exact colours (PMS→hex), fonts, logo lockups |
-| **Live / reference site** | external URL | Accurate content to rewrite into the new narrative |
+### Tier A — enough to start tokens & style guide
+- Brand direction (brand manual, brief visual notes, or DESIGN.md)
+- Architecture notes **or** designer pick: web (shadcn) / mobile (Gluestack)
 
-Use `bmad-help` to orient ("where am I, what's next?") and map the current state to the next story.
+Nice to have: Product Brief, Trigger Map / personas.
+
+### Tier B — enough to build the first story’s screens
+- Tier A done (or already in the Figma file)
+- That story’s file (from the sprint / story list)
+- PRD (for non-goals / what’s out of scope)
+
+Nice to have: readiness report, full epics set.
+
+### Tier C — best quality (warn if missing, don’t hard-block)
+- Journeys / scenarios
+- Signed-off FigJam flows (`wireframe-status.md` from `/thisura-wireframe`)
+- DESIGN.md + EXPERIENCE.md
+- Live / reference site for content
+
+If DESIGN.md exists → **import its colours/type into Figma variables**; don’t invent a second brand
+system. If wireframe-status shows journeys not signed off for screens in the next story → **warn**
+and let the designer choose wait vs continue.
+
+Tag every screen and build-log row with the **story name/id** from planning.
 
 ---
 
@@ -108,17 +127,22 @@ edit unless the user promotes it.
 ---
 
 ## Step 0 — Orient & set up (lock decisions before building)
-Ask and **WAIT for answers**; keep it warm and short, offer pickable options + a free-text slot:
-1. **Confirm the inputs exist** (table above). Summarize the PRD template inventory + non-goals so
-   nothing is built out of scope.
-2. **Figma file** — confirm the URL / `fileKey`, or offer to create one.
-3. **Lock decisions** (record in the build-log header): **breakpoints** (e.g. Desktop 1440 +
+1. **Read `adapters/bmad-inputs.md`** and run discovery. Confirm what you found (PRD, architecture,
+   stories, DESIGN.md, wireframe-status, etc.) in plain language.
+2. Check **which tier** you’re in (§ above). If Tier A is incomplete, ask only for what’s missing
+   to start tokens — don’t dump a ten-item checklist. If they want screens but Tier B is incomplete,
+   say what’s still needed for the first story.
+3. **Figma file** — confirm the URL / `fileKey`, or offer to create one.
+4. **Lock decisions** (record in the build-log header): **breakpoints** (e.g. Desktop 1440 +
    Mobile 390), **theme(s)** (light only / + dark), **UI-framework token mapping** (web → shadcn /
    mobile → Gluestack, Tailwind v4 naming), **icon library** (e.g. Lucide), **content policy**
-   (extract from the reference + rewrite to the new narrative; in-scope net-new only).
-4. One open slot: "Anything special for this run?" — in-scope extras fold in; out-of-scope → Out of
+   (extract from the reference + rewrite to the new narrative; in-scope net-new only). Prefer values
+   already in DESIGN.md / architecture when present.
+5. Summarize **PRD non-goals** so nothing is built out of scope.
+6. One open slot: "Anything special for this run?" — in-scope extras fold in; out-of-scope → Out of
    scope reply. Confirm the resolved plan + the 4-page file structure back before executing.
 
+Ask and **WAIT for answers**; keep it warm and short; offer pickable options + a free-text slot.
 **Read `figma-use` before any write.** Locking these now prevents rework — tokens, components, and
 every screen depend on them.
 
@@ -137,7 +161,7 @@ session.** Reading every file up front wastes context.
 
 | When | Read | Skip |
 |---|---|---|
-| Step 0 / setup | (nothing — this SKILL.md is enough) | all refs |
+| Step 0 / setup | `adapters/bmad-inputs.md` | all other refs |
 | **Phase 1 — Foundations** | `foundations-tokens.md`, `primitives.md`, `style-guide-layout.md`, **and exactly one platform file**: `web-shadcn.md` *(web)* **or** `mobile-gluestack.md` *(mobile)* | the other platform file |
 | **Phase 2 — Components** | `components.md` | token specs, screens |
 | **Phase 3 — Screens** | `screens.md`, then `accessibility.md` for the AA gate | token specs |

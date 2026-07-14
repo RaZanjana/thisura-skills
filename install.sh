@@ -23,8 +23,8 @@ DEST="$HOME/.claude/skills"
 # Available skills (index-aligned with DESCRIPTIONS).
 SKILLS=("thisura-hifi" "thisura-wireframe")
 DESCRIPTIONS=(
-  "High-fidelity Figma screens from project docs — tokens, components, screens"
-  "Lo-fi journey wireframes in FigJam, then lo-fi screens in Figma"
+  "Hi-fi Figma screens from your planning docs — tokens, components, one story at a time"
+  "Journey flow maps in FigJam from your planning docs, then optional lo-fi screens"
 )
 
 SELECTED=()

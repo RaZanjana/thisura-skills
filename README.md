@@ -1,17 +1,24 @@
 # Thisura Skills
 
-A small collection of reusable [Agent Skills](https://www.anthropic.com/news/skills) for our UI/UX workflow. One command installs them — no project, no repo to keep open, no setup.
+Design helpers you run in **Cursor**. They read your project’s planning docs and draw in **FigJam** / **Figma** — so you spend time reviewing flows and screens, not rebuilding them from scratch.
 
-## What's inside
+## The simple pipeline
 
-| Skill | What it does |
-|-------|--------------|
-| [`thisura-hifi/`](./thisura-hifi) | Builds **production-ready high-fidelity Figma screens** from your project's planning docs (PRD, architecture, epics & stories), **one story at a time** with a review stop each round. Sets up the design-token system + a bound Style Guide page (the old `thisura-style-guide` workflow, now folded in as its first phase), builds components on demand, then assembles desktop + mobile screens from instances — with breakpoint-mode binding, AC-required states, flow annotations, a WCAG AA contrast audit, manual-edit absorption, and a build-log memory. shadcn for web, Gluestack for mobile; Tailwind v4 naming. See its [README](./thisura-hifi/README.md). |
-| [`thisura-wireframe/`](./thisura-wireframe) | Wireframes your product **one user journey at a time**, from your PRD, Themes & Epics, and User Journey docs, in two modes. **Mode A (FigJam):** maps each journey as a low-fidelity flow map on a FigJam board — greyscale screen boxes, native connectors, decision diamonds, sticky-note annotations, a Section per journey. **Mode B (Figma Design):** once a flow is signed off, generates polished lo-fi **screen components** (with state variants) for you to map against the journeys. Keeps **recurring screens consistent** via a screen registry + master/snapshot derivation, with a self-audit and a review stop between journeys. See its [README](./thisura-wireframe/README.md). |
+1. **Plan the product** (with your usual BMAD / planning process) — brief, PRD, journeys, epics & stories.  
+2. **Map the journeys** → `/thisura-wireframe` (FigJam flow maps; optional lo-fi screens after sign-off).  
+3. **Design the real screens** → `/thisura-hifi` (tokens, components, desktop + mobile, one story at a time).  
+4. **Build in code** (your engineering team).
 
-More skills may be added as sibling folders over time.
+You don’t need to hand-feed every file path. If the project already has planning docs, the skills **look for them** and ask you to confirm.
 
-## Install (designers — no repo needed)
+## What’s inside
+
+| Skill | What you get |
+|-------|----------------|
+| [**thisura-wireframe**](./thisura-wireframe) | Lo-fi **journey maps in FigJam** (one journey at a time). After you approve a flow, optional **lo-fi screen components** in Figma. |
+| [**thisura-hifi**](./thisura-hifi) | **High-fidelity Figma screens**: design tokens + style guide, then components, then desktop + mobile screens — **one story at a time**, with a review stop each round. |
+
+## Install (designers)
 
 Paste this into Terminal:
 
@@ -19,110 +26,58 @@ Paste this into Terminal:
 curl -fsSL https://raw.githubusercontent.com/RaZanjana/thisura-skills/main/install.sh | bash
 ```
 
-The installer opens an **interactive picker** — move with ↑/↓, toggle with space, and press Enter to confirm (everything is selected by default):
+Pick which skills to install (everything is selected by default), then **restart Cursor**. Type `/` in Agent chat and look for `thisura-wireframe` and `thisura-hifi`.
 
-```
-Select Thisura skills to install:
-  ↑/↓ move · space toggle · a = all · enter = confirm
-
- › [x] all                    — install everything below
-   [x] thisura-hifi           — High-fidelity Figma screens from project docs — tokens, components, screens
-   [x] thisura-wireframe      — Lo-fi journey wireframes in FigJam, then lo-fi screens in Figma
-```
-
-It drops the chosen skills into `~/.claude/skills/` (creating the folder if it doesn't exist) and works with any model you use in Cursor — Claude, GPT, or Gemini. Then **restart Cursor** and type `/` in the Agent chat to confirm they loaded.
-
-You don't need a Cursor project open, a git repo, or the Claude app installed — the skill lives at the OS level and loads on every launch.
-
-> **Re-running the same command updates the skill** to the latest version. That's also how you pull updates later — just run it again and restart Cursor.
-
-To skip the prompt (e.g. in a script), set `THISURA_SKILLS` — `all`, or a comma/space-separated list of skill names:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/RaZanjana/thisura-skills/main/install.sh | THISURA_SKILLS="thisura-wireframe" bash
-```
-
-When the command is piped without a terminal (e.g. CI) and `THISURA_SKILLS` isn't set, it installs everything.
-
-### Pinning a specific version
-
-The installer pulls the tip of `main` by default. To install a specific release instead, set `THISURA_REF` to a git tag:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/RaZanjana/thisura-skills/main/install.sh | THISURA_REF=wireframe-v1.0.0 bash
-```
-
-After installing, the printed line shows the version, and you can always check the `version:` field at the top of each skill's `SKILL.md`.
+> Re-run the same command anytime to update. Restart Cursor after updating.
 
 <details>
-<summary>Manual install (optional)</summary>
+<summary>Other install options</summary>
 
-If you'd rather not run the script:
+Skip the picker (scripts / CI):
 
 ```bash
-git clone https://github.com/RaZanjana/thisura-skills.git
-cp -r thisura-skills/thisura-hifi      ~/.claude/skills/        # copy
-cp -r thisura-skills/thisura-wireframe ~/.claude/skills/
-# or symlink so git pull keeps them fresh:
-ln -s "$(pwd)/thisura-skills/thisura-hifi"      ~/.claude/skills/thisura-hifi
-ln -s "$(pwd)/thisura-skills/thisura-wireframe" ~/.claude/skills/thisura-wireframe
+curl -fsSL https://raw.githubusercontent.com/RaZanjana/thisura-skills/main/install.sh | THISURA_SKILLS="all" bash
 ```
-Cursor also reads `.agents/skills/` and per-project `.claude/skills/` — any of those work.
+
+Pin a version:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/RaZanjana/thisura-skills/main/install.sh | THISURA_REF=wireframe-v1.1.0 bash
+```
+
+Manual copy or symlink from this repo into `~/.claude/skills/` also works. Cursor also reads `.agents/skills/` and per-project `.claude/skills/`.
 </details>
 
-## Using a skill
+## How to start a session
 
-Each skill has its own README with prerequisites and a sample prompt.
+**Journeys (FigJam):**
 
-HiFi screens (point it at a **Figma file**; it asks you to confirm your planning docs and lock breakpoints/theme/framework as setup questions, then builds tokens + style guide, then screens story by story):
+```
+Use /thisura-wireframe to wireframe the journeys for this project in this FigJam board: [paste board URL]
+```
+
+**Hi-fi screens (Figma):**
 
 ```
 Use /thisura-hifi to build the HiFi screens for this project in this Figma file: [paste Figma URL]
 ```
 
-Wireframes (point it at a **FigJam board**; it asks for your PRD, Themes & Epics, and User Journey docs as setup questions):
+Each skill will look for your planning docs, confirm what it found, ask a few short setup questions, then start. Full walkthroughs: [wireframe README](./thisura-wireframe/README.md) · [hifi README](./thisura-hifi/README.md).
 
-```
-Use /thisura-wireframe to wireframe the journeys for this project in this FigJam board: [paste FigJam board URL]
-```
+## What you need ready
 
-Each one asks a few setup questions, then gets to work. Full details in
-[`thisura-hifi/README.md`](./thisura-hifi/README.md) and
-[`thisura-wireframe/README.md`](./thisura-wireframe/README.md).
+| For wireframe | For hi-fi |
+|---------------|-----------|
+| PRD | Brand direction (or UX look-and-feel notes) |
+| Epics & stories (or an older Themes & Epics file) | Architecture notes *or* tell it web vs mobile |
+| Journeys / scenarios | The story you’re designing next + PRD |
+| A FigJam board (or let it create one) | A Figma file (or let it create one) |
 
-## Versioning
+Best path for hi-fi: journeys already signed off in FigJam first.
 
-Each skill is versioned **independently** using [Semantic Versioning](https://semver.org):
+## Versioning & contributing
 
-- **MAJOR** — changes that break existing prompts or change the output behavior.
-- **MINOR** — new, backward-compatible capability.
-- **PATCH** — layout fixes, wording, and bug fixes.
-
-The version lives in two places that should always agree:
-
-1. The `version:` field in each skill's `SKILL.md` (the source of truth).
-2. A namespaced git tag — `hifi-vX.Y.Z` / `wireframe-vX.Y.Z`.
-
-Each skill keeps its own history in a `CHANGELOG.md`:
-[`thisura-hifi/CHANGELOG.md`](./thisura-hifi/CHANGELOG.md) and
-[`thisura-wireframe/CHANGELOG.md`](./thisura-wireframe/CHANGELOG.md).
-
-## Contributing / updating a skill
-
-Maintainers edit the markdown, then cut a release:
-
-```bash
-# 1. Make the change (keep it scoped to one skill per commit where possible)
-# 2. Bump the `version:` field in that skill's SKILL.md
-# 3. Move the entry from "Unreleased" into a new version section in its CHANGELOG.md
-git add .
-git commit -m "wireframe: <what changed>"
-git push
-
-# 4. Tag the release (namespaced per skill) so people can pin it
-git tag wireframe-v1.1.0
-git push --tags
-```
+Each skill has its own version and [CHANGELOG](./thisura-wireframe/CHANGELOG.md). Maintainers: keep `adapters/bmad-inputs.md` in sync across the repo root and both skill folders when you change how docs are found.
 
 ## License
 
