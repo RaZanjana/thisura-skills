@@ -1,16 +1,17 @@
 ---
 name: thisura-wireframe
-version: 1.0.0
+version: 1.1.1
 description: >-
-  Maps a project's user journeys as low-fidelity wireframes from its PRD, Themes & Epics, and User
-  Journey docs, one journey at a time, with a self-audit and a review stop between journeys. Mode A
-  (default): draws each journey as a flow map on a FigJam board — greyscale screen boxes, native
-  connectors, decision diamonds, terminators, sticky annotations, one Section per journey. Mode B
-  (after sign-off): generates lo-fi screen components with state variants in a Figma Design file.
-  Use for lo-fi / low-fidelity wireframes, a flow map, a screen map, or to wireframe journeys from
-  project docs — for mobile, desktop, both, or a mixed app+admin scope. Triggers: "wireframe",
-  "lo-fi / low-fidelity", "flow map", "screen map", "wireframe the journeys/flows". Not for hi-fi UI
-  or design systems / tokens (that's thisura-hifi) or code.
+  Maps a project's user journeys as low-fidelity wireframes from planning docs (PRD, epics &
+  stories, journeys/scenarios — auto-found from BMAD/WDS project folders when present), one journey
+  at a time, with a self-audit and a review stop between journeys. Mode A (default): draws each
+  journey as a flow map on a FigJam board — greyscale screen boxes, native connectors, decision
+  diamonds, terminators, sticky annotations, one Section per journey. Mode B (after sign-off):
+  generates lo-fi screen components with state variants in a Figma Design file. Use for lo-fi /
+  low-fidelity wireframes, a flow map, a screen map, or to wireframe journeys from project docs —
+  for mobile, desktop, both, or a mixed app+admin scope. Triggers: "wireframe", "lo-fi /
+  low-fidelity", "flow map", "screen map", "wireframe the journeys/flows". Not for hi-fi UI or
+  design systems / tokens (that's thisura-hifi) or code.
 ---
 
 # Thisura Wireframe — Journey-by-Journey Lo-Fi Builder
@@ -46,15 +47,23 @@ language; the internal model (registry, snapshots, phases) stays under the hood.
   | Master / snapshot / derivation | "I keep each screen consistent everywhere it appears" |
   | Reveal map / owning journey | "which journey first introduces each part" |
   | Ripple protocol | "I'll update it everywhere it appears and re-show you those journeys" |
-  | Manual-edit / override | "I noticed your edit — keep it, or make it the new default?" |
-  | Surface scope | "which devices — mobile, desktop, or both" |
-  | State-coverage depth | "how many states to show — just the key ones, or every edge case" |
+  | Manual-edit / override | "I noticed your edit. Keep it, or make it the new default?" |
+  | Surface scope | "which devices (mobile, desktop, or both)" |
+  | State-coverage depth | "how many states to show (just the key ones, or every edge case)" |
   | Self-audit | "I checked it against your docs and fixed what was off" |
+  | BMAD / WDS / planning_artifacts / auto-discovery | "I'll look for your project docs" |
+  | Themes & Epics / T&E | "your epics and stories" (unless their file is literally named Themes & Epics) |
+  | User Journey file / C-UX-Scenarios | "your journeys" / "your scenarios" |
+  | wireframe-status.md | "which journeys you've already signed off" |
 - **Keep the real Figma/FigJam nouns** a designer already knows: FigJam, board, Section, sticky,
   connector, component, variant, frame.
 - **Headings shown to the user are plain** — never title a message "Phase 1/2/3"; use phase numbers
   only in your own planning.
 - Short and concrete. If a precise term is unavoidable, gloss it in plain words the first time.
+- **No em dashes in generated artifacts.** Never use `—` (or en dashes `–`) in anything written for
+  the designer or put into FigJam/Figma: chat messages, UI copy, labels, stickies, screen-box
+  titles, connector labels, annotations. Use a comma, period, or parentheses instead. Skill-doc
+  prose may keep em dashes; generated output must not.
 
 ---
 
@@ -75,19 +84,24 @@ component library in Figma Design, **after** the flow is agreed.
 ---
 
 ## Input contract (what I need before drawing)
-I work from your real project docs — I won't invent requirements. Before Phase 1 I gather three
-things, each asked as a **pick-from-list or free-text** question (multi-select where it helps), in
-this order:
+I work from your real project docs — I won't invent requirements.
 
-1. **Required documents** — attach or point me to:
+**Before asking the designer to attach files:** read `adapters/bmad-inputs.md` and **auto-find**
+PRD, epics & stories, and journeys/scenarios from the open project (BMAD/WDS folders). Then
+**confirm what you found** in plain language. Only ask them to attach or paste a path for gaps.
+
+Required before drawing (UX detail optional):
+
+1. **Project docs**
    - **PRD** — the requirements.
-   - **Themes & Epics** — the full feature list. *(If it's a multi-sheet Excel, tell me the exact
-     worksheet — I won't guess across sheets.)*
-   - **User Journey file** — the journey list + flow order (the spine).
-   - *(optional)* **UX Specification** — for layout/interaction detail; without it, screens lean on
-     the PRD + journey and I'll say so.
-   Markdown is ideal; Excel / PDF / Word read fine. **Mode A won't start until the three required
-   docs are in** (UX Spec optional).
+   - **Epics & stories** — the feature list (from planning). Fallback: a legacy Themes & Epics
+     file; if that's multi-sheet Excel, ask which worksheet — never guess.
+   - **Journeys / scenarios** — the journey list + flow order (the spine). Prefer WDS scenarios;
+     else EXPERIENCE.md key flows or an attached journey doc.
+   - *(optional)* **UX detail** — EXPERIENCE.md / DESIGN.md, Freya page specs, or similar; without
+     it, screens lean on the PRD + journeys and I'll say so.
+   Markdown is ideal; Excel / PDF / Word still fine as fallback. **Mode A won't start until the
+   three required docs are in.**
 2. **FigJam URL** — the `figma.com/board/...` board I'll draw the flow map on (Mode A). No board
    yet? I can create one. *(A `/design/` URL here is Mode B's file, not the flow-map board — I'll
    flag it.)*
@@ -138,29 +152,31 @@ touch anything outside the target file. Outside "Does" → **Out of scope** repl
 ---
 
 ## Step 0 — Intake (Create mode — draw nothing until done)
-Gather the three inputs above first, designer-to-designer: keep it warm and short, **offer pickable
-options plus a free-text slot** on every question, multi-select where natural, and **WAIT for
-answers**. Confirm Mode A / Create mode and English review copy as defaults (don't ask).
+1. **Read `adapters/bmad-inputs.md`** and run the discovery procedure (find PRD, epics & stories,
+   journeys). Draw nothing yet.
+2. **Confirm findings** with the designer, e.g.  
+   > “I found your PRD, epics & stories, and these journeys: … I’ll use those. Sound right?”
+3. Gather anything still missing + the FigJam URL. Keep it warm and short; **offer pickable
+   options plus a free-text slot** on every question; **WAIT for answers**. Confirm Mode A /
+   Create mode and English review copy as defaults (don't ask).
 
-Then **read the docs and ask follow-ups only where they're genuinely unresolved** — this is the
-part that keeps the run light:
+Then **read the docs and ask follow-ups only where they're genuinely unresolved**:
 - **Bundle all follow-ups into ONE short round (aim for ≤3 questions).** Never drip-feed.
-- **Let the documents answer first.** If the PRD / T&E / User Journey already settle something,
-  don't ask it — only surface what the docs leave open or ambiguous.
+- **Let the documents answer first.** If the PRD / epics & stories / journeys already settle
+  something, don't ask it — only surface what the docs leave open or ambiguous.
 - Each follow-up is **pick-from-list + free-text**.
 
 Typical follow-ups, asked **only if the docs don't already answer them**:
-- **Worksheet** — if Themes & Epics is a multi-sheet Excel and the sheet wasn't named.
+- **Worksheet** — only if they're on a multi-sheet Excel feature list and the sheet wasn't named.
 - **Surface scope** — mobile / desktop / both / mixed. If the docs make it obvious, just confirm
   it; **for a mixed scope, infer the surface→journey/screen split from the docs and present it for
   approval at the Phase 1 gate — don't ask the designer to sort journeys.**
 - **State-coverage depth** — happy path + key states, or the full edge-case set (empty / loading /
   error / success / validation / permission / offline). Main lever on screen count.
-- **Journeys to exclude** — only ask which (if any) to skip; the journey list itself comes from the
-  User Journey file, in order.
-- **Doc-specific ambiguity** — anything the uploaded docs raise (e.g. a journey whose surface is
-  unclear, or a label/behaviour conflict between PRD and journey). Ask only the ones that actually
-  block a faithful build.
+- **Journeys to exclude** — only ask which (if any) to skip; the journey list itself comes from
+  the journeys/scenarios docs, in order.
+- **Doc-specific ambiguity** — anything the docs raise (e.g. a journey whose surface is unclear,
+  or a label/behaviour conflict between PRD and journey). Ask only what blocks a faithful build.
 
 One open slot to close: "Anything special for this run?" — in-scope extras fold in; out-of-scope →
 Out of scope reply. Confirm the resolved scope back before Phase 1.
@@ -169,6 +185,7 @@ Out of scope reply. Confirm the resolved scope back before Phase 1.
 
 ## Workflow
 **Read only what the current mode needs, and never re-read a file already loaded this session.**
+- **Step 0 / intake** — read `adapters/bmad-inputs.md` first (once per session).
 - **Mode A (FigJam flow map)** — read `wireframe-spec.md` (parsing + traceability + self-audit
   checklist), `screen-registry.md` (screen identity, snapshots, reveal + ripple/manual-edit
   protocols), then `figjam-flow.md` (board structure, screen-box spec, flowchart shapes,
@@ -184,15 +201,16 @@ Step 0 Intake → P1 Parse + build registry (approve) → P2 Per-journey loop (d
 ### Phase 1 — Parse, build the Screen Registry & confirm scope (the approval gate)
 A screen is **not owned by one journey** — the same screen recurs across journeys and each can add
 to it. So **before drawing anything**, run the `screen-registry.md` **pre-pass over ALL journeys +
-docs at once**: parse PRD + T&E (named worksheet) + User Journey (+ UX Spec if present) per
-`wireframe-spec.md`, then produce the **Screen Registry** — every unique screen with a **stable ID**
-and surface; every element it will *ever* have with its **owning (reveal) journey** decided by file
-order; the **reveal map** (revealed vs placeholder per journey); the **state map**; and source
-traces. For a **mixed** surface scope, **infer the surface→journey/screen map from the docs** and
-include it in this approval for the designer to review. Run registry validation. Show this back as
-the **`🗂 Screen Index`** preview (a FigJam table), in journey file order, and **get approval**
-before drawing. This is your one written checkpoint — it replaces a per-journey-only list and is
-what makes recurring screens consistent and placeholders possible.
+docs at once**: parse PRD + epics & stories (or legacy Themes & Epics / named Excel worksheet) +
+journeys/scenarios (+ UX detail if present) per `wireframe-spec.md`, then produce the **Screen
+Registry** — every unique screen with a **stable ID** and surface; every element it will *ever*
+have with its **owning (reveal) journey** decided by file order; the **reveal map** (revealed vs
+placeholder per journey); the **state map**; and source traces. For a **mixed** surface scope,
+**infer the surface→journey/screen map from the docs** and include it in this approval for the
+designer to review. Run registry validation. Show this back as the **`🗂 Screen Index`** preview
+(a FigJam table), in journey file order, and **get approval** before drawing. This is your one
+written checkpoint — it replaces a per-journey-only list and is what makes recurring screens
+consistent and placeholders possible.
 
 ### Phase 2 — Per-journey build loop (one journey at a time, in file order)
 First time only: create the **`🧩 Master Screens`** reference Section and the **`🗂 Screen Index`**
@@ -215,14 +233,15 @@ table from the approved registry. Then, for each in-scope journey:
    **start/end terminators**, per `figjam-flow.md`. Attach **sticky-note annotations** in the
    defined categories.
 4. **Self-audit (before review).** Run the per-journey audit in `wireframe-spec.md` against PRD +
-   T&E + User Journey (+ UX Spec): boxes match the journey steps, states are present, the flow
-   matches the journey map, copy traces to the inputs, nothing invented, no orphan/unreachable
-   box. **Fix any issue found before involving the user.**
+   epics & stories + journeys (+ UX detail): boxes match the journey steps, states are present,
+   the flow matches the journey map, copy traces to the inputs, nothing invented, no
+   orphan/unreachable box. **Fix any issue found before involving the user.**
 5. **STOP and ask the user to review and refine.** Do not auto-continue. If they hand-edit a box
    in FigJam, run the **manual-edit protocol** in `screen-registry.md` on the next run — detect the
    divergence and ask whether to **promote** it to the master (ripples everywhere) or keep it as a
    recorded **override** (never corrected back). Their edit is never overwritten. **Proceed to the
-   next journey only on their go-ahead.** When a journey is signed off, offer **Mode B** for it.
+   next journey only on their go-ahead.** When a journey is signed off, **update
+   `wireframe-status.md`** per `adapters/bmad-inputs.md` §4, then offer **Mode B** for it.
 
 ### Phase 3 — Final validation (after the last journey)
 No Sections overlap; no box orphaned; every box reachable in its journey flow (no orphans);

@@ -38,7 +38,8 @@ This is still **requirements-grade** lo-fi, not visual design. No brand colour, 
 ## Fonts (specific, enforced)
 - **Inter** — every piece of **meaningful** copy (titles, CTAs, nav labels, field labels, key
   content, error/empty messages). Weights: 600 for titles/headers, 500 for buttons/labels, 400 for
-  body-meaningful.
+  body-meaningful. **No em dashes (`—`) or en dashes (`–`) in Inter (or any) copy**; use commas,
+  periods, or parentheses.
 - **Flow Circular** (Dan Ross) — **all placeholder / greeked text** (filler body, secondary
   descriptions, list filler). Its illegible flowing form makes "this is placeholder, not final
   copy" unmistakable, which is exactly what a lo-fi review needs.
@@ -126,6 +127,7 @@ do either.
 - [ ] **No element overlaps a sibling** (verify no fixed-height text and no absolute `y` offsets).
 - [ ] Meaningful copy is **Inter** and short (≤ ~80 chars); long prose trimmed or greeked in **Flow
       Circular** (or the noted fallback).
+- [ ] No em dashes (`—`) or en dashes (`–`) in any labels, titles, CTAs, or captions.
 - [ ] Shared structural elements (buttons, banners, nav, badges) use **fixed widths** — same size
       across instances.
 - [ ] Greyscale only — no stray colour, shadow, or gradient.

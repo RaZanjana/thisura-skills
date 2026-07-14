@@ -13,7 +13,9 @@ Read `figma-use` and `figma-generate-design` before composing.
 2. **Place global chrome** — Header + Footer as **instances**; every page has both (Standard #17).
 3. **Compose from instances**; fill slots/props with **in-scope, accurate** content — extracted
    from the reference and **rewritten to the project's narrative**; author net-new only within
-   scope (the PRD non-goals are binding).
+   scope (the PRD non-goals are binding). **No em dashes (`—`) or en dashes (`–`) in any
+   generated UI copy, labels, annotations, or layer names shown to reviewers** (Standard #28);
+   use commas, periods, or parentheses.
 4. **One semantic text style per role across breakpoints** — the mode resizes it; never swap styles
    per breakpoint (Standard #19).
 5. **Cover the AC-required states**: loading / empty / error / success / validation / focus /
@@ -64,6 +66,7 @@ re-check all instances (Standard #25–#26, `components.md`).
 - [ ] Manual changes detected & absorbed at story start (`per-story-loop.md`).
 - [ ] Desktop + mobile built; mobile beside desktop; breakpoint mode bound.
 - [ ] Composed from instances; slots/props populated with in-scope content.
+- [ ] No em dashes (`—`) or en dashes (`–`) in generated copy, annotations, or labels (Standard #28).
 - [ ] Tokens + spacing bound; one text style per role across breakpoints.
 - [ ] Required states covered; clip-content correct around shadows/rings.
 - [ ] Global chrome present (header + footer).

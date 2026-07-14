@@ -9,6 +9,28 @@ Versions are tagged in git as `hifi-vX.Y.Z`.
 
 ## [Unreleased]
 
+## [1.2.1] — 2026-07-14
+
+### Added
+- **No em dashes in generated artifacts** (Standard #28): never write `—` or `–` into UI copy,
+  labels, annotations, stickies, or designer chat; use commas, periods, or parentheses.
+  Documented in Voice, `screens.md`, and `build-log.md`.
+
+## [1.2.0] — 2026-07-14
+
+### Added
+- **BMAD/WDS doc auto-find** via `adapters/bmad-inputs.md` — discovers PRD, architecture, stories,
+  DESIGN.md, and wireframe status before asking the designer to hunt for files.
+- **Tiered start:** Foundations (tokens) vs first-story screens vs “best quality” extras — no longer
+  blocks on a full ten-doc checklist.
+- Reads **`wireframe-status.md`** from Wireframe sign-off; warns if journeys aren’t approved yet.
+- Prefers **DESIGN.md** colours/type when present; tags screens with BMAD **story ids**.
+- Designer-friendly README rewrite.
+
+### Changed
+- Step 0 intake: confirm auto-found docs in plain language; only ask for gaps.
+- Voice table: translate BMAD/path jargon for designers.
+
 ## [1.1.0] — 2026-06-29
 
 ### Added
@@ -42,6 +64,7 @@ at a time, with a stakeholder review gate.
 - WCAG AA resolving-contrast audit as a gate, the 23-point standards checklist, and a build-log workflow memory.
 - Design-friendly Voice guidance for clearer, less robotic output.
 
-[Unreleased]: https://github.com/RaZanjana/thisura-skills/compare/hifi-v1.1.0...HEAD
+[Unreleased]: https://github.com/RaZanjana/thisura-skills/compare/hifi-v1.2.0...HEAD
+[1.2.0]: https://github.com/RaZanjana/thisura-skills/releases/tag/hifi-v1.2.0
 [1.1.0]: https://github.com/RaZanjana/thisura-skills/releases/tag/hifi-v1.1.0
 [1.0.0]: https://github.com/RaZanjana/thisura-skills/releases/tag/hifi-v1.0.0

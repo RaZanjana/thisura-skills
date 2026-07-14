@@ -36,11 +36,11 @@ that's instantly understandable.
 - **Shape:** `ROUNDED_RECTANGLE` (or `SQUARE`). Greyscale only — fill **white** `#FFFFFF`, stroke
   **gray** `#B3B3B3`, text **dark** `#1E1E1E` (use the `white` preset from
   `create-shape-with-text`). Reserve color for symbols + stickies, not screens.
-- **Text content (all in `shape.text.characters`):** a **title line** = `{Screen} — {state}`,
+- **Text content (all in `shape.text.characters`):** a **title line** = `{Screen} ({state})`,
   then a short **bulleted list of the key elements** on that screen (the meaningful ones — CTAs,
   nav, title, key fields, the empty/error message). Example:
   ```
-  Workspace — idle
+  Workspace (idle)
   • Top nav: LikiFin POC · Agent Workspace
   • Case panel: "Waiting for inbound call…"
   • Live transcript (empty)
@@ -49,15 +49,16 @@ that's instantly understandable.
 - **Real copy only on meaningful elements** (CTA/nav/title/field labels/error+empty messages),
   short (≤ ~80 chars per line). Don't write paragraphs; summarize filler as a single bullet
   (e.g. "• Body copy (placeholder)"). No greeking font is needed in FigJam — a "(placeholder)"
-  bullet is enough.
+  bullet is enough. **Never use em dashes (`—`) or en dashes (`–`) in box titles, bullets,
+  stickies, or connector labels**; use commas, periods, or parentheses.
 - **Size with `fitShapeToText`** (from `create-shape-with-text`) — never hardcode box size, or the
   text clips. Keep boxes a consistent base width across the board (e.g. ~280–340 wide) so the map
   reads evenly; let height grow to fit bullets.
 - **Placeholder elements** (an element a later journey will reveal): show as a greyed bullet
-  prefixed and tagged, e.g. `• (later) Checkout CTA — reveals in: Purchase`. See the placeholder
+  prefixed and tagged, e.g. `• (later) Checkout CTA (reveals in: Purchase)`. See the placeholder
   convention in `screen-registry.md`. The box still lists the slot so the screen's content is
   stable across journeys.
-- **State** lives in the title (`— idle`, `— empty`, `— error`, `— loading`) and in the bullets
+- **State** lives in the title (`(idle)`, `(empty)`, `(error)`, `(loading)`) and in the bullets
   (what the state shows). One box per state that the journey needs.
 - **Tag** each box via `sharedPluginData` (namespace `thisura`: `screenId`, `state`, `status`) so
   the registry can find it later; fall back to strict naming if plugin data is unavailable.
@@ -155,8 +156,8 @@ the box/element it annotates. Color-code by category (use the sticky palette fro
 - **Content** (`Green #B3EFBD`) — what real content replaces a placeholder here.
 - **Interaction** (`Violet #D3BDFF`) — gestures, validation rules, disabled conditions, edge
   behaviour.
-Keep each sticky short and specific (e.g. *Nav — "Continue" → OTP Verify; back → Sign Up*). Prefix
-the category word so notes stay scannable. Default to square stickies; only go `isWideWidth` for
+Keep each sticky short and specific (e.g. *Nav: "Continue" → OTP Verify; back → Sign Up*). Prefix
+the category word so notes stay scannable. No em dashes in sticky text. Default to square stickies; only go `isWideWidth` for
 ~100+ words. Position stickies after boxes are placed (read actual `sticky.height`; don't assume
 240). Keep them in a tidy band near their row rather than scattered.
 
@@ -164,7 +165,8 @@ the category word so notes stay scannable. Default to square stickies; only go `
 - [ ] Section named after the journey; placed below the previous with ≥160px gutter; **no overlap**
       with any other Section.
 - [ ] Every **screen box** sized with `fitShapeToText` (no clipped text); greyscale `white` preset;
-      title `{Screen} — {state}` + key-element bullets; placeholders shown as `(later) … reveals in: …`.
+      title `{Screen} ({state})` + key-element bullets; placeholders shown as `(later) … (reveals in: …)`.
+- [ ] **No em dashes (`—`) or en dashes (`–`)** in any box title, bullet, sticky, or connector label.
 - [ ] Section sized to fully contain its boxes + symbols + stickies; **no two boxes overlap**.
 - [ ] All boxes on the fixed grid; spine row + branch row with a **≥240px row gutter**; branch boxes
       **directly below their decision**.
